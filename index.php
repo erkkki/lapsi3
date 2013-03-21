@@ -1,4 +1,4 @@
 <?php
 
-echo "toimi";
+echo "toimi virtuaalinen ubuntu";
 ?>
