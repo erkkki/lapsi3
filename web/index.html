@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <style>
+    ul.nav li.dropdown:hover > ul.dropdown-menu{
+      display: block;
+      margin:0;
+    } 
+  </style>
+</head>
+
+<body style="padding:50px;"">
+    
+<div class="container">
+  <div class="navbar">
+    <div class="navbar-inner">
+      <ul class="nav">
+        <li><a href="#/">Home</a></li>
+        <li class="dropdown" style="margin:0;">
+          <a id="drop1" href="#/travian" role="button">
+            Travian 
+          </a>
+          <ul class="dropdown-menu" style="margin-top:-5px;">
+            <li><a tabindex="-1" href="#/travian/search">Village search</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav pull-right">
+        <li><a href="#/info">Info</a></li>
+      </ul>
+    </div>	  
+  </div>
+  <div ng-app="app">
+        <div ng-view></div>
+  </div>
+</div>
+    
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="js/angular.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
