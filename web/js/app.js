@@ -1,24 +1,21 @@
 var app = angular.module("app", []);
 
-app.config(function ($routeProvider){
+app.config(['$routeProvider', function($routeProvider) {
+  
   $routeProvider.when('/',
     {
       templateUrl:"/views/index.html",
       controller:"AppCtrl"
     }
-  )
-  $routeProvider.when('/info',
+  ).
+    when('/info',
     {
       templateUrl:"/views/info.html"
     }
-  )
-  $routeProvider.when('/travian/:what',
+  ).
+  when('/travian/:what',
     {
       templateUrl:"/views/travian.html"
     }
-  )
-})
-
-app.controller("AppCtrl", function ($scope){
-  
-})
+  );
+}]);

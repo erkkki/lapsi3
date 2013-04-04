@@ -327,18 +327,242 @@
         ]
     },
     {
+        "name": "doctrine/common",
+        "version": "2.3.0",
+        "version_normalized": "2.3.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/common",
+            "reference": "2.3.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/doctrine/common/zipball/2.3.0",
+            "reference": "2.3.0",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "time": "2012-09-19 22:55:18",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\Common": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            },
+            {
+                "name": "Johannes Schmitt",
+                "email": "schmittjoh@gmail.com",
+                "homepage": "http://jmsyst.com",
+                "role": "Developer of wrapped JMSSerializerBundle"
+            }
+        ],
+        "description": "Common Library for Doctrine projects",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "annotations",
+            "collections",
+            "eventmanager",
+            "persistence",
+            "spl"
+        ]
+    },
+    {
+        "name": "symfony/console",
+        "version": "v2.1.9",
+        "version_normalized": "2.1.9.0",
+        "target-dir": "Symfony/Component/Console",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Console.git",
+            "reference": "v2.1.9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Console/zipball/v2.1.9",
+            "reference": "v2.1.9",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2013-03-01 16:50:10",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Console": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Console Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "knplabs/console-service-provider",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/KnpLabs/ConsoleServiceProvider.git",
+            "reference": "2c01c4d4f9e34940a135083c99b1e30656913087"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/KnpLabs/ConsoleServiceProvider/zipball/2c01c4d4f9e34940a135083c99b1e30656913087",
+            "reference": "2c01c4d4f9e34940a135083c99b1e30656913087",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "symfony/console": "2.1.*"
+        },
+        "time": "2012-10-07 21:19:54",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Knp\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "KnpLabs",
+                "homepage": "http://knplabs.com"
+            }
+        ],
+        "description": "console service provider for Silex",
+        "homepage": "http://knplabs.com",
+        "keywords": [
+            "console",
+            "silex"
+        ]
+    },
+    {
+        "name": "doctrine/dbal",
+        "version": "2.3.3",
+        "version_normalized": "2.3.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/dbal.git",
+            "reference": "2.3.3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/doctrine/dbal/zipball/2.3.3",
+            "reference": "2.3.3",
+            "shasum": ""
+        },
+        "require": {
+            "doctrine/common": ">=2.3.0,<2.5-dev",
+            "php": ">=5.3.2"
+        },
+        "time": "2013-03-24 19:16:29",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\DBAL": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            }
+        ],
+        "description": "Database Abstraction Layer",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "database",
+            "dbal",
+            "persistence",
+            "queryobject"
+        ]
+    },
+    {
         "name": "silex/silex",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/fabpot/Silex.git",
-            "reference": "59e7dbd338b5caba9879ae11524da4a5905f80c1"
+            "reference": "803f809cdaa409e5769b24db952655d7e9187677"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/fabpot/Silex/zipball/59e7dbd338b5caba9879ae11524da4a5905f80c1",
-            "reference": "59e7dbd338b5caba9879ae11524da4a5905f80c1",
+            "url": "https://api.github.com/repos/fabpot/Silex/zipball/803f809cdaa409e5769b24db952655d7e9187677",
+            "reference": "803f809cdaa409e5769b24db952655d7e9187677",
             "shasum": ""
         },
         "require": {
@@ -375,7 +599,7 @@
             "symfony/dom-crawler": ">=2.1,<2.3-dev",
             "symfony/form": "To make use of the FormServiceProvider, >= 2.1.4 is required"
         },
-        "time": "2013-03-08 16:56:52",
+        "time": "2013-04-01 08:47:32",
         "type": "library",
         "extra": {
             "branch-alias": {
