@@ -5,6 +5,7 @@ class VillageSearch {
 
     
     protected $conn;
+    protected $server;
 
     public function __construct($conn){
         $this->conn = $conn;
@@ -16,6 +17,11 @@ class VillageSearch {
       $users = $statement->fetchAll();
     
       return  json_encode($users);
+    }
+    
+    
+    public function setServer($server){
+        $this->server = $server;
     }
 }
 ?>

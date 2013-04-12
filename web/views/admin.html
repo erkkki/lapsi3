@@ -1,0 +1,18 @@
+<legend>Travian Servers</legend>
+
+<div style="margin-top: 20px;">
+    <table class="table table-bordered">
+        <tr>
+            <th style="width: 50px;"></th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Last update time</th>
+        </tr>
+        <tr ng-repeat="server in servers">
+            <td><a href="#/admin/edit/{{server.name}}"><button class="btn">Edit</button></a></td>
+            <td>{{server.name}} </td>
+            <td>{{server.address}}</td>
+            <td>{{server.lastupdate}}</td>
+        </tr>
+    </table>
+</div>

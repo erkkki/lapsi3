@@ -1,1 +1,15 @@
-<p> travian </p>
+<form id="search">
+    <fieldset>
+        <legend>Village search</legend>
+        <input class="span1" type="text" placeholder="X">
+        <input class="span1" type="text" placeholder="Y">
+        <br>
+        <button type="submit" class="btn">Submit</button>
+    </fieldset>
+</form>
+
+<ul>
+	<li ng-repeat="alert in alerts" style="color: {{}}">
+		<a>{{alert.id}} {{alert.x}} {{alert.y}} </a>
+	</li>
+</ul>
