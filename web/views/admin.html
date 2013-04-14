@@ -3,13 +3,18 @@
 <div style="margin-top: 20px;">
     <table class="table table-bordered">
         <tr>
-            <th style="width: 50px;"></th>
+            <th style="width: 50px;"><a href="#/admin/addserver/"><button class="btn btn-block">Add</button></a></th>
             <th>Name</th>
             <th>Address</th>
             <th>Last update time</th>
         </tr>
         <tr ng-repeat="server in servers">
-            <td><a href="#/admin/edit/{{server.name}}"><button class="btn">Edit</button></a></td>
+            <td>
+                <div class="btn-group">
+                  <a class="btn" href="#/admin/edit/{{server.id}}">Edit</a>
+                  <a class="btn" href="" ng-click="delServer(server.id)">Delete</a>
+                </div>
+            </td>
             <td>{{server.name}} </td>
             <td>{{server.address}}</td>
             <td>{{server.lastupdate}}</td>

@@ -15,6 +15,10 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
   .when('/admin',{
       controller: AdminCtrl,
       templateUrl:"/views/admin.html"
+  })  
+  .when('/admin/addserver',{
+      controller: AddServerCtrl,
+      templateUrl:"/views/addserver.html"
   })
   .when('/admin/edit/:server',{
       controller: ServerEditCtrl,
@@ -22,3 +26,20 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
   });
 
 }]);
+
+angular.module('app').factory('Servers', function($http) {
+  var Servers = function(data) {
+    angular.extend(this, data);
+  }
+  Servers.getAll = function() {
+    return $http.get('api/travian/serverlist/').then(function(response) {
+      return new Servers(response.data);
+    });
+  };
+  Servers.get = function(id) {
+    return $http.get('api/travian/serverlist/' + id).then(function(response) {
+      return new Servers(response.data);
+    });
+  };
+  return Servers;
+});
