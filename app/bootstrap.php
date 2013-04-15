@@ -26,17 +26,17 @@ $app['servers'] = $app->share(function (Application $app) {
 });
 
 $app['vil_search'] = $app->share(function (Application $app) {
-    return new VillageSearch($app['db']);
+    return new VillageSearch($app['db'], $app['servers']);
 });
 
 $app->get('/api/travian/serverlist/',function(Application $app){
     return $app['servers']->getServers();
 });
-$app->get('/api/travian/delete/{id}',function(Application $app, $id){
-    return $app['servers']->deleteServer($id);
-});
 $app->get('/api/travian/serverlist/{id}',function(Application $app, $id){
     return $app['servers']->getServer($id);
+});
+$app->get('/api/travian/delete/{id}',function(Application $app, $id){
+    return $app['servers']->deleteServer($id);
 });
 $app->get('/api/travian/{server}/setname/{name}',function(Application $app, $server, $name){
     return $app['servers']->updateName($server, $name);
@@ -49,9 +49,12 @@ $app->get('api/travian/addserver/{server}/{address}',function(Application $app, 
 });
 
 
-$app->get('/api/travian/{server}/search/',function(Application $app, $server){
+$app->get('/api/travian/search/{server}/{xkord}/{ykord}/{count}',function(Application $app, $server, $xkord, $ykord, $count){
     $app['vil_search']->setServer($server);
-    return $app['vil_search']->getsome();
+    $app['vil_search']->setX($xkord);
+    $app['vil_search']->setY($ykord);
+    $app['vil_search']->setCount($count);
+    return $app['vil_search']->getVillages();
 });
 
 

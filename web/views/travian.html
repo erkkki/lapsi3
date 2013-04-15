@@ -1,15 +1,5 @@
-<form id="search">
-    <fieldset>
-        <legend>Village search</legend>
-        <input class="span1" type="text" placeholder="X">
-        <input class="span1" type="text" placeholder="Y">
-        <br>
-        <button type="submit" class="btn">Submit</button>
-    </fieldset>
-</form>
+<legend>Village Search</legend>
+<div class="btn-group">
+  <a ng-repeat="server in servers" class="btn" href="#/travian/{{server.id}}/0/0">{{server.name}}</a>
+</div>
 
-<ul>
-	<li ng-repeat="alert in alerts" style="color: {{}}">
-		<a>{{alert.id}} {{alert.x}} {{alert.y}} </a>
-	</li>
-</ul>

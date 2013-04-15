@@ -12,6 +12,10 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
       controller: TravianCtrl,
       templateUrl:"/views/travian.html"
     })
+  .when('/travian/:server/:x/:y',{
+      controller: VilSearchCtrl,
+      templateUrl:"/views/villageSearch.html"
+    })
   .when('/admin',{
       controller: AdminCtrl,
       templateUrl:"/views/admin.html"

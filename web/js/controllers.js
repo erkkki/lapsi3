@@ -1,12 +1,29 @@
-function TravianCtrl($scope, $http){
-    $http({method: 'GET', url: 'api/travian/tx3/search/'}).
-    success(function(data, status, headers, config) {
-      $scope.alerts = data;
-    }).
-    error(function(data, status, headers, config) {
-      console.log("Failed in TravianCtrl");
-      $scope.alerts.destination = "Error";
-  });
+function TravianCtrl($scope, $http, $routeParams, Servers){
+    $scope.servers = Servers.getAll();
+}
+function VilSearchCtrl($scope, $http, $routeParams, Servers){
+    $scope.servers = Servers.getAll();
+    $scope.villages = {};
+    $scope.limit = 0;
+    
+    $scope.search = function(){
+      $http.get('api/travian/search/' + $routeParams.server + '/' + $routeParams.x + '/' + $routeParams.y + '/' + $scope.limit)
+        .success(function(data, status, headers, config) {
+          $scope.villages = data;
+        })
+    };
+    
+    $scope.next = function(){
+        $scope.limit += 20;
+        $scope.search();
+    };
+    $scope.back = function(){
+        if($scope.limit == 0) return;
+        $scope.limit -= 20;
+        $scope.search();
+    };
+
+    $scope.search();
 }
 
 
