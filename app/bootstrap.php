@@ -60,7 +60,6 @@ $app->get('/api/travian/search/{server}/{xkord}/{ykord}/{count}',function(Applic
 
 
 
-
 $app->get('/api/', function () use ($app){
 
     $statement = $app['db']->prepare('SELECT * FROM tx3');
