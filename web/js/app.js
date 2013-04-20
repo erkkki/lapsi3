@@ -3,30 +3,30 @@ var app = angular.module("app", []);
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when('/',{
-      templateUrl:"/views/index.html"
+      templateUrl:"/api/views/index"
     })
   .when('/info',{
-      templateUrl:"/views/info.html"
+      templateUrl:"/api/views/info"
     })
   .when('/travian',{
       controller: TravianCtrl,
-      templateUrl:"/views/travian.html"
+      templateUrl:"/api/views/travian"
     })
   .when('/travian/:server/:x/:y',{
       controller: VilSearchCtrl,
-      templateUrl:"/views/villageSearch.html"
+      templateUrl:"/api/views/villageSearch"
     })
   .when('/admin',{
       controller: AdminCtrl,
-      templateUrl:"/views/admin.html"
+      templateUrl:"/api/views/admin"
   })  
   .when('/admin/addserver',{
       controller: AddServerCtrl,
-      templateUrl:"/views/addserver.html"
+      templateUrl:"/api/views/addserver"
   })
   .when('/admin/edit/:server',{
       controller: ServerEditCtrl,
-      templateUrl:"/views/editServer.html"      
+      templateUrl:"/api/views/editServer"      
   });
 
 }]);

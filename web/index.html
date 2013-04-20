@@ -8,7 +8,10 @@
     ul.nav li.dropdown:hover > ul.dropdown-menu{
       display: block;
       margin:0;
-    } 
+    }
+    span.ng-scope {
+        display:none;
+    }
   </style>
   <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
   <script src="js/angular.min.js"></script>
@@ -24,7 +27,12 @@
     <div class="navbar-inner">
       <ul class="nav">
         <li><a href="#/">Home</a></li>
-        <li><a href="#/travian">Travian</a></li>
+        <li class="dropdown" style="margin:0;">
+          <a id="drop1" href="#/travian" role="button">Travian</a>
+          <ul class="dropdown-menu" style="margin-top:-5px;">
+            <li><a tabindex="-1" href="#/travian/0/0/0">Village search</a></li>
+          </ul>            
+        </li>
         <li><a href="#/admin">Admin</a></li>
       </ul>
       <ul class="nav pull-right">

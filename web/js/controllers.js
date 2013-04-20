@@ -1,13 +1,14 @@
 function TravianCtrl($scope, $http, $routeParams, Servers){
     $scope.servers = Servers.getAll();
 }
-function VilSearchCtrl($scope, $http, $routeParams, Servers){
+function VilSearchCtrl($scope, $http, $routeParams,$location, Servers){
     $scope.servers = Servers.getAll();
     $scope.villages = {};
     $scope.limit = 0;
-    
-    $scope.search = function(){
-      $http.get('api/travian/search/' + $routeParams.server + '/' + $routeParams.x + '/' + $routeParams.y + '/' + $scope.limit)
+    $scope.server = $routeParams.server;
+     
+    $scope.search = function(x,y){
+      $http.get('api/travian/search/' + $scope.server + '/' + x + '/' + y + '/' + $scope.limit)
         .success(function(data, status, headers, config) {
           $scope.villages = data;
         })
@@ -22,8 +23,7 @@ function VilSearchCtrl($scope, $http, $routeParams, Servers){
         $scope.limit -= 20;
         $scope.search();
     };
-
-    $scope.search();
+    $scope.search($routeParams.x,$routeParams.y);
 }
 
 

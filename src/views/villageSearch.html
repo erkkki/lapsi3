@@ -1,7 +1,20 @@
+<legend>Village Search</legend>
 
 <div class="btn-group">
   <a ng-repeat="server in servers" class="btn" href="#/travian/{{server.id}}/0/0">{{server.name}}</a>
 </div>
+<div class="input-prepend" style="margin-top:10px;">
+  <span class="add-on">X</span>
+  <input class="input-mini" type="number" ng-model="kord.x" min="-400" max="400" placeholder="0">
+</div>
+<div class="input-prepend" style="margin-top:10px;">
+  <span class="add-on">Y</span>
+  <input class="input-mini" type="number" ng-model="kord.y" min="-400" max="400"placeholder="0">
+</div>
+<a class="btn" ng-click="search(kord.x,kord.y)">Submit</a>
+
+
+<pre>{{kord | json}}</pre>
 
 <div style="margin-top: 20px;">
     <table class="table table-bordered table-condensed">
@@ -25,13 +38,13 @@
             <td>{{villages.population}}</td>
             <td>{{villages.village}}</td>
             <td>{{villages.player}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{villages.kokpop}}</td>
+            <td>{{villages.idle}}</td>
+            <td>{{villages.villagecount}}</td>
             <td>{{villages.alliance}}</td>
-            <td></td>
+            <td>{{villages.tid}}</td>
         </tr>
     </table>
 </div>
 
-<pre>server = {{villages | json}}</pre>
+
