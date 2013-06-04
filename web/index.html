@@ -4,6 +4,8 @@
   <title></title>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="css/flags.css">
+  <link rel="stylesheet" type="text/css" href="css/ui/jquery-ui.css">
   <style>
     ul.nav li.dropdown:hover > ul.dropdown-menu{
       display: block;
@@ -12,8 +14,30 @@
     span.ng-scope {
         display:none;
     }
+    img.type1{ 
+        width:25px;
+        height:30px;
+        background:url(img/1235.png) 0 0;
+    }
+    img.type2{ 
+        width:25px;
+        height:30px;
+        background:url(img/1235.png) -25px 0;
+    }
+    img.type3{ 
+        width:25px;
+        height:30px;
+        background:url(img/1235.png) -50px 0;
+    }
+    img.type5{ 
+        width:25px;
+        height:30px;
+        background:url(img/1235.png) -75px 0;
+    }
+                
   </style>
-  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/ui/jquery-ui.js"></script>
   <script src="js/angular.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/app.js"></script>
@@ -27,13 +51,9 @@
     <div class="navbar-inner">
       <ul class="nav">
         <li><a href="#/">Home</a></li>
-        <li class="dropdown" style="margin:0;">
-          <a id="drop1" href="#/travian" role="button">Travian</a>
-          <ul class="dropdown-menu" style="margin-top:-5px;">
-            <li><a tabindex="-1" href="#/travian/0/0/0">Village search</a></li>
-          </ul>            
-        </li>
+        <li><a href="#/travian/">Travian</a></li>
         <li><a href="#/admin">Admin</a></li>
+        <li><a href="#/test">test</a></li>
       </ul>
       <ul class="nav pull-right">
         <li><a href="#/info">Info</a></li>
@@ -44,7 +64,5 @@
         <div ng-view></div>
   </div>
 </div>
-    
-
 </body>
 </html>

@@ -3,8 +3,11 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 use Project\Travian\VillageSearch;
-use Project\Travian\ServerList;
+use Project\Travian\tableServise;
+use Project\Travian\serverService;
+
 use Project\Travian\PlayerService;
 
 $app = new Silex\Application();
@@ -22,48 +25,65 @@ $app->register(new DoctrineServiceProvider(), array(
     ),
 ));
 
-$app['servers'] = $app->share(function (Application $app) {
-    return new ServerList($app['db']);
-});
 
 $app['Player'] = $app->share(function (Application $app) {
     return new PlayerService($app['db']);
 });
-
 $app['vil_search'] = $app->share(function (Application $app) {
-    return new VillageSearch($app['db'], $app['servers'], $app['Player']);
-});
-
-$app->get('/api/travian/serverlist/',function(Application $app){
-    return $app['servers']->getServers();
-});
-$app->get('/api/travian/serverlist/{id}',function(Application $app, $id){
-    return $app['servers']->getServer($id);
-});
-$app->get('/api/travian/delete/{id}',function(Application $app, $id){
-    return $app['servers']->deleteServer($id);
-});
-$app->get('/api/travian/{server}/setname/{name}',function(Application $app, $server, $name){
-    return $app['servers']->updateName($server, $name);
-});
-$app->get('/api/travian/{server}/setaddress/{address}',function(Application $app, $server, $address){
-    return $app['servers']->updateAddress($server, $address);
-});
-$app->get('/api/travian/addserver/{server}/{address}',function(Application $app, $server, $address){
-    return $app['servers']->addServer($server, $address);
-});
-$app->get('/api/travian/search/{server}/{xkord}/{ykord}/{count}',function(Application $app, $server, $xkord, $ykord, $count){
-    $app['vil_search']->setServer($server);
-    $app['vil_search']->setX($xkord);
-    $app['vil_search']->setY($ykord);
-    $app['vil_search']->setCount($count);
-    return $app['vil_search']->getVillages();
-});
-
-$app->get('/api/views/{name}',function(Application $app, $name){
-    return include('../src/views/' . $name . '.html');
+    return new VillageSearch($app['db'], $app['Player']);
 });
 
 
+//############ Server api #############
 
+
+$app['serverService'] = $app->share(function (Application $app) {
+    return new ServerService($app['db'], $app['tableServise']);
+});
+$app['tableServise'] = $app->share(function (Application $app) {
+    return new tableServise($app['db']);
+});
+
+$app->get('/api/travian/server/list/',function(Application $app){
+    return json_encode($app['serverService']->getServerList());
+});
+$app->get('/api/travian/server/list/all/',function(Application $app){
+    return json_encode($app['serverService']->getAllList());
+});
+$app->get('/api/travian/server/by/{id}/',function(Application $app, $id){
+    return json_encode($app['serverService']->getServerId($id));
+});
+$app->get('/api/travian/server/by/{id}/',function(Application $app, $id){
+    return json_encode($app['serverService']->getServerName($id));
+});
+$app->post('/api/travian/server/add/',function(Application $app, Request $request){
+    return $app['serverService']->addServer(json_decode($request->getContent()));
+});
+$app->get('/api/travian/server/delete/{id}',function(Application $app, $id){
+    return $app['serverService']->deleteServer($id);
+});
+$app->get('/api/travian/server/updateservers/',function(Application $app){
+    return $app['serverService']->updateServerlist();
+});
+$app->post('/api/travian/server/editserver/',function(Application $app, Request $request){
+    return $app['serverService']->updateServer(json_decode($request->getContent()));
+});
+$app->get('/api/travian/server/update/{id}',function(Application $app, $id){
+    return $app['serverService']->updateServerData($id);
+});
+
+//#####################################
+
+$app->get('/api/test/',function(Application $app){
+    return $app['tableServise']->createActiveServers();
+});
+
+
+
+$app->post('/api/travian/search',function(Application $app, Request $request){
+    $data = json_decode($request->getContent());
+    if($data->{server} == null) return true;
+    $app['vil_search']->setData(json_decode($request->getContent()));
+    return $app['vil_search']->getVillages2();
+});
 return $app;

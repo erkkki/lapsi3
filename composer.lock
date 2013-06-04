@@ -1,5 +1,9 @@
 {
-    "hash": "7c7f6ef5fca6f07e99373858e1a06637",
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "4c3ec465afc0afab3f875896745b2b01",
     "packages": [
         {
             "name": "doctrine/common",
@@ -72,16 +76,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "2.3.3",
+            "version": "2.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "2.3.3"
+                "reference": "2.3.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/2.3.3",
-                "reference": "2.3.3",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/2.3.4",
+                "reference": "2.3.4",
                 "shasum": ""
             },
             "require": {
@@ -131,7 +135,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2013-03-24 19:16:29"
+            "time": "2013-05-11 07:45:37"
         },
         {
             "name": "keboola/csv",
@@ -139,13 +143,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/php-csv.git",
-                "reference": "81525a1b7acc47faec124ee1aeb5492194e25821"
+                "reference": "1.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/php-csv/zipball/81525a1b7acc47faec124ee1aeb5492194e25821",
-                "reference": "81525a1b7acc47faec124ee1aeb5492194e25821",
+                "url": "https://api.github.com/repos/keboola/php-csv/zipball/1.1.0",
+                "reference": "1.1.0",
                 "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.19"
             },
             "type": "library",
             "autoload": {
@@ -156,7 +163,7 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Keboola CSV reader and writer",
             "homepage": "http://keboola.com",
-            "time": "2013-04-05 16:41:48"
+            "time": "2013-04-23 11:07:05"
         },
         {
             "name": "knplabs/console-service-provider",
@@ -202,16 +209,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.4.1",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "1.4.1"
+                "reference": "1.5.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1.4.1",
-                "reference": "1.4.1",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1.5.0",
+                "reference": "1.5.0",
                 "shasum": ""
             },
             "require": {
@@ -260,7 +267,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2013-04-01 10:04:58"
+            "time": "2013-04-23 10:09:48"
         },
         {
             "name": "pimple/pimple",
@@ -348,52 +355,52 @@
         },
         {
             "name": "silex/silex",
-            "version": "dev-master",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Silex.git",
-                "reference": "1cd7f3f050b78dae4458d93892355720f56659f9"
+                "reference": "v1.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Silex/zipball/1cd7f3f050b78dae4458d93892355720f56659f9",
-                "reference": "1cd7f3f050b78dae4458d93892355720f56659f9",
+                "url": "https://api.github.com/repos/fabpot/Silex/zipball/v1.0.0",
+                "reference": "v1.0.0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
                 "pimple/pimple": "1.*",
-                "symfony/event-dispatcher": ">=2.1,<2.3-dev",
-                "symfony/http-foundation": ">=2.1,<2.3-dev",
-                "symfony/http-kernel": ">=2.1,<2.3-dev",
-                "symfony/routing": ">=2.1,<2.3-dev"
+                "symfony/event-dispatcher": ">=2.1,<2.4-dev",
+                "symfony/http-foundation": ">=2.1,<2.4-dev",
+                "symfony/http-kernel": ">=2.1,<2.4-dev",
+                "symfony/routing": ">=2.1,<2.4-dev"
             },
             "require-dev": {
                 "doctrine/dbal": ">=2.2.0,<2.4.0-dev",
                 "monolog/monolog": ">=1.4,<2.0,>=1.4.1",
-                "swiftmailer/swiftmailer": "4.2.*",
-                "symfony/browser-kit": ">=2.1,<2.3-dev",
-                "symfony/config": ">=2.1,<2.3-dev",
-                "symfony/css-selector": ">=2.1,<2.3-dev",
-                "symfony/dom-crawler": ">=2.1,<2.3-dev",
-                "symfony/finder": ">=2.1,<2.3-dev",
-                "symfony/form": ">=2.1.4,<2.3-dev",
-                "symfony/locale": ">=2.1,<2.3-dev",
-                "symfony/monolog-bridge": ">=2.1,<2.3-dev",
-                "symfony/options-resolver": ">=2.1,<2.3-dev",
-                "symfony/process": ">=2.1,<2.3-dev",
-                "symfony/security": ">=2.1,<2.3-dev",
-                "symfony/serializer": ">=2.1,<2.3-dev",
-                "symfony/translation": ">=2.1,<2.3-dev",
-                "symfony/twig-bridge": ">=2.1,<2.3-dev",
-                "symfony/validator": ">=2.1,<2.3-dev",
+                "swiftmailer/swiftmailer": "5.*",
+                "symfony/browser-kit": ">=2.1,<2.4-dev",
+                "symfony/config": ">=2.1,<2.4-dev",
+                "symfony/css-selector": ">=2.1,<2.4-dev",
+                "symfony/dom-crawler": ">=2.1,<2.4-dev",
+                "symfony/finder": ">=2.1,<2.4-dev",
+                "symfony/form": ">=2.1.4,<2.4-dev",
+                "symfony/locale": ">=2.1,<2.4-dev",
+                "symfony/monolog-bridge": ">=2.1,<2.4-dev",
+                "symfony/options-resolver": ">=2.1,<2.4-dev",
+                "symfony/process": ">=2.1,<2.4-dev",
+                "symfony/security": ">=2.1,<2.4-dev",
+                "symfony/serializer": ">=2.1,<2.4-dev",
+                "symfony/translation": ">=2.1,<2.4-dev",
+                "symfony/twig-bridge": ">=2.1,<2.4-dev",
+                "symfony/validator": ">=2.1,<2.4-dev",
                 "twig/twig": ">=1.8.0,<2.0-dev"
             },
             "suggest": {
-                "symfony/browser-kit": ">=2.1,<2.3-dev",
-                "symfony/css-selector": ">=2.1,<2.3-dev",
-                "symfony/dom-crawler": ">=2.1,<2.3-dev",
-                "symfony/form": "To make use of the FormServiceProvider, >= 2.1.4 is required"
+                "symfony/browser-kit": ">=2.1,<2.4-dev",
+                "symfony/css-selector": ">=2.1,<2.4-dev",
+                "symfony/dom-crawler": ">=2.1,<2.4-dev",
+                "symfony/form": ">= 2.1.4,<2.4-dev"
             },
             "type": "library",
             "extra": {
@@ -426,21 +433,21 @@
             "keywords": [
                 "microframework"
             ],
-            "time": "2013-04-11 12:23:56"
+            "time": "2013-05-03 16:49:57"
         },
         {
             "name": "symfony/console",
-            "version": "v2.1.9",
+            "version": "v2.1.10",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "v2.1.9"
+                "reference": "v2.1.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/v2.1.9",
-                "reference": "v2.1.9",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/v2.1.10",
+                "reference": "v2.1.10",
                 "shasum": ""
             },
             "require": {
@@ -468,7 +475,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-01 16:50:10"
+            "time": "2013-05-06 06:31:43"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -526,17 +533,17 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v2.1.9",
+            "version": "v2.1.10",
             "target-dir": "Symfony/Component/Finder",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder.git",
-                "reference": "v2.1.9"
+                "reference": "v2.1.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Finder/zipball/v2.1.9",
-                "reference": "v2.1.9",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/v2.1.10",
+                "reference": "v2.1.10",
                 "shasum": ""
             },
             "require": {
@@ -752,7 +759,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "silex/silex": 20,
         "knplabs/console-service-provider": 20,
         "keboola/csv": 20,
         "monolog/monolog": 0

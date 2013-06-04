@@ -3,47 +3,44 @@ var app = angular.module("app", []);
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when('/',{
-      templateUrl:"/api/views/index"
+      templateUrl:"/views/info.html"
     })
   .when('/info',{
-      templateUrl:"/api/views/info"
+      templateUrl:"/views/info.html"
     })
-  .when('/travian',{
+  .when('/test',{
       controller: TravianCtrl,
-      templateUrl:"/api/views/travian"
+      templateUrl:"/views/test.html"
     })
-  .when('/travian/:server/:x/:y',{
+  .when('/travian/:server',{
       controller: VilSearchCtrl,
-      templateUrl:"/api/views/villageSearch"
+      templateUrl:"/views/villageSearch.html"
+    })
+  .when('/travian/',{
+      controller: VilSearchCtrl,
+      templateUrl:"/views/villageSearch.html"
     })
   .when('/admin',{
       controller: AdminCtrl,
-      templateUrl:"/api/views/admin"
-  })  
-  .when('/admin/addserver',{
-      controller: AddServerCtrl,
-      templateUrl:"/api/views/addserver"
-  })
-  .when('/admin/edit/:server',{
-      controller: ServerEditCtrl,
-      templateUrl:"/api/views/editServer"      
+      templateUrl:"/views/admin.html"     
   });
 
 }]);
 
-angular.module('app').factory('Servers', function($http) {
-  var Servers = function(data) {
-    angular.extend(this, data);
-  }
-  Servers.getAll = function() {
-    return $http.get('api/travian/serverlist/').then(function(response) {
-      return new Servers(response.data);
-    });
-  };
-  Servers.get = function(id) {
-    return $http.get('api/travian/serverlist/' + id).then(function(response) {
-      return new Servers(response.data);
-    });
-  };
-  return Servers;
-});
+angular.module('app')
+  .factory('Servers', function($http) {
+    var Servers = function(data) {
+      angular.extend(this, data);
+    }
+    Servers.getAll = function() {
+      return $http.get('/api/travian/server/list/').then(function(response) {
+        return new Servers(response.data);
+      });
+    };
+    Servers.get = function(id) {
+      return $http.get('/api/travian/server/by/' + id).then(function(response) {
+        return new Servers(response.data);
+      });
+    };
+    return Servers;
+  });

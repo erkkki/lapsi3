@@ -16,6 +16,7 @@ class PlayerService{
     }
 
     public function FindPlayersById($server, $ids){
+      $uids = "";
       foreach ($ids as $value) {
         $uids .= "'". $value . "',"; 
       }

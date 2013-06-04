@@ -1,0 +1,99 @@
+<br>
+<div class="btn-group">
+  <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
+    {{opt.server}}
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu">
+      <li><a ng-repeat="server in servers" href="#/travian/{{server.address}}">
+            <img class="flag flag-{{server.country}}" src="img/img_trans.gif"/>
+            {{server.address}}
+          </a>
+      </li>
+  </ul>
+</div>
+<div class="input-prepend" style="margin-top:10px;">
+  <span class="add-on">X</span>
+  <input class="input-mini" type="number" ng-model="opt.x" ng-change="search()"min="-400" max="400" placeholder="{{opt.x}}">
+</div>
+<div class="input-prepend" style="margin-top:10px;">
+  <span class="add-on">Y</span>
+  <input class="input-mini" type="number" ng-model="opt.y" ng-change="search()" min="-400" max="400" placeholder="{{opt.y}}">
+</div>
+
+<div class="btn-group">
+    <button class="btn" ng-class="getTribeClass('1')" type="button" ng-click="rtribe(1)">{{opt.1}} Romans</button>
+    <button class="btn" ng-class="getTribeClass('2')" type="button" ng-click="rtribe(2)">{{opt.2}} Teutons</button>
+    <button class="btn" ng-class="getTribeClass('3')" type="button" ng-click="rtribe(3)">{{opt.3}} Gauls</button>
+    <button class="btn" ng-class="getTribeClass('5')" type="button" ng-click="rtribe(5)">{{opt.5}} Natars</button>
+</div>
+
+<div class="btn-group">
+  <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
+    Limit
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu">
+      <li><a ng-click="setVilCount(20)">20</a></li>
+      <li><a ng-click="setVilCount(40)">40</a></li>
+      <li><a ng-click="setVilCount(60)">60</a></li>
+      <li><a ng-click="setVilCount(80)">80</a></li>
+      <li><a ng-click="setVilCount(100)">100</a></li>
+  </ul>
+</div>
+
+<!-- Test buttons etc -->
+
+    <!--<pre>{{opt | json}}</pre>-->
+    <!--
+    <br>
+      <a href="#removeRaces" role="button" class="btn" data-toggle="modal">Hide/Show Tribe</a>
+    <br>-->
+<!-- end of test etc -->
+
+<div style="margin-top: 20px;">
+    <table class="table table-bordered table-condensed table-hover">
+        <tr>
+            <th ng-click="back()" style="width: 10px;"><i class="icon-chevron-left"></i></th>
+            <th ng-click="orderby('dist')" style="width: 40px;">Distance</th>
+            <th style="width: 60px;">X.Y</th>
+            <th ng-click="orderby('population')" style="width: 40px;">Pop</th>
+            <th ng-click="orderby('village')" style="width: 200px;">Village name</th>
+            <th ng-click="orderby('player')">Account</th>
+            <th>Account pop</th>
+            <th>Idle time</th>
+            <th>Village count</th>
+            <th ng-click="orderby('alliance')">Guild</th>
+            <th ng-click="next()" style="width: 25px;"><i class="icon-chevron-right"></i></th>
+        </tr>
+        <tr ng-repeat="villages in villages">
+            <td><i class="icon-chevron-down"></i></td>
+            <td>{{villages.dist}}</td>
+            <td>({{villages.x}}|{{villages.y}})</td>
+            <td>{{villages.population}}</td>
+            <td>{{villages.village}}</td>
+            <td>{{villages.player}}<i class="icon-remove pull-right" ng-click="removePlayer(villages.uid)"></i></td>
+            <td>{{villages.kokpop}}</td>
+            <td>{{villages.idle}}</td>
+            <td>{{villages.villagecount}}</td>
+            <td>{{villages.alliance}}<i class="icon-remove pull-right" ng-click="removeGuild(villages.aid)"></i></td>
+            <td><img class="type{{villages.tid}}" src="img/img_trans.gif"/></td>
+        </tr>
+    </table>
+</div>
+
+<div id="removeRaces" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="removeRacesLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="removeRacesLabel">Hide/Show Tribe</h3>
+  </div>
+  <div class="modal-body">
+    <button class="btn" type="button" ng-click="rtribe(1)">{{opt.1}} Romans</button>
+    <button class="btn" type="button" ng-click="rtribe(2)">{{opt.2}} Teutons</button>
+    <button class="btn" type="button" ng-click="rtribe(3)">{{opt.3}} Gauls</button>
+    <button class="btn" type="button" ng-click="rtribe(5)">{{opt.5}} Natars</button>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
