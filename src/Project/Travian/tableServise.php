@@ -16,7 +16,7 @@ class tableServise {
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `address` varchar(100) NOT NULL,
               PRIMARY KEY (`id`)
-              ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1";
+              ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
       return $this->conn->exec($sql);
     }
 
@@ -30,7 +30,7 @@ class tableServise {
               `name` varchar(100) NOT NULL,
               `update` BIGINT NOT NULL,
               PRIMARY KEY (`id`)
-              ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1";
+              ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
       return $this->conn->exec($sql);
     }
     public function createXworld($name){
@@ -38,20 +38,20 @@ class tableServise {
         
       $sql = "CREATE TABLE `".$name."` (
               `id` int(11) NOT NULL,
-              `x` varchar(100) NOT NULL,
-              `y` varchar(100) NOT NULL,
-              `tid` varchar(100) NULL,
-              `vid` varchar(100) NULL,
+              `x` int(11) NOT NULL,
+              `y` int(11) NOT NULL,
+              `tid` int(11) NULL,
+              `vid` int(11) NULL,
               `village` varchar(100) NULL,
-              `uid` varchar(100) NULL,
+              `uid` int(11) NULL,
               `player` varchar(100) NULL,
               `aid` varchar(100) NULL,
               `alliance` varchar(100) NULL,
-              `population` varchar(100) NULL,
+              `population` int(11) NULL,
               `pophistory` char NULL,
               `idle` INT(11) NULL,
               PRIMARY KEY (`id`)
-              ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1";
+              ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
       return $this->conn->exec($sql);
     }
     function tableExists($name){

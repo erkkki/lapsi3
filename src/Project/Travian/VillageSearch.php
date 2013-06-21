@@ -5,13 +5,11 @@ class VillageSearch {
 
     
     protected $conn;
-    protected $playerService;
     protected $villages;
     protected $options;
 
-    public function __construct($conn, PlayerService $playerService){
+    public function __construct($conn){
         $this->conn = $conn;
-        $this->playerService = $playerService;
     }
     public function setData($data){
         $this->options = $data;
@@ -51,29 +49,10 @@ class VillageSearch {
           return 'No villages :(';
         }
         if($this->villages != null) 
-            //$this->getOwners();
         return json_encode($this->villages);
         
         return true;
         
-    }
-    
-    private function getOwners(){
-      $uids = array();
-      foreach ($this->villages as $value) {
-        array_push($uids, $value['uid']); 
-      }
-      $owners = $this->playerService->FindPlayersById($this->options->{'server'}, $uids);
-      $keys = array();
-      foreach ($owners as $key => $value){
-          array_push($keys, $value['uid']);
-      }
-      foreach ($this->villages as $vikey => $value){
-        $key = array_search($value['uid'], $keys);
-        $this->villages[$vikey]['kokpop'] = $owners[$key]['kokpop'];
-        $this->villages[$vikey]['villagecount'] = $owners[$key]['kylia'];
-        $this->villages[$vikey]['idle'] = $owners[$key]['idle'];
-      }
     }
  
 }

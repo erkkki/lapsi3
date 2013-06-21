@@ -1,16 +1,17 @@
 <?php
 require_once __DIR__.'/../vendor/autoload.php';
 
-use Silex\Provider\DoctrineServiceProvider;
 use Silex\Application;
+use Silex\Provider\DoctrineServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Project\Travian\VillageSearch;
 use Project\Travian\tableServise;
 use Project\Travian\serverService;
+use Project\Travian\activeServers;
+use Project\Travian\allServers;
+use Project\Travian\serverDataService;
 
-use Project\Travian\PlayerService;
-
-$app = new Silex\Application();
+$app = new Silex\Application(); 
 $app['debug'] = true;
 
 $app->register(new DoctrineServiceProvider(), array(
@@ -26,63 +27,81 @@ $app->register(new DoctrineServiceProvider(), array(
 ));
 
 
-$app['Player'] = $app->share(function (Application $app) {
-    return new PlayerService($app['db']);
-});
 $app['vil_search'] = $app->share(function (Application $app) {
-    return new VillageSearch($app['db'], $app['Player']);
-});
-
-
-//############ Server api #############
-
-
-$app['serverService'] = $app->share(function (Application $app) {
-    return new ServerService($app['db'], $app['tableServise']);
+    return new VillageSearch($app['db']);
 });
 $app['tableServise'] = $app->share(function (Application $app) {
     return new tableServise($app['db']);
 });
 
-$app->get('/api/travian/server/list/',function(Application $app){
-    return json_encode($app['serverService']->getServerList());
+//### allservers ###
+
+$app['allServers'] = $app->share(function (Application $app) {
+    return new allServers($app['db'], $app['tableServise']);
+});
+
+$app->get('/api/travian/server/updateservers/',function(Application $app){
+    return json_encode($app['allServers']->updateServers());
 });
 $app->get('/api/travian/server/list/all/',function(Application $app){
-    return json_encode($app['serverService']->getAllList());
+    return json_encode($app['allServers']->getServersList());
 });
-$app->get('/api/travian/server/by/{id}/',function(Application $app, $id){
-    return json_encode($app['serverService']->getServerId($id));
+//######################
+//### active servers ###
+
+$app['activeservers'] = $app->share(function (Application $app) {
+    return new activeServers($app['db'], $app['tableServise']);
 });
-$app->get('/api/travian/server/by/{id}/',function(Application $app, $id){
-    return json_encode($app['serverService']->getServerName($id));
+         
+$app->get('/api/travian/server/list/',function(Application $app){
+    return json_encode($app['activeservers']->getServers());
+});
+$app->get('/api/travian/server/by/id/{id}/',function(Application $app, $id){
+    return json_encode($app['activeservers']->getServerId($id));
+});
+$app->get('/api/travian/server/by/name/{name}/',function(Application $app, $name){
+    return json_encode($app['activeservers']->getServerName($name));
 });
 $app->post('/api/travian/server/add/',function(Application $app, Request $request){
-    return $app['serverService']->addServer(json_decode($request->getContent()));
-});
-$app->get('/api/travian/server/delete/{id}',function(Application $app, $id){
-    return $app['serverService']->deleteServer($id);
-});
-$app->get('/api/travian/server/updateservers/',function(Application $app){
-    return $app['serverService']->updateServerlist();
+    $data = json_decode($request->getContent());
+    return json_encode($app['activeservers']->addServer($data));
 });
 $app->post('/api/travian/server/editserver/',function(Application $app, Request $request){
-    return $app['serverService']->updateServer(json_decode($request->getContent()));
+    $data = json_decode($request->getContent());
+    return json_encode($app['activeservers']->updateServer($data));
+});
+$app->get('/api/travian/server/delete/{id}',function(Application $app, $id){
+    $server = $app['activeservers']->getServerId($id);
+    $app['activeservers']->deleteServer($id);    
+    $app['tableServise']->DropTable(str_replace('.','',$server['address']));
+    return true;
+});
+//##########################
+//### server data update ###
+$app['dataupdate'] = $app->share(function (Application $app) {
+    return new serverDataService($app['db'], $app['tableServise'], $app['activeservers']);
+});
+
+$app->get('/api/travian/server/update/{id}',function(Application $app, $id){
+    return $app['dataupdate']->updateServerData($id);
+});
+
+
+//######################
+/*
+$app['serverService'] = $app->share(function (Application $app) {
+    return new serverService($app['db'], $app['tableServise']);
 });
 $app->get('/api/travian/server/update/{id}',function(Application $app, $id){
     return $app['serverService']->updateServerData($id);
 });
-
-//#####################################
-
-$app->get('/api/test/',function(Application $app){
-    return $app['tableServise']->createActiveServers();
-});
-
+*/
+//######################
 
 
 $app->post('/api/travian/search',function(Application $app, Request $request){
     $data = json_decode($request->getContent());
-    if($data->{server} == null) return true;
+    if($data->server == null) return true;
     $app['vil_search']->setData(json_decode($request->getContent()));
     return $app['vil_search']->getVillages2();
 });

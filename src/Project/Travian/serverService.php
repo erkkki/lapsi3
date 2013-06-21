@@ -1,7 +1,7 @@
 <?php
 namespace Project\Travian;
 
-class ServerService {
+class serverService {
     private $conn;
     private $tables;
     private $activeServers, $allServers;
@@ -90,83 +90,20 @@ class ServerService {
         }
       return false;
     }
-    
-    
     public function updateServerData($id){
         $server = $this->getServerId($id);
         $sqlTable = str_replace('.','',$server['address']);
         $map = $this->loadServerData($server['address']);
         
-        if(!$this->tables->tableExists($sqlTable)){
-            $this->tables->createXworld($sqlTable);
-            foreach ($map as $line) {
-                $this->insertNewVil($line,$sqlTable);
-            }
-        } /*else {
-            $statement = $this->conn->prepare("select vid from " . $sqlTable);
-            $statement->execute();
-            $temp = $statement->fetchAll();
-            $vids = array();
-            foreach ($temp as $row) {
-                array_push($vids, $row['vid']);
-            }
-            foreach ($map as $village) {
-                if(in_array($village['vid'], $vids)){
-                    //$this->updateVil($village,$sqlTable);
-                } else {
-                    $this->insertNewVil($village,$sqlTable);
-                }
-                
-            }             
-           
-             
-        }*/
-        /*
-              `id` int(11) NOT NULL AUTO_INCREMENT,
-              `x` varchar(100) NOT NULL,
-              `y` varchar(100) NOT NULL,
-              `tid` varchar(100) NULL,
-              `vid` varchar(100) NULL,
-              `village` varchar(100) NULL,
-              `uid` varchar(100) NULL,
-              `player` varchar(100) NULL,
-              `aid` varchar(100) NULL,
-              `alliance` varchar(100) NULL,
-              `population` varchar(100) NULL,
-              `pophistory` char NULL,
-              `idle` INT(11) NULL,
-         */
-        
-        
-        //echo "<pre>";
-        //var_dump($vids);
-        return true;
-    }
-/*
-Village: The name of the village.
-UID: The player’s unique ID, also known as User-ID.
-Player: The player name.
-AID: The alliance’s unique ID.
-Alliance: The alliance name.
-Population: The village’s number of inhabitants without the troops.    
-
-UPDATE table_name
-SET column1=value1,column2=value2,...
-WHERE some_column=some_value;
-*/
-    private function updateVil($line,$table){
-        if($line['x'] == null || $line['y'] == null) return 0;
-        $statement = $this->conn->prepare('update ' . $table . ' set tid=?,village=?,uid=?,player=?,aid=?,alliance=?, population=? WHERE vid= ?');
-        $statement->execute(array(
-                    $line['tid'],
-                    $line['village'],
-                    $line['uid'],
-                    $line['player'],
-                    $line['aid'],
-                    $line['alliance'],
-                    $line['population'],
-                    $line['vid']
-                ));
+        if($this->tables->tableExists($sqlTable)){
+            $this->tables->DropTable($sqlTable);
+            $this->tables->createXworld($sqlTable); 
+        } else {
+            $this->tables->createXworld($sqlTable); 
+        }
+        foreach ($map as $line) {
+            $this->insertNewVil($line,$sqlTable);
+        }
         return true;
     }
     private function insertNewVil($line,$table){
@@ -188,7 +125,6 @@ WHERE some_column=some_value;
                     '0'               
                 ));        
     }
-    
     private function loadServerData($address){
         $map = explode("\n", file_get_contents("http://" . $address . "/map.sql"));
         $returnAr = array();
