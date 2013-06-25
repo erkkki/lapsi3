@@ -28,7 +28,7 @@ class tableServise {
               `address` varchar(100) NOT NULL,
               `country` varchar(100) NOT NULL,
               `name` varchar(100) NOT NULL,
-              `update` BIGINT NOT NULL,
+              `updatetime` BIGINT NOT NULL,
               PRIMARY KEY (`id`)
               ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
       return $this->conn->exec($sql);

@@ -1,12 +1,11 @@
 <br>
 <div class="btn-group">
   <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
-    {{opt.server}}
+    {{servername}}
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu">
       <li><a ng-repeat="server in servers" href="#/travian/{{server.address}}">
-            <img class="flag flag-{{server.country}}" src="img/img_trans.gif"/>
             {{server.address}}
           </a>
       </li>
@@ -42,58 +41,87 @@
   </ul>
 </div>
 
-<!-- Test buttons etc -->
+<button class="btn btn-info" ng-click="showPlayerCol()">Settings</button>
 
-    <!--<pre>{{opt | json}}</pre>-->
-    <!--
+
+<div collapse="settings" style="{{setoverflow}}">
+    <div>
+        <button class="btn pull-right" ng-click="showPlayerCol()">close</button>
+        <div class="row">
+            <div class="span5">
+                <legend>Players</legend>
+                <div class="inline">
+                    <div class="btn-group">
+                       <button class="btn btn-info {{players.hide}}" ng-click="onlyPlayers()">Hide selected.</button>
+                       <button class="btn btn-info {{players.show}}" ng-click="onlyPlayers()">Show only selected.</button>
+                    </div>
+                </div>
+                <ul class="inline" style="margin-top:10px;">
+                    <li ng-repeat="player in opt.notPlayers | orderBy:'name'">
+                        <p>
+                          <button class="btn btn-small btn-danger" style="margin-bottom: 5px;" ng-click="rPinArray(player)"><i class="icon-remove"></i> {{player.name}}</button>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        
+            <div class="span5">
+                <legend>Guilds</legend>
+                <div class="inline">
+                    <div class="btn-group">
+                       <button class="btn btn-info {{guilds.hide}}" ng-click="onlyGuilds()">Hide selected.</button>
+                       <button class="btn btn-info {{guilds.show}}" ng-click="onlyGuilds()">Show only selected.</button>
+                    </div>
+                </div>
+                <ul class="inline" style="margin-top:10px;">
+                    <li ng-repeat="guild in opt.notGuilds | orderBy:'name'">
+                        <p>
+                          <button class="btn btn-small btn-danger" style="margin-bottom: 5px;" ng-click="rGuildinArray(guild)"><i class="icon-remove"></i> {{guild.name}}</button>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+   <!--
+    <pre>{{servers | json}}</pre>
+     
     <br>
       <a href="#removeRaces" role="button" class="btn" data-toggle="modal">Hide/Show Tribe</a>
     <br>-->
 <!-- end of test etc -->
-
-<div style="margin-top: 20px;">
-    <table class="table table-bordered table-condensed table-hover">
-        <tr>
-            <th ng-click="back()" style="width: 10px;"><i class="icon-chevron-left"></i></th>
-            <th ng-click="orderby('dist')" style="width: 40px;">Distance</th>
-            <th style="width: 60px;">X.Y</th>
-            <th ng-click="orderby('population')" style="width: 40px;">Pop</th>
-            <th ng-click="orderby('village')" style="width: 200px;">Village name</th>
-            <th ng-click="orderby('player')">Account</th>
-            <th>Account pop</th>
-            <th>Idle time</th>
-            <th>Village count</th>
-            <th ng-click="orderby('alliance')">Guild</th>
-            <th ng-click="next()" style="width: 25px;"><i class="icon-chevron-right"></i></th>
-        </tr>
-        <tr ng-repeat="villages in villages">
-            <td><i class="icon-chevron-down"></i></td>
-            <td>{{villages.dist}}</td>
-            <td>({{villages.x}}|{{villages.y}})</td>
-            <td>{{villages.population}}</td>
-            <td>{{villages.village}}</td>
-            <td>{{villages.player}}<i class="icon-remove pull-right" ng-click="removePlayer(villages.uid)"></i></td>
-            <td>{{villages.kokpop}}</td>
-            <td>{{villages.idle}}</td>
-            <td>{{villages.villagecount}}</td>
-            <td>{{villages.alliance}}<i class="icon-remove pull-right" ng-click="removeGuild(villages.aid)"></i></td>
-            <td><img class="type{{villages.tid}}" src="img/img_trans.gif"/></td>
-        </tr>
-    </table>
-</div>
-
-<div id="removeRaces" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="removeRacesLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="removeRacesLabel">Hide/Show Tribe</h3>
-  </div>
-  <div class="modal-body">
-    <button class="btn" type="button" ng-click="rtribe(1)">{{opt.1}} Romans</button>
-    <button class="btn" type="button" ng-click="rtribe(2)">{{opt.2}} Teutons</button>
-    <button class="btn" type="button" ng-click="rtribe(3)">{{opt.3}} Gauls</button>
-    <button class="btn" type="button" ng-click="rtribe(5)">{{opt.5}} Natars</button>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-  </div>
+<div collapse="result">
+    <div style="margin-top: 20px;">
+        <table class="table table-bordered table-condensed table-hover">
+            <tr>
+                <th ng-click="back()" style="width: 10px;"><i class="icon-chevron-left"></i></th>
+                <th ng-click="orderby('dist')" style="width: 40px;">Distance</th>
+                <th style="width: 60px;">X.Y</th>
+                <th ng-click="orderby('population')" style="width: 40px;">Pop</th>
+                <th ng-click="orderby('village')" style="width: 200px;">Village name</th>
+                <th ng-click="orderby('player')">Account</th>
+                <th>Account pop</th>
+                <th>Idle time</th>
+                <th>Village count</th>
+                <th ng-click="orderby('alliance')">Guild</th>
+                <th ng-click="next()" style="width: 25px;"><i class="icon-chevron-right"></i></th>
+            </tr>
+            <tr ng-repeat="villages in villages">
+                <td><i class="icon-chevron-down"></i></td>
+                <td>{{villages.dist}}</td>
+                <td>({{villages.x}}|{{villages.y}})</td>
+                <td>{{villages.population}}</td>
+                <td>{{villages.village}}</td>
+                <td>{{villages.player}}<i class="icon-remove pull-right" ng-click="removePlayer(villages.uid,villages.player)"></i></td>
+                <td>{{villages.kokpop}}</td>
+                <td>{{villages.idle}}</td>
+                <td>{{villages.villagecount}}</td>
+                <td>{{villages.alliance}}<i class="icon-remove pull-right" ng-click="removeGuild(villages.aid,villages.alliance)"></i></td>
+                <td><img class="type{{villages.tid}}" src="img/img_trans.gif"/></td>
+            </tr>
+        </table>
+    </div>
 </div>

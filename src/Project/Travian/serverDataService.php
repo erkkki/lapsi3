@@ -24,8 +24,8 @@ class serverDataService {
             $this->tables->createXworld($sqlTable); 
         }
         $this->insertVillages($map,$sqlTable);
-        //$statement = $this->conn->prepare('update activeservers set update = ? where id = ?');
-        //$statement->execute(array(time(), $server['id']));
+        $statement = $this->conn->prepare('update activeservers set updatetime = ? where id = ?');
+        $statement->execute(array(time(), $server['id']));
         
         return true;
     }
@@ -46,9 +46,6 @@ class serverDataService {
                         '$line[5]','$line[6]','$line[7]','$line[8]','$line[9]',
                         '$line[10]','','')";            
             array_push($returnAr, $result);
-            
-            
-                
             /*
              *['id'] = $line[0];
              *['x'] = $line[1];

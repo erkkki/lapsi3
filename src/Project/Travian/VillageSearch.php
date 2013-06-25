@@ -15,24 +15,53 @@ class VillageSearch {
         $this->options = $data;
     }
     private function queryVillages(){
-      $ser = str_replace('.','',$this->options->{'server'});
+      $ser = str_replace('.','',$this->options->server);
       $statement = $this->conn->prepare("SELECT * , TRUNCATE(abs(sqrt(pow(x-?,2) + pow(y-?,2))),1) AS dist FROM ".$ser.
-                                        " WHERE ".  $this->tribequery() . " AND uid NOT IN (" . $this->notPlayers().")" . 
-                                        " AND aid NOT IN (" . $this->notGuilds() . 
-                                        ")ORDER BY ". $this->options->{'orderby'}." LIMIT ". $this->options->{'limit'} . "," . $this->options->{'count'});
-      $statement->execute(array($this->options->{'x'},$this->options->{'y'}));
+                                        " WHERE ".  $this->tribequery() . " " . $this->guilds() . " " .$this->players() . " " . 
+                                        "ORDER BY ". $this->orderby() . $this->limitby());
+      $statement->execute(array($this->options->x,$this->options->y));
       $this->villages = $statement->fetchAll();
-    } 
+    }
+    public function getPlayer($name, $server){
+      $ser = str_replace('.','',$this->options->server);
+      $statement = $this->conn->prepare("select player from $ser where player LIKE ? group by player");
+      $statement->execute(array($name . '%'));
+      return $statement->fetchAll();
+    }
+    private function limitby(){
+        $query = " LIMIT ". $this->options->limit . "," . $this->options->count;
+        return $query;
+    }
+    private function orderby(){
+        return $this->options->orderby;
+    }
+    private function players(){
+        if(count($this->options->notPlayers) <= 0) return;
+        if($this->options->players){
+            $query = "AND uid IN (";
+        } else {
+            $query = "AND uid NOT IN (";
+        }
+        $uids = array();
+        foreach($this->options->notPlayers as $player){
+            array_push($uids, $player->uid);
+        }
+        return $query . implode(",", $uids) . ")";
+   }
     
-    private function notPlayers(){
-        if($this->options->{'notPlayers'} == null) return "''";
-        return substr($this->options->{'notPlayers'}, 1);
-    }
-
-    private function notGuilds(){
-        if($this->options->{'notGuilds'} == null) return "''";
-        return substr($this->options->{'notGuilds'}, 1);
-    }
+    private function guilds(){
+        if(count($this->options->notGuilds) <= 0) return;
+        if($this->options->guilds){
+            $query = "AND aid IN (";
+        } else {
+            $query = "AND aid NOT IN (";
+        }
+        $aids = array();
+        foreach($this->options->notGuilds as $player){
+            array_push($aids, $player->aid);
+        }
+        return $query . implode(",", $aids) . ")";
+    }    
 
     private function tribequery(){
       $tribes = "tid in ('0'";

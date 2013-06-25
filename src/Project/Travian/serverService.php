@@ -1,4 +1,5 @@
 <?php
+/*
 namespace Project\Travian;
 
 class serverService {
@@ -50,11 +51,6 @@ class serverService {
         return true;
     }
     private function getNewServers(){
-        /*
-         * Bug in namespaces 
-         * Fix: '\'
-         * http://goo.gl/VbpUi
-         */
         $dom = new \DOMDocument();
         
         try {
@@ -151,5 +147,5 @@ class serverService {
         return $returnAr;
     }
     
-}
+}*/
 ?>

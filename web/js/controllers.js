@@ -1,23 +1,60 @@
 function TravianCtrl($scope, $http, $routeParams, Servers){
     $scope.servers = Servers.getAll();
 }
-function VilSearchCtrl($scope, $http, $routeParams, $location, Servers){
+function VilSearchCtrl($scope, $http, $routeParams, $location, Servers, limitToFilter){
     $scope.servers = Servers.getAll();
     $scope.villages = {};
-    
-    $scope.opt = {"1":"Hide", "2":"Hide", "3":"Hide", "5":"Hide", 
+    $scope.settings = true;
+    $scope.result = true;
+    $scope.players = {"show":"","hide":"disabled"};
+    $scope.guilds = {"show":"","hide":"disabled"};
+    $scope.servername = "Select server";
+    $scope.opt = {"1":"Hide", "2":"Hide", "3":"Hide", "5":"Hide",
                   "x":"0", "y":"0", 
                   "server": $routeParams.server,
                   "limit": 0,
                   "count": 20,
                   "orderby":"dist",
-                  "notGuilds":"",
-                  "notPlayers":""};
-     
+                  "guilds" : "0",
+                  "notGuilds":[],
+                  "players": "0",
+                  "notPlayers":[]};
+              
+    $scope.onlyPlayers = function(){
+        if($scope.players.hide == "disabled"){
+           $scope.players = {"show":"disabled","hide":""};
+           $scope.opt.players = "1";
+        } else {
+           $scope.players = {"show":"","hide":"disabled"};
+           $scope.opt.players = "0";
+        }
+        $scope.search();
+    };
+    $scope.onlyGuilds = function(){
+        if($scope.guilds.hide == "disabled"){
+           $scope.guilds = {"show":"disabled","hide":""};
+           $scope.opt.guilds = "1";
+        } else {
+           $scope.guilds = {"show":"","hide":"disabled"};
+           $scope.opt.guilds = "0";
+        }
+        $scope.search();
+    };
+    $scope.showPlayerCol = function(){
+        $scope.settings = !$scope.settings;
+        $scope.result = !$scope.result;
+    };
     $scope.search = function(){
+      if($scope.opt.server == "") return;
       $http.post('api/travian/search', $scope.opt)
         .success(function(data, status, headers, config) {
           $scope.villages = data;
+          if(data.length <= 1 || $scope.settings == false){
+              $scope.result = true;
+          } else {
+            $scope.result = false;
+          }
+          $scope.servername = $scope.opt.server;
         });
     };    
     $scope.rtribe = function(id){
@@ -28,14 +65,22 @@ function VilSearchCtrl($scope, $http, $routeParams, $location, Servers){
         }
         $scope.search();
     };    
-    
-    $scope.removePlayer = function(player){
-        $scope.opt["notPlayers"] += "," + player;
+    $scope.rPinArray = function(uidid){
+        var index= $scope.opt.notPlayers.indexOf(uidid)
+        $scope.opt.notPlayers.splice(index,1); 
         $scope.search();
     };
-
-    $scope.removeGuild = function(guild){
-        $scope.opt["notGuilds"] += "," + guild;
+    $scope.rGuildinArray = function(aidid){
+        var index= $scope.opt.notGuilds.indexOf(aidid)
+        $scope.opt.notGuilds.splice(index,1); 
+        $scope.search();
+    };
+    $scope.removePlayer = function(uidid,player){
+        $scope.opt.notPlayers.push({uid:uidid, name:player});
+        $scope.search();
+    };
+    $scope.removeGuild = function(aidid,guild){
+        $scope.opt.notGuilds.push({aid:aidid, name:guild});
         $scope.search();
     };
     

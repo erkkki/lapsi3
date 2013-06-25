@@ -6,7 +6,6 @@ use Silex\Provider\DoctrineServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Project\Travian\VillageSearch;
 use Project\Travian\tableServise;
-use Project\Travian\serverService;
 use Project\Travian\activeServers;
 use Project\Travian\allServers;
 use Project\Travian\serverDataService;
@@ -86,23 +85,18 @@ $app->get('/api/travian/server/update/{id}',function(Application $app, $id){
     return $app['dataupdate']->updateServerData($id);
 });
 
-
-//######################
-/*
-$app['serverService'] = $app->share(function (Application $app) {
-    return new serverService($app['db'], $app['tableServise']);
+$app->post('/api/travian/test',function(Application $app, Request $request){
+    $data = json_decode($request->getContent());
+    echo "<pre>";
+    var_dump($data);
+    echo "</pre><br>";
+    return true;
 });
-$app->get('/api/travian/server/update/{id}',function(Application $app, $id){
-    return $app['serverService']->updateServerData($id);
-});
-*/
-//######################
-
-
 $app->post('/api/travian/search',function(Application $app, Request $request){
     $data = json_decode($request->getContent());
     if($data->server == null) return true;
     $app['vil_search']->setData(json_decode($request->getContent()));
     return $app['vil_search']->getVillages2();
 });
+
 return $app;

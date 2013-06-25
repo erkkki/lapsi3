@@ -11,8 +11,10 @@ class activeServers {
         $this->tables = $tablesServise;
     } 
     public function addServer($data){
+        if(!$this->tables->tableExists('activeservers'))
+            $this->tables->createActiveServers();
         $statement = $this->conn->prepare('insert into activeservers values(?, ?, ?, ?, ?)');
-        $statement->execute(array('', $data->server, $data->country, $data->name, 1));
+        $statement->execute(array('', $data->server, strtolower($data->country), $data->name, 1));
         return true;        
     }
     public function deleteServer($id){
@@ -34,7 +36,11 @@ class activeServers {
     public function getServers(){
         $statement = $this->conn->prepare('SELECT * FROM activeservers');
         $statement->execute();
-        return $statement->fetchAll(); 
+        $result = $statement->fetchAll(); 
+        foreach ($result as &$line) {
+            $line['humantime'] = date("F j, Y, g:i a", $line['updatetime']);
+        }
+        return $result;
     }               
     public function getServerID($id){
         $servers = $this->getServers();
