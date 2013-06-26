@@ -85,7 +85,7 @@ $app->get('/api/travian/server/update/{id}',function(Application $app, $id){
     return $app['dataupdate']->updateServerData($id);
 });
 
-$app->post('/api/travian/test',function(Application $app, Request $request){
+$app->post('/api/travian/test/',function(Application $app, Request $request){
     $data = json_decode($request->getContent());
     echo "<pre>";
     var_dump($data);

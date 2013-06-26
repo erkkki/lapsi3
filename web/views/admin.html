@@ -35,41 +35,24 @@
       <div class="control-group">
         <label class="control-label" for="inputServer">Server</label>
         <div class="controls">
-          <div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-              {{addOpt.server}}
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li ng-repeat="servers in serverList"><a ng-click="selectServer(servers.address)">{{servers.address}}</a></li>
-            </ul>
-          </div>
+          <input type="text" ng-model="add.server" typeahead="server as server.address for server in serverList | filter:$viewValue">
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="inputCountry">Country</label>
         <div class="controls">
-          <div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-              {{addOpt.name}}
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li ng-repeat="country in countrys  | orderBy:'name'"><a ng-click="selectCountry(country.code,country.name)">{{country.name}}</a></li>
-            </ul>
-          </div>
+          <input type="text" ng-model="add.country" typeahead="state as state.name for state in countrys | filter:$viewValue">
         </div>
       </div>
     </form>   
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary" ng-click="addServer(addOpt)" data-dismiss="modal">Save</button>
+    <button class="btn btn-primary" ng-click="addServer(add)" data-dismiss="modal">Save</button>
   </div>
 </div>
 
-
-<div id="ServerEdit" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="ServerEdit" aria-hidden="true">
+<div id="ServerEdit" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="AddServer" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3>Add new server</h3>
@@ -77,37 +60,21 @@
   <div class="modal-body" style="height: 800px;">
     <form class="form-horizontal">
       <div class="control-group">
-        <label class="control-label" for="inputServer">Server</label>
+        <label class="control-label" for="inputServer">{{edit.address}}</label>
         <div class="controls">
-          <div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-              {{editOpt.address}}
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li ng-repeat="servers in serverList"><a ng-click="editServer(servers.address)">{{servers.address}}</a></li>
-            </ul>
-          </div>
+          <input type="text" ng-model="edit.address" typeahead="server as server.address for server in serverList | filter:$viewValue">
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="inputCountry">Country</label>
+        <label class="control-label" for="inputCountry">{{edit.country}}</label>
         <div class="controls">
-          <div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-              {{editOpt.name}}
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li ng-repeat="country in countrys  | orderBy:'name'"><a ng-click="editCountry(country.code,country.name)">{{country.name}}</a></li>
-            </ul>
-          </div>
+          <input type="text" ng-model="edit.name" typeahead="state as state.name for state in countrys | filter:$viewValue">
         </div>
       </div>
     </form>   
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary" ng-click="editServer()" data-dismiss="modal">Save</button>
+    <button class="btn btn-primary" ng-click="editServer(edit)" data-dismiss="modal">Save</button>
   </div>
 </div>

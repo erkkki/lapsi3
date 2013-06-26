@@ -20,6 +20,8 @@ function VilSearchCtrl($scope, $http, $routeParams, $location, Servers, limitToF
                   "players": "0",
                   "notPlayers":[]};
               
+    $scope.temp = undefined;
+              
     $scope.onlyPlayers = function(){
         if($scope.players.hide == "disabled"){
            $scope.players = {"show":"disabled","hide":""};
@@ -125,17 +127,17 @@ function AdminCtrl($scope, Servers, $http){
   $scope.addinit = function(){
       $scope.getAllServers();
       $scope.countryCodes();
-      $scope.addOpt = {"server":"Select Server",
-                       "name":"Select Country"};
   }
   $scope.editinit = function(server){
       $scope.getAllServers();
       $scope.countryCodes();
-      $scope.editOpt = server;
+      $scope.edit = server;
   }
-  $scope.editServer = function(){
-      $scope.delServer($scope.editOpt.id);
-      $scope.addServer($scope.editOpt);
+  $scope.editServer = function(data){
+    $http.post('/api/travian/server/editserver/', data)
+      .success(function(data, status, headers, config) {
+        $scope.servers = Servers.getAll();
+      });
   };  
   
   $scope.getAllServers = function(){
@@ -145,38 +147,27 @@ function AdminCtrl($scope, Servers, $http){
     });
   };
   
-  $scope.selectServer = function(server){
-      $scope.addOpt.server = server;
-  };
-  $scope.selectCountry = function(country,name){
-      $scope.addOpt.country = country;
-      $scope.addOpt.name = name;
-  };
-  $scope.editServer = function(server){
-      $scope.editOpt.server = server;
-  };
-  $scope.editCountry = function(country,name){
-      $scope.editOpt.country = country;
-      $scope.editOpt.name = name;
-  };
   $scope.countryCodes = function(){
     $http.get('js/countryCodes.json')
     .success(function(data, status, headers, config) {
       $scope.countrys = data;
     });
   };
+  
   $scope.addServer = function(data){
     $http.post('/api/travian/server/add/', data)
       .success(function(data, status, headers, config) {
         $scope.servers = Servers.getAll();
-      });   
+      });
   };
+  
   $scope.delServer = function(id){
     $http.get('api/travian/server/delete/'+id)
     .success(function(data, status, headers, config) {
       $scope.servers = Servers.getAll();
     });
   };
+  
   $scope.fupdate = function(id){
     $http.get('/api/travian/server/update/'+id)
     .success(function(data, status, headers, config) {

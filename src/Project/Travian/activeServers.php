@@ -14,7 +14,7 @@ class activeServers {
         if(!$this->tables->tableExists('activeservers'))
             $this->tables->createActiveServers();
         $statement = $this->conn->prepare('insert into activeservers values(?, ?, ?, ?, ?)');
-        $statement->execute(array('', $data->server, strtolower($data->country), $data->name, 1));
+        $statement->execute(array('', $data->server->address, strtolower($data->country->code), $data->country->name, 1));
         return true;        
     }
     public function deleteServer($id){
@@ -28,7 +28,7 @@ class activeServers {
     public function updateServer($data){
         if($this->getServerID($data->id)){
             $statement = $this->conn->prepare('update activeservers set country = ? , name = ? , address = ? where id = ?');
-            $statement->execute(array($data->country, $data->name, $data->address, $data->id)); 
+            $statement->execute(array(strtolower($data->name->code), $data->name->name, $data->address, $data->id)); 
             return true;
         }
         return false;
