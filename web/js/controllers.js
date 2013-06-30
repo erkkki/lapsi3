@@ -1,12 +1,13 @@
-function TravianCtrl($scope, $http, $routeParams, Servers){
-    $scope.servers = Servers.getAll();
+function testCtrl($scope){
+    $scope.range = {};
 }
-function VilSearchCtrl($scope, $http, $routeParams, $location, Servers, limitToFilter){
+function VilSearchCtrl($scope, $http, $routeParams, $location, Servers){
     $scope.servers = Servers.getAll();
     $scope.villages = {};
     $scope.settings = true;
     $scope.result = true;
     $scope.players = {"show":"","hide":"disabled"};
+    $scope.psearch = {};
     $scope.guilds = {"show":"","hide":"disabled"};
     $scope.servername = "Select server";
     $scope.opt = {"1":"Hide", "2":"Hide", "3":"Hide", "5":"Hide",
@@ -18,10 +19,37 @@ function VilSearchCtrl($scope, $http, $routeParams, $location, Servers, limitToF
                   "guilds" : "0",
                   "notGuilds":[],
                   "players": "0",
-                  "notPlayers":[]};
-              
-    $scope.temp = undefined;
-              
+                  "notPlayers":[],
+                  "vilminpop": 0,
+                  "vilmaxpop": 2000,
+                  "accominpop": 0,
+                  "accomaxpop": 10000,
+                  "vilcountmin": 1,
+                  "vilcountmax": 20
+              };
+    
+    $scope.addplayer = function(player){
+      if($routeParams.server == "") return;
+      data = {};
+      data.key = player;
+      data.server = $routeParams.server;
+      $http.post('api/travian/search/playerbyname/', data)
+        .success(function(data, status, headers, config) {
+            $scope.removePlayer(data[0].uid, data[0].player);
+        });
+    };
+    
+    $scope.searchPlayer = function(temp){
+      if($routeParams.server == "" || temp.length <= 0) return;
+      data = {};
+      data.key = temp;
+      data.server = $routeParams.server;
+      $http.post('api/travian/search/player/', data)
+        .success(function(data, status, headers, config) {
+          $scope.psearch = data;
+        });
+    };
+    
     $scope.onlyPlayers = function(){
         if($scope.players.hide == "disabled"){
            $scope.players = {"show":"disabled","hide":""};
@@ -30,7 +58,6 @@ function VilSearchCtrl($scope, $http, $routeParams, $location, Servers, limitToF
            $scope.players = {"show":"","hide":"disabled"};
            $scope.opt.players = "0";
         }
-        $scope.search();
     };
     $scope.onlyGuilds = function(){
         if($scope.guilds.hide == "disabled"){
@@ -40,14 +67,21 @@ function VilSearchCtrl($scope, $http, $routeParams, $location, Servers, limitToF
            $scope.guilds = {"show":"","hide":"disabled"};
            $scope.opt.guilds = "0";
         }
-        $scope.search();
     };
     $scope.showPlayerCol = function(){
         $scope.settings = !$scope.settings;
-        $scope.result = !$scope.result;
+        
+        
+        if($scope.settings && $scope.opt.server != ""){
+            $scope.result = false;
+            $scope.search();
+        } else {
+            $scope.result = true;
+        }
+        
     };
     $scope.search = function(){
-      if($scope.opt.server == "") return;
+      if($routeParams.server == "") return;
       $http.post('api/travian/search', $scope.opt)
         .success(function(data, status, headers, config) {
           $scope.villages = data;
@@ -58,7 +92,7 @@ function VilSearchCtrl($scope, $http, $routeParams, $location, Servers, limitToF
           }
           $scope.servername = $scope.opt.server;
         });
-    };    
+    };
     $scope.rtribe = function(id){
         if(angular.equals($scope.opt[id],"Hide")){
             $scope.opt[id] = "Show";
@@ -70,12 +104,10 @@ function VilSearchCtrl($scope, $http, $routeParams, $location, Servers, limitToF
     $scope.rPinArray = function(uidid){
         var index= $scope.opt.notPlayers.indexOf(uidid)
         $scope.opt.notPlayers.splice(index,1); 
-        $scope.search();
     };
     $scope.rGuildinArray = function(aidid){
         var index= $scope.opt.notGuilds.indexOf(aidid)
         $scope.opt.notGuilds.splice(index,1); 
-        $scope.search();
     };
     $scope.removePlayer = function(uidid,player){
         $scope.opt.notPlayers.push({uid:uidid, name:player});

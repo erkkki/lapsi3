@@ -1,52 +1,55 @@
-<div class="btn-group">
-  <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
-    {{opt.server}}
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu">
-      <li><a ng-repeat="server in servers" href="#/travian/{{server.name}}">
-            <img class="flag flag-fi" src="img/img_trans.gif"/>
-            {{server.name}}
-          </a>
-      </li>
-  </ul>
+
+
+
+<form class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label" for="inputEmail">Village population:</label>
+    <div class="controls">
+      <span class="add-on">Min</span>
+      <input class="span8" id="prependedInput" min="1" max="1999" type="number">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputPassword">Password</label>
+    <div class="controls">
+      <span class="add-on">Max</span>
+      <input class="span8" id="prependedInput" min="1" max="2000" type="number">
+    </div>
+  </div>
+</form>
+
+
+
+
+
+<div class="row">
+ <div class="span6">
+    <p>
+      <label for="amount">Village pop range:</label>
+      <input type="text" ng-model="range" id="amount" style="border: 0; font-weight: bold;" />
+    </p>
+
+    <div id="slider-range"></div>
+  </div>
 </div>
 
-  
+<p>
+    <br>
+    <pre>{{range | json}}</pre>
+</p>
+
   <script>
   $(function() {
     $( "#slider-range" ).slider({
       range: true,
       min: 0,
-      max: 500,
-      values: [ 75, 300 ],
+      max: 2000,
+      values: [ 0, 2000 ],
       slide: function( event, ui ) {
-        $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+        $( "#amount" ).val(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
       }
     });
-    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-      " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+    $( "#amount" ).val($( "#slider-range" ).slider( "values", 0 ) +
+      " - " + $( "#slider-range" ).slider( "values", 1 ) );
   });
   </script>
-
-
- 
-<p>
-  <label for="amount">Price range:</label>
-  <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
-</p>
- 
-<div id="slider-range"></div>
- 
-<div class="btn-group">
-  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-    Action
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu">
-      <li><a>asd</a></li>
-  </ul>
-</div> 
-
-
-

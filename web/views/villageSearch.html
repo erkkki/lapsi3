@@ -1,4 +1,4 @@
-<br>
+
 <div class="btn-group">
   <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
     {{servername}}
@@ -13,18 +13,11 @@
 </div>
 <div class="input-prepend" style="margin-top:10px;">
   <span class="add-on">X</span>
-  <input class="input-mini" type="number" ng-model="opt.x" ng-change="search()"min="-400" max="400" placeholder="{{opt.x}}">
+  <input class="input-mini" type="number" ng-model="opt.x" ng-change="search()" min="-400" max="400" placeholder="{{opt.x}}">
 </div>
 <div class="input-prepend" style="margin-top:10px;">
   <span class="add-on">Y</span>
   <input class="input-mini" type="number" ng-model="opt.y" ng-change="search()" min="-400" max="400" placeholder="{{opt.y}}">
-</div>
-
-<div class="btn-group">
-    <button class="btn" ng-class="getTribeClass('1')" type="button" ng-click="rtribe(1)">{{opt.1}} Romans</button>
-    <button class="btn" ng-class="getTribeClass('2')" type="button" ng-click="rtribe(2)">{{opt.2}} Teutons</button>
-    <button class="btn" ng-class="getTribeClass('3')" type="button" ng-click="rtribe(3)">{{opt.3}} Gauls</button>
-    <button class="btn" ng-class="getTribeClass('5')" type="button" ng-click="rtribe(5)">{{opt.5}} Natars</button>
 </div>
 
 <div class="btn-group">
@@ -44,51 +37,110 @@
 <button class="btn btn-info" ng-click="showPlayerCol()">Settings</button>
 
 
-<div collapse="settings" style="{{setoverflow}}">
-    <div>
-        <button class="btn pull-right" ng-click="showPlayerCol()">close</button>
-        <div class="row">
-            <div class="span5">
-                <legend>Players</legend>
-                <div class="inline">
-                    <div class="btn-group">
-                       <button class="btn btn-info {{players.hide}}" ng-click="onlyPlayers()">Hide selected.</button>
-                       <button class="btn btn-info {{players.show}}" ng-click="onlyPlayers()">Show only selected.</button>
-                    </div>
+<div collapse="settings">
+    <div class="row-fluid">
+        <div class="span6">
+            <legend>Players</legend>
+            <div class="inline">
+                <div class="btn-group">
+                   <button class="btn btn-info {{players.hide}}" ng-click="onlyPlayers()">Hide selected</button>
+                   <button class="btn btn-info {{players.show}}" ng-click="onlyPlayers()">Show only selected</button>
                 </div>
-                <ul class="inline" style="margin-top:10px;">
-                    <li ng-repeat="player in opt.notPlayers | orderBy:'name'">
-                        <p>
-                          <button class="btn btn-small btn-danger" style="margin-bottom: 5px;" ng-click="rPinArray(player)"><i class="icon-remove"></i> {{player.name}}</button>
-                        </p>
-                    </li>
-                </ul>
+                <div class="input-append" style="margin-top:10px;">
+                    <input class="span8" id="appendedInputButtons" type="text" ng-model="player" 
+                           ng-change="searchPlayer(player)" typeahead="players as players for players in psearch | filter:$viewValue">
+                    <button class="btn" type="button" ng-click="addplayer(player)">Add player</button>
+                </div>
             </div>
+            <ul class="inline" style="margin-top:10px;">
+                <li ng-repeat="player in opt.notPlayers | orderBy:'name'">
+                    <p>
+                      <button class="btn btn-small btn-danger" style="margin-bottom: 5px;" ng-click="rPinArray(player)"><i class="icon-remove"></i> {{player.name}}</button>
+                    </p>
+                </li>
+            </ul>
+        </div>
         
-            <div class="span5">
-                <legend>Guilds</legend>
-                <div class="inline">
-                    <div class="btn-group">
-                       <button class="btn btn-info {{guilds.hide}}" ng-click="onlyGuilds()">Hide selected.</button>
-                       <button class="btn btn-info {{guilds.show}}" ng-click="onlyGuilds()">Show only selected.</button>
-                    </div>
-                </div>
-                <ul class="inline" style="margin-top:10px;">
-                    <li ng-repeat="guild in opt.notGuilds | orderBy:'name'">
-                        <p>
-                          <button class="btn btn-small btn-danger" style="margin-bottom: 5px;" ng-click="rGuildinArray(guild)"><i class="icon-remove"></i> {{guild.name}}</button>
-                        </p>
-                    </li>
-                </ul>
+        <div class="span6">
+            <legend>Guilds</legend>
+            <div class="inline">
+               <div class="btn-group">
+                   <button class="btn btn-info {{guilds.hide}}" ng-click="onlyGuilds()">Hide selected</button>
+                   <button class="btn btn-info {{guilds.show}}" ng-click="onlyGuilds()">Show only selected</button>
+               </div>
+            </div>
+            <ul class="inline" style="margin-top:10px;">
+               <li ng-repeat="guild in opt.notGuilds | orderBy:'name'">
+                   <p>
+                      <button class="btn btn-small btn-danger" style="margin-bottom: 5px;" ng-click="rGuildinArray(guild)"><i class="icon-remove"></i> {{guild.name}}</button>
+                   </p>
+               </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid"> 
+        <div class="span6">            
+            <legend>Race selection</legend>
+            <div class="btn-group">
+               <button class="btn" ng-class="getTribeClass('1')" type="button" ng-click="rtribe(1)">{{opt.1}} Romans</button>
+               <button class="btn" ng-class="getTribeClass('2')" type="button" ng-click="rtribe(2)">{{opt.2}} Teutons</button>
+               <button class="btn" ng-class="getTribeClass('3')" type="button" ng-click="rtribe(3)">{{opt.3}} Gauls</button>
+               <button class="btn" ng-class="getTribeClass('5')" type="button" ng-click="rtribe(5)">{{opt.5}} Natars</button>
             </div>
         </div>
-    </div> 
+        <div class="span6">
+            <legend>Population limits</legend>
+
+            <form class="form-horizontal">
+              <div class="control-group">
+                <label class="control-label" for="inputEmail">Village population</label>
+                <div class="controls">
+                  <div class="input-prepend">
+                    <span class="add-on">Min</span>
+                    <input class="input-mini" id="prependedInput" ng-model="opt.vilminpop" min="0" max="1999" type="number">
+                  </div>
+                  <div class="input-prepend">
+                    <span class="add-on">Max</span>
+                    <input class="input-mini" id="prependedInput" ng-model="opt.vilmaxpop" min="1" max="2000" type="number">
+                  </div>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="inputPassword">Account population</label>
+                <div class="controls">
+                  <div class="input-prepend">
+                    <span class="add-on">Min</span>
+                    <input class="input-mini" id="prependedInput" ng-model="opt.accominpop" min="0" max="99999" type="number">
+                  </div>
+                  <div class="input-prepend">
+                    <span class="add-on">Max</span>
+                    <input class="input-mini" id="prependedInput" ng-model="opt.accomaxpop" min="1" max="100000" type="number">
+                  </div>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="inputPassword">Village count</label>
+                <div class="controls">
+                  <div class="input-prepend">
+                    <span class="add-on">Min</span>
+                    <input class="input-mini" id="prependedInput" ng-model="opt.vilcountmin" min="1" max="99" type="number">
+                  </div>
+                  <div class="input-prepend">
+                    <span class="add-on">Max</span>
+                    <input class="input-mini" id="prependedInput" ng-model="opt.vilcountmax" min="2" max="200" type="number">
+                  </div>
+                </div>
+              </div>
+            </form>
+        </div>
+    </div>
 </div>
 
-
-   <!--
-    <pre>{{servers | json}}</pre>
-     
+   
+    
+    <!--
+    <pre>{{psearch | json}}</pre>
+    
     <br>
       <a href="#removeRaces" role="button" class="btn" data-toggle="modal">Hide/Show Tribe</a>
     <br>-->
@@ -109,6 +161,7 @@
                 <th ng-click="orderby('alliance')">Guild</th>
                 <th ng-click="next()" style="width: 25px;"><i class="icon-chevron-right"></i></th>
             </tr>
+
             <tr ng-repeat="villages in villages">
                 <td><i class="icon-chevron-down"></i></td>
                 <td>{{villages.dist}}</td>

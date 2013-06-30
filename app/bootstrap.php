@@ -84,7 +84,32 @@ $app['dataupdate'] = $app->share(function (Application $app) {
 $app->get('/api/travian/server/update/{id}',function(Application $app, $id){
     return $app['dataupdate']->updateServerData($id);
 });
+//##########################
+//#### Search villages #####
 
+$app->post('/api/travian/search',function(Application $app, Request $request){
+    $data = json_decode($request->getContent());
+    if($data->server == null) return true;
+    $app['vil_search']->setData(json_decode($request->getContent()));
+    return json_encode($app['vil_search']->getVillages());
+});
+$app->post('/api/travian/search/player/',function(Application $app, Request $request){
+    $data = json_decode($request->getContent());
+    $temp = $app['vil_search']->getPlayer($data->key,$data->server);
+    $players = array();
+    foreach ($temp as $line) {
+          array_push($players, $line['player']);
+      }
+    return json_encode($players);
+});
+$app->post('/api/travian/search/playerbyname/',function(Application $app, Request $request){
+    $data = json_decode($request->getContent());
+    $temp = $app['vil_search']->getPlayer($data->key,$data->server);
+    return json_encode($temp); 
+});
+
+
+//##########################
 $app->post('/api/travian/test/',function(Application $app, Request $request){
     $data = json_decode($request->getContent());
     echo "<pre>";
@@ -92,11 +117,8 @@ $app->post('/api/travian/test/',function(Application $app, Request $request){
     echo "</pre><br>";
     return true;
 });
-$app->post('/api/travian/search',function(Application $app, Request $request){
-    $data = json_decode($request->getContent());
-    if($data->server == null) return true;
-    $app['vil_search']->setData(json_decode($request->getContent()));
-    return $app['vil_search']->getVillages2();
+$app->get('/api/travian/test2/{id}',function(Application $app, $id){
+    return json_encode($app['vil_search']->getPlayer($id,"tx3.travian.fi"));
 });
 
 return $app;

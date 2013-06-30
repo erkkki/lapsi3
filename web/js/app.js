@@ -9,7 +9,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
       templateUrl:"/views/info.html"
     })
   .when('/test',{
-      controller: TravianCtrl,
+      controller: testCtrl,
       templateUrl:"/views/test.html"
     })
   .when('/travian/:server',{

@@ -18,15 +18,24 @@ class VillageSearch {
       $ser = str_replace('.','',$this->options->server);
       $statement = $this->conn->prepare("SELECT * , TRUNCATE(abs(sqrt(pow(x-?,2) + pow(y-?,2))),1) AS dist FROM ".$ser.
                                         " WHERE ".  $this->tribequery() . " " . $this->guilds() . " " .$this->players() . " " . 
+                                        $this->vilPopulationquery() . " " . 
                                         "ORDER BY ". $this->orderby() . $this->limitby());
       $statement->execute(array($this->options->x,$this->options->y));
       $this->villages = $statement->fetchAll();
     }
+    private function vilPopulationquery(){
+        
+        if($this->options->vilminpop == "" && $this->options->vilmaxpop == "") return;
+        if($this->options->vilminpop == ""){ $min = 0; } else $min = $this->options->vilminpop; 
+        if($this->options->vilmaxpop == ""){ $max = 2000; } else $max = $this->options->vilmaxpop;
+        
+        return "AND population BETWEEN " . $min . " AND " . $max;
+    }
     public function getPlayer($name, $server){
-      $ser = str_replace('.','',$this->options->server);
-      $statement = $this->conn->prepare("select player from $ser where player LIKE ? group by player");
+      $ser = str_replace('.','',$server);
+      $statement = $this->conn->prepare("select * from $ser where player LIKE ? group by player");
       $statement->execute(array($name . '%'));
-      return $statement->fetchAll();
+      return $statement->fetchAll();       
     }
     private function limitby(){
         $query = " LIMIT ". $this->options->limit . "," . $this->options->count;
@@ -71,17 +80,14 @@ class VillageSearch {
       if($this->options->{'5'} == "Hide") $tribes .= ",'5'";
       return $tribes . ")";
     }    
-    public function getVillages2(){
+    public function getVillages(){
         try {
           $this->queryVillages();
         } catch (Exception $e){
           return 'No villages :(';
         }
         if($this->villages != null) 
-        return json_encode($this->villages);
-        
-        return true;
-        
+        return $this->villages;        
     }
  
 }
