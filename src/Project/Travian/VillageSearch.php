@@ -18,22 +18,42 @@ class VillageSearch {
       $ser = str_replace('.','',$this->options->server);
       $statement = $this->conn->prepare("SELECT * , TRUNCATE(abs(sqrt(pow(x-?,2) + pow(y-?,2))),1) AS dist FROM ".$ser.
                                         " WHERE ".  $this->tribequery() . " " . $this->guilds() . " " .$this->players() . " " . 
-                                        $this->vilPopulationquery() . " " . 
+                                        $this->vilPopulationquery() . " " . $this->accountPopulationquery() . " " .
+                                        $this->villageCountquery() . " " .
                                         "ORDER BY ". $this->orderby() . $this->limitby());
       $statement->execute(array($this->options->x,$this->options->y));
       $this->villages = $statement->fetchAll();
     }
     private function vilPopulationquery(){
-        
         if($this->options->vilminpop == "" && $this->options->vilmaxpop == "") return;
         if($this->options->vilminpop == ""){ $min = 0; } else $min = $this->options->vilminpop; 
         if($this->options->vilmaxpop == ""){ $max = 2000; } else $max = $this->options->vilmaxpop;
         
         return "AND population BETWEEN " . $min . " AND " . $max;
     }
+    private function accountPopulationquery(){
+        if($this->options->accominpop == "" && $this->options->accomaxpop == "") return;
+        if($this->options->accominpop == ""){ $min = 0; } else $min = $this->options->accominpop; 
+        if($this->options->accomaxpop == ""){ $max = 100000; } else $max = $this->options->accomaxpop;
+        
+        return "AND uidPopulation BETWEEN " . $min . " AND " . $max;
+    }
+    private function villageCountquery(){
+        if($this->options->vilcountmin == "" && $this->options->vilcountmax == "") return;
+        if($this->options->vilcountmin == ""){ $min = 1; } else $min = $this->options->vilcountmin; 
+        if($this->options->vilcountmax == ""){ $max = 200; } else $max = $this->options->vilcountmax;
+        
+        return "AND villagecount BETWEEN " . $min . " AND " . $max;
+    }
     public function getPlayer($name, $server){
       $ser = str_replace('.','',$server);
       $statement = $this->conn->prepare("select * from $ser where player LIKE ? group by player");
+      $statement->execute(array($name . '%'));
+      return $statement->fetchAll();       
+    }
+    public function getGuild($name, $server){
+      $ser = str_replace('.','',$server);
+      $statement = $this->conn->prepare("select * from $ser where alliance LIKE ? group by alliance");
       $statement->execute(array($name . '%'));
       return $statement->fetchAll();       
     }

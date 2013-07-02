@@ -40,21 +40,20 @@ class tableServise {
               `id` int(11) NOT NULL,
               `x` int(11) NOT NULL,
               `y` int(11) NOT NULL,
-              `tid` int(11) NULL,
-              `vid` int(11) NULL,
-              `village` varchar(100) NULL,
-              `uid` int(11) NULL,
-              `player` varchar(100) NULL,
-              `aid` varchar(100) NULL,
-              `alliance` varchar(100) NULL,
-              `population` int(11) NULL,
-              `pophistory` char NULL,
-              `idle` INT(11) NULL,
-              PRIMARY KEY (`id`)
-              ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
+              `tid` int(11) NOT NULL,
+              `vid` int(11) NOT NULL,
+              `village` varchar(100) NOT NULL,
+              `uid` int(11) NOT NULL,
+              `player` varchar(100) NOT NULL,
+              `aid` varchar(100) NOT NULL,
+              `alliance` varchar(100) NOT NULL,
+              `population` int(11) NOT NULL,
+              `uidPopulation` int(11) NULL,
+              `villagecount` int(11) null
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
       return $this->conn->exec($sql);
     }
-    function tableExists($name){
+    public function tableExists($name){
         $results = $this->conn->query("SHOW TABLES LIKE '$name'");
         if($results->rowCount()>0)
             return 1;

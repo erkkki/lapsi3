@@ -26,7 +26,14 @@ class serverDataService {
         $this->insertVillages($map,$sqlTable);
         $statement = $this->conn->prepare('update activeservers set updatetime = ? where id = ?');
         $statement->execute(array(time(), $server['id']));
-        
+        $this->conn->exec("delete from " . $sqlTable . " where population = '0'");
+        $this->updatePopVil($sqlTable);
+        return true;
+         
+    }
+    private function updatePopVil($table){
+        $this->conn->exec("update " . $sqlTable . " as t1, ( select sum(population) as pop, count(population) as vil, uid from " . $sqlTable . 
+                          " group by uid) as t2 set t1.uidPopulation = t2.pop, t1.villagecount = t2.vil where t1.uid = t2.uid");
         return true;
     }
     private function getMapsql($address){
@@ -38,10 +45,10 @@ class serverDataService {
             foreach ($line as &$elem) {
                 $elem = trim($elem, "'");                
             }
-            // id x  y tid vid village uid player aid  | alliance | population | pophistory | idle |
-
+            
             if(@$line[4] == null)
                 return $returnAr;
+            
             $result = "('$line[0]','$line[1]','$line[2]','$line[3]','$line[4]',
                         '$line[5]','$line[6]','$line[7]','$line[8]','$line[9]',
                         '$line[10]','','')";            
@@ -57,7 +64,9 @@ class serverDataService {
              *['player'] = $line[7]; 
              *['aid'] = $line[8]; 
              *['alliance'] = $line[9]; 
-             *['population'] = $line[10]; 
+             *['population'] = $line[10];
+             *`uidPopulation` int(11) NULL,
+             *`villagecount` int(11) null
              */
         }
         return $returnAr;

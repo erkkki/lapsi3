@@ -8,6 +8,7 @@ function VilSearchCtrl($scope, $http, $routeParams, $location, Servers){
     $scope.result = true;
     $scope.players = {"show":"","hide":"disabled"};
     $scope.psearch = {};
+    $scope.gsearch = {};
     $scope.guilds = {"show":"","hide":"disabled"};
     $scope.servername = "Select server";
     $scope.opt = {"1":"Hide", "2":"Hide", "3":"Hide", "5":"Hide",
@@ -23,11 +24,38 @@ function VilSearchCtrl($scope, $http, $routeParams, $location, Servers){
                   "vilminpop": 0,
                   "vilmaxpop": 2000,
                   "accominpop": 0,
-                  "accomaxpop": 10000,
+                  "accomaxpop": 50000,
                   "vilcountmin": 1,
-                  "vilcountmax": 20
-              };
+                  "vilcountmax": 100
+              };    
+
+
+    $scope.addguild = function(guild){
+      if($routeParams.server == "") return;
+      data = {};
+      data.key = guild;
+      data.server = $routeParams.server;
+      $http.post('api/travian/search/guildbyname/', data)
+        .success(function(data, status, headers, config) {
+            $scope.removeGuild(data[0].aid, data[0].alliance);
+            $scope.guild = "";
+        });
+    };
     
+    $scope.searchGuild = function(temp){
+      if(temp.length == 0) $scope.gsearch = "";
+      if($routeParams.server == "" || temp.length < 0) return;
+      data = {};
+      data.key = temp;
+      data.server = $routeParams.server;
+      $http.post('api/travian/search/guild/', data)
+        .success(function(data, status, headers, config) {
+          $scope.gsearch = data;
+        });
+    };
+
+
+
     $scope.addplayer = function(player){
       if($routeParams.server == "") return;
       data = {};
@@ -36,11 +64,13 @@ function VilSearchCtrl($scope, $http, $routeParams, $location, Servers){
       $http.post('api/travian/search/playerbyname/', data)
         .success(function(data, status, headers, config) {
             $scope.removePlayer(data[0].uid, data[0].player);
+            $scope.player = "";
         });
     };
     
     $scope.searchPlayer = function(temp){
-      if($routeParams.server == "" || temp.length <= 0) return;
+      if(temp.length == 0) $scope.psearch = "";
+      if($routeParams.server == "" || temp.length < 1) return;
       data = {};
       data.key = temp;
       data.server = $routeParams.server;
@@ -70,10 +100,7 @@ function VilSearchCtrl($scope, $http, $routeParams, $location, Servers){
     };
     $scope.showPlayerCol = function(){
         $scope.settings = !$scope.settings;
-        
-        
         if($scope.settings && $scope.opt.server != ""){
-            $scope.result = false;
             $scope.search();
         } else {
             $scope.result = true;
@@ -84,11 +111,16 @@ function VilSearchCtrl($scope, $http, $routeParams, $location, Servers){
       if($routeParams.server == "") return;
       $http.post('api/travian/search', $scope.opt)
         .success(function(data, status, headers, config) {
-          $scope.villages = data;
-          if(data.length <= 1 || $scope.settings == false){
+          if(data != "null")
+            $scope.villages = data;
+          else {
+            $scope.villages = {};
+            return;
+          }
+          if(data.lenght < 0 || $scope.settings == false){
               $scope.result = true;
           } else {
-            $scope.result = false;
+              $scope.result = false;
           }
           $scope.servername = $scope.opt.server;
         });

@@ -107,7 +107,20 @@ $app->post('/api/travian/search/playerbyname/',function(Application $app, Reques
     $temp = $app['vil_search']->getPlayer($data->key,$data->server);
     return json_encode($temp); 
 });
-
+$app->post('/api/travian/search/guild/',function(Application $app, Request $request){
+    $data = json_decode($request->getContent());
+    $temp = $app['vil_search']->getGuild($data->key,$data->server);
+    $guilds = array();
+    foreach ($temp as $line) {
+          array_push($guilds, $line['alliance']);
+      }
+    return json_encode($guilds);
+});
+$app->post('/api/travian/search/guildbyname/',function(Application $app, Request $request){
+    $data = json_decode($request->getContent());
+    $temp = $app['vil_search']->getGuild($data->key,$data->server);
+    return json_encode($temp); 
+});
 
 //##########################
 $app->post('/api/travian/test/',function(Application $app, Request $request){
