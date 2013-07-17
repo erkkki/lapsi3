@@ -9,15 +9,9 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
       templateUrl:"/views/info.html"
     })
   .when('/test',{
-      controller: testCtrl,
       templateUrl:"/views/test.html"
     })
-  .when('/travian/:server',{
-      controller: VilSearchCtrl,
-      templateUrl:"/views/villageSearch.html"
-    })
   .when('/travian/',{
-      controller: VilSearchCtrl,
       templateUrl:"/views/villageSearch.html"
     })
   .when('/admin',{

@@ -32,8 +32,12 @@ class serverDataService {
          
     }
     private function updatePopVil($table){
-        $this->conn->exec("update " . $sqlTable . " as t1, ( select sum(population) as pop, count(population) as vil, uid from " . $sqlTable . 
-                          " group by uid) as t2 set t1.uidPopulation = t2.pop, t1.villagecount = t2.vil where t1.uid = t2.uid");
+        $this->conn->exec("update " . $table . " as t1, 
+                          (select sum(population) as pop, count(population) as vil, uid from " . $table . " group by uid) as t2
+                          set t1.uidPopulation = t2.pop, 
+                          t1.villagecount = t2.vil,
+                          t1.idle = case when t1.uidPopulation = t2.pop then t1.idle+1 else 0 end
+                          where t1.uid = t2.uid");   
         return true;
     }
     private function getMapsql($address){
@@ -51,7 +55,7 @@ class serverDataService {
             
             $result = "('$line[0]','$line[1]','$line[2]','$line[3]','$line[4]',
                         '$line[5]','$line[6]','$line[7]','$line[8]','$line[9]',
-                        '$line[10]','','')";            
+                        '$line[10]','','','')";            
             array_push($returnAr, $result);
             /*
              *['id'] = $line[0];

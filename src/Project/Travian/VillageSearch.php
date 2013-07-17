@@ -4,111 +4,87 @@ namespace Project\Travian;
 class VillageSearch {
 
     
-    protected $conn;
-    protected $villages;
-    protected $options;
+  protected $conn;
+  protected $villages;
+  protected $post;
+  public $temp;
 
-    public function __construct($conn){
-        $this->conn = $conn;
-    }
-    public function setData($data){
-        $this->options = $data;
-    }
-    private function queryVillages(){
-      $ser = str_replace('.','',$this->options->server);
-      $statement = $this->conn->prepare("SELECT * , TRUNCATE(abs(sqrt(pow(x-?,2) + pow(y-?,2))),1) AS dist FROM ".$ser.
-                                        " WHERE ".  $this->tribequery() . " " . $this->guilds() . " " .$this->players() . " " . 
-                                        $this->vilPopulationquery() . " " . $this->accountPopulationquery() . " " .
-                                        $this->villageCountquery() . " " .
-                                        "ORDER BY ". $this->orderby() . $this->limitby());
-      $statement->execute(array($this->options->x,$this->options->y));
-      $this->villages = $statement->fetchAll();
-    }
-    private function vilPopulationquery(){
-        if($this->options->vilminpop == "" && $this->options->vilmaxpop == "") return;
-        if($this->options->vilminpop == ""){ $min = 0; } else $min = $this->options->vilminpop; 
-        if($this->options->vilmaxpop == ""){ $max = 2000; } else $max = $this->options->vilmaxpop;
-        
-        return "AND population BETWEEN " . $min . " AND " . $max;
-    }
-    private function accountPopulationquery(){
-        if($this->options->accominpop == "" && $this->options->accomaxpop == "") return;
-        if($this->options->accominpop == ""){ $min = 0; } else $min = $this->options->accominpop; 
-        if($this->options->accomaxpop == ""){ $max = 100000; } else $max = $this->options->accomaxpop;
-        
-        return "AND uidPopulation BETWEEN " . $min . " AND " . $max;
-    }
-    private function villageCountquery(){
-        if($this->options->vilcountmin == "" && $this->options->vilcountmax == "") return;
-        if($this->options->vilcountmin == ""){ $min = 1; } else $min = $this->options->vilcountmin; 
-        if($this->options->vilcountmax == ""){ $max = 200; } else $max = $this->options->vilcountmax;
-        
-        return "AND villagecount BETWEEN " . $min . " AND " . $max;
-    }
-    public function getPlayer($name, $server){
-      $ser = str_replace('.','',$server);
-      $statement = $this->conn->prepare("select * from $ser where player LIKE ? group by player");
-      $statement->execute(array($name . '%'));
-      return $statement->fetchAll();       
-    }
-    public function getGuild($name, $server){
-      $ser = str_replace('.','',$server);
-      $statement = $this->conn->prepare("select * from $ser where alliance LIKE ? group by alliance");
-      $statement->execute(array($name . '%'));
-      return $statement->fetchAll();       
-    }
-    private function limitby(){
-        $query = " LIMIT ". $this->options->limit . "," . $this->options->count;
-        return $query;
-    }
-    private function orderby(){
-        return $this->options->orderby;
-    }
-    private function players(){
-        if(count($this->options->notPlayers) <= 0) return;
-        if($this->options->players){
-            $query = "AND uid IN (";
-        } else {
-            $query = "AND uid NOT IN (";
-        }
-        $uids = array();
-        foreach($this->options->notPlayers as $player){
-            array_push($uids, $player->uid);
-        }
-        return $query . implode(",", $uids) . ")";
-   }
+  public function __construct($conn){
+    $this->conn = $conn;
+  }
+  public function setData($data){
+    $this->post = $data;
+    $this->post->table = str_replace('.','',$this->post->server);
     
-    private function guilds(){
-        if(count($this->options->notGuilds) <= 0) return;
-        if($this->options->guilds){
-            $query = "AND aid IN (";
-        } else {
-            $query = "AND aid NOT IN (";
-        }
-        $aids = array();
-        foreach($this->options->notGuilds as $player){
-            array_push($aids, $player->aid);
-        }
-        return $query . implode(",", $aids) . ")";
-    }    
-
-    private function tribequery(){
-      $tribes = "tid in ('0'";
-      if($this->options->{'1'} == "Hide") $tribes .= ",'1'";
-      if($this->options->{'2'} == "Hide") $tribes .= ",'2'";
-      if($this->options->{'3'} == "Hide") $tribes .= ",'3'";
-      if($this->options->{'5'} == "Hide") $tribes .= ",'5'";
-      return $tribes . ")";
-    }    
-    public function getVillages(){
-        try {
-          $this->queryVillages();
-        } catch (Exception $e){
-          return 'No villages :(';
-        }
-        if($this->villages != null) 
-        return $this->villages;        
+    $this->post->vilminpop = (is_int($data->x) ? $data->x : 0);
+    $this->post->vilminpop = (is_int($data->y) ? $data->y : 0);
+    
+    $this->post->count = (is_int($data->count) ? $data->count : 20);
+    $this->post->limit = (is_int($data->limit) ? $data->limit : 0);
+    
+    $this->post->roman = ($data->tribes->roman ? '' : '1');
+    $this->post->teuton = ($data->tribes->teuton ? '' : '2');
+    $this->post->gaul = ($data->tribes->gaul ? '' : '3');
+    $this->post->natar = ($data->tribes->natar ? '' : '5');
+    
+    $this->post->vilminpop = (is_int($data->vilminpop) ? $data->vilminpop : '0');
+    $this->post->vilmaxpop = (is_int($data->vilmaxpop) ? $data->vilmaxpop : '2000');
+    
+    $this->post->accominpop = (is_int($data->accominpop) ? $data->accominpop : '0');
+    $this->post->accomaxpop = (is_int($data->accomaxpop) ? $data->accomaxpop : '50000');   
+    
+    $this->post->vilcountmin = (is_int($data->vilcountmin) ? $data->vilcountmin : '1');
+    $this->post->vilcountmax = (is_int($data->vilcountmax) ? $data->vilcountmax : '100');     
+    
+    $this->post->playersquery = $this->inquerry('uid',$data->onlyplayers, $data->players);
+    
+    $this->post->quildquery = $this->inquerry('aid',$data->onlyguilds, $data->guilds);
+    
+    
+  }
+  public function searchVillages(){
+    return $this->squery();
+  }
+  private function squery(){
+    $opt = &$this->post;
+    $statement = $this->conn->prepare("SELECT * , TRUNCATE(abs(sqrt(pow(x-:x,2) + pow(y-:y,2))),1) AS dist FROM ".$opt->table." 
+                                      WHERE tid IN (:tid1,:tid2,:tid3,:tid5)
+                                      AND population BETWEEN :vilminpop AND :vilmaxpop  
+                                      AND uidPopulation BETWEEN :accminpop AND :accmaxpop
+                                      AND villagecount BETWEEN :vilmin AND :vilmax
+                                      ".$opt->playersquery . $opt->quildquery."
+                                      ORDER BY dist
+                                      LIMIT ".$opt->limit.",".$opt->count);
+    
+    $statement->execute(array(':x' => $opt->x,
+                              ':y' => $opt->y,
+                              ':tid1' => $opt->roman,
+                              ':tid2' => $opt->teuton,
+                              ':tid3' => $opt->gaul,
+                              ':tid5' => $opt->natar,
+                              ':vilminpop' => $opt->vilminpop,
+                              ':vilmaxpop' => $opt->vilmaxpop,
+                              ':accminpop' => $opt->accominpop,
+                              ':accmaxpop' => $opt->accomaxpop,
+                              ':vilmin' => $opt->vilcountmin,
+                              ':vilmax' => $opt->vilcountmax
+                              ));
+    return $statement->fetchAll();
+  }
+  private function inquerry($id,$not,$values){
+    $query = 'AND ' . $id;
+    $query .= ($not ? ' IN (' : ' NOT IN (');
+    if(count($values) > 0){
+      $uids = array();
+      foreach($values as $players){
+          array_push($uids, $players->$id);
+      }
+      $query .= implode(',', $uids) . ')';
+    } else {
+      $query = '';
     }
- 
+    return $query;
+  }
+    
+    
 }
-?>

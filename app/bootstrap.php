@@ -24,7 +24,11 @@ $app->register(new DoctrineServiceProvider(), array(
         'charset' => 'utf8',
     ),
 ));
-
+$app->register(new ConsoleServiceProvider(), array(
+    'console.name'              => 'Lapsi',
+    'console.version'           => '1.0.0',
+    'console.project_directory' => __DIR__.'/..'
+));
 
 $app['vil_search'] = $app->share(function (Application $app) {
     return new VillageSearch($app['db']);
@@ -86,21 +90,15 @@ $app->get('/api/travian/server/update/{id}',function(Application $app, $id){
 });
 //##########################
 //#### Search villages #####
-
-$app->post('/api/travian/search',function(Application $app, Request $request){
-    $data = json_decode($request->getContent());
-    if($data->server == null) return true;
-    $app['vil_search']->setData(json_decode($request->getContent()));
-    return json_encode($app['vil_search']->getVillages());
-});
+/*
 $app->post('/api/travian/search/player/',function(Application $app, Request $request){
     $data = json_decode($request->getContent());
     $temp = $app['vil_search']->getPlayer($data->key,$data->server);
     $players = array();
     foreach ($temp as $line) {
           array_push($players, $line['player']);
-      }
-    return json_encode($players);
+    }
+    return json_encode($temp);
 });
 $app->post('/api/travian/search/playerbyname/',function(Application $app, Request $request){
     $data = json_decode($request->getContent());
@@ -121,17 +119,14 @@ $app->post('/api/travian/search/guildbyname/',function(Application $app, Request
     $temp = $app['vil_search']->getGuild($data->key,$data->server);
     return json_encode($temp); 
 });
+*/
+$app->post('/api/travian/search',function(Application $app, Request $request){
+  $data = json_decode($request->getContent());
+  if($data->server == null) return true;
+  $app['vil_search']->setData(json_decode($request->getContent()));
+  return json_encode($app['vil_search']->searchVillages());
+});
 
 //##########################
-$app->post('/api/travian/test/',function(Application $app, Request $request){
-    $data = json_decode($request->getContent());
-    echo "<pre>";
-    var_dump($data);
-    echo "</pre><br>";
-    return true;
-});
-$app->get('/api/travian/test2/{id}',function(Application $app, $id){
-    return json_encode($app['vil_search']->getPlayer($id,"tx3.travian.fi"));
-});
 
 return $app;
