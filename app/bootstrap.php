@@ -3,6 +3,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
+use Knp\Provider\ConsoleServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Project\Travian\VillageSearch;
 use Project\Travian\tableServise;
@@ -24,8 +25,9 @@ $app->register(new DoctrineServiceProvider(), array(
         'charset' => 'utf8',
     ),
 ));
+
 $app->register(new ConsoleServiceProvider(), array(
-    'console.name'              => 'Lapsi',
+    'console.name'              => 'Project',
     'console.version'           => '1.0.0',
     'console.project_directory' => __DIR__.'/..'
 ));

@@ -33,7 +33,7 @@ class allServers {
         $dom = new \DOMDocument();
         
         try {
-            $dom->loadHTML(file_get_contents('http://status.travian.com/'));
+            @$dom->loadHTML(file_get_contents('http://status.travian.com/'));
         } catch (Exception $e) {
             return json_encode("Cannot Download status.travian.com");
         }
@@ -47,6 +47,7 @@ class allServers {
     }
     
     private function addServers($data){
+        $sql = '';
         foreach($data as $ser){
           $sql .= "('','".$ser."'),";
         }
