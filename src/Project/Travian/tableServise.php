@@ -48,9 +48,10 @@ class tableServise {
               `aid` varchar(100) NOT NULL,
               `alliance` varchar(100) NOT NULL,
               `population` int(11) NOT NULL,
-              `uidPopulation` int(11) NULL,
-              `villagecount` int(11) null,
-              `idle` int(11) null
+              `uidPopulation` int(11),
+              `villagecount` int(11),
+              `idle` int(11) null,
+              PRIMARY KEY (`vid`)
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
       return $this->conn->exec($sql);
     }

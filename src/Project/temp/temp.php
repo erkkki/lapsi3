@@ -1,4 +1,5 @@
 <?php
+/*
 namespace Project\Travian;
  
 class VillageSearch {
@@ -116,5 +117,5 @@ class VillageSearch {
         return $this->villages;        
     }
  
-}
+}*/
 ?>

@@ -48,8 +48,8 @@ function AdminCtrl($scope, Servers, $http){
     });
   };
   
-  $scope.fupdate = function(id){
-    $http.get('/api/travian/server/update/'+id)
+  $scope.fupdate = function(add){
+    $http.get('/api/travian/server/update/'+add)
     .success(function(data, status, headers, config) {
       $scope.servers = Servers.getAll();
     });

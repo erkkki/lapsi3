@@ -87,8 +87,8 @@ $app['dataupdate'] = $app->share(function (Application $app) {
     return new serverDataService($app['db'], $app['tableServise'], $app['activeservers']);
 });
 
-$app->get('/api/travian/server/update/{id}',function(Application $app, $id){
-    return $app['dataupdate']->updateServerData($id);
+$app->get('/api/travian/server/update/{address}',function(Application $app, $address){
+    return $app['dataupdate']->updateServerData($address);
 });
 //##########################
 //#### Search villages #####

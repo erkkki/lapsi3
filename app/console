@@ -4,10 +4,12 @@ $app = require_once __DIR__.'/bootstrap.php';
 
 use Project\command\testCommand;
 use Project\command\AllServersCommand;
+use Project\command\UpdateDataCommand;
 
 $application = $app['console'];
 $application->add(new testCommand());
 $application->add(new AllServersCommand());
+$application->add(new UpdateDataCommand());
 $application->run();
 
 ?>

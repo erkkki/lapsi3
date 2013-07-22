@@ -30,8 +30,12 @@ function testCtrl($scope, $http, $window){
       }
       return;
     }
+    var temp = [];
     while($scope.villages[i]){
-      $scope.window.open("http://"+ $scope.opt.server + address + $scope.villages[i][what]);
+      if(temp.indexOf($scope.villages[i][what]) == -1){
+        $scope.window.open("http://"+ $scope.opt.server + address + $scope.villages[i][what]);
+        temp.push($scope.villages[i][what]);
+      }
       i++;
     } 
   };    

@@ -50,17 +50,17 @@
               <table class="table table-condensed table-bordered table-hover">
                 <thead ng-init="opt.limit = 0; openAllLink = true">
                   <tr>
-                    <th ng-click="opt.limit = opt.limit - opt.count"><i class="icon-chevron-left"></i></th>
+                    <th ng-click="opt.limit = opt.limit - opt.count; search();"><i class="icon-chevron-left"></i></th>
                     <th ng-hide="table.dist">Distance</th>
-                    <th ng-hide="table.xy">X.Y <a ng-hide="openAllLink" ng-click="openall('/position_details.php?x=','x');"> Open all</a></th>
+                    <th ng-hide="table.xy">X.Y <a ng-hide="openAllLink" ng-click="openall('/position_details.php?x=','x');" class="text-error"> Open all</a></th>
                     <th ng-hide="table.pop">Pop</th>
-                    <th ng-hide="table.name">Village name<a ng-hide="openAllLink" ng-click="openall('/build.php?id=39&tt=2&z=','id');"> Open all</a></th>
-                    <th ng-hide="table.acc">Account <a ng-hide="openAllLink" ng-click="openall('/allianz.php?uid=','uid');"> Open all</a></th>
+                    <th ng-hide="table.name">Village name<a ng-hide="openAllLink" ng-click="openall('/build.php?id=39&tt=2&z=','id');" class="text-error"> Open all</a></th>
+                    <th ng-hide="table.acc">Account <a ng-hide="openAllLink" ng-click="openall('/allianz.php?uid=','uid');" class="text-error"> Open all</a></th>
                     <th ng-hide="table.accpop">Account pop</th>
                     <th ng-hide="table.idle">Idle time</th>
                     <th ng-hide="table.vcount">Village count</th>
-                    <th ng-hide="table.guild">Guild <a ng-hide="openAllLink" ng-click="openall('/allianz.php?aid=','aid');"> Open all</a></th>
-                    <th ng-click="opt.limit = opt.limit + opt.count"><i class="icon-chevron-right"></i></th>
+                    <th ng-hide="table.guild">Guild <a ng-hide="openAllLink" ng-click="openall('/allianz.php?aid=','aid');" class="text-error"> Open all</a></th>
+                    <th ng-click="opt.limit = opt.limit + opt.count; search();"><i class="icon-chevron-right"></i></th>
                   </tr>                
                 </thead>
                 <tbody ng-init="opt.players=[]; opt.guilds=[];">
@@ -259,7 +259,7 @@
         <div class="span12">
           <!-- side -->
           <pre>{{opt | json}}</pre>
-          <pre>{{results | json}}</pre>
+          <pre>{{temp | json}}</pre>
           <pre>{{settings | json}}</pre>
         </div>
       </div>
