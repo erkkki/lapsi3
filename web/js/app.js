@@ -18,23 +18,4 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
       controller: AdminCtrl,
       templateUrl:"/views/admin.html"     
   });
-
 }]);
-
-angular.module('app')
-  .factory('Servers', function($http) {
-    var Servers = function(data) {
-      angular.extend(this, data);
-    }
-    Servers.getAll = function() {
-      return $http.get('/api/travian/server/list/').then(function(response) {
-        return new Servers(response.data);
-      });
-    };
-    Servers.get = function(id) {
-      return $http.get('/api/travian/server/by/' + id).then(function(response) {
-        return new Servers(response.data);
-      });
-    };
-    return Servers;
-  });
