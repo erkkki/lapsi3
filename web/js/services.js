@@ -12,11 +12,13 @@ angular.module('app').factory('Servers', function($http) {
 
 app.service('LocalStorage', function(){
   this.add = function(name,value){
-    localStorage.setItem(name,JSON.stringify(value)); 
+    localStorage.setItem(name,angular.toJson(value));
+    //localStorage.setItem(name,JSON.stringify(value)); 
   };
   this.get = function(name){
     if(!this.isset(name)) return false;
-    return JSON.parse(localStorage.getItem(name));
+    return angular.fromJson(localStorage.getItem(name));
+    //return JSON.parse(localStorage.getItem(name));
   };
   this.isset = function(name){
     if (localStorage.getItem(name) === null) {
@@ -27,6 +29,10 @@ app.service('LocalStorage', function(){
   this.remove = function(name){
     localStorage.removeItem(name);
   };
+  this.update = function(name,newValue){
+    this.remove(name);
+    this.add(name,newValue);    
+  }
   
   this.isSupported = function(){
     try{

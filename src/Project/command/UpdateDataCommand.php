@@ -25,7 +25,7 @@ class UpdateDataCommand extends Command{
       $active = $this->getSilexApplication()['activeservers'];
       $servers =  $active->getServers();
       $start = time();
-      if(count($servers == 0)){
+      if(count($servers) == 0){
         return $output->writeln("No active servers.");
       }
       $output->writeln("Active servers count: " . count($servers).".");      

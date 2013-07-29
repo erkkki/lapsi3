@@ -6,10 +6,12 @@ use Silex\Provider\DoctrineServiceProvider;
 use Knp\Provider\ConsoleServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Project\Travian\VillageSearch;
-use Project\Travian\tableServise;
 use Project\Travian\activeServers;
 use Project\Travian\allServers;
+use Project\Travian\guildService;
+use Project\Travian\playerService;
 use Project\Travian\serverDataService;
+use Project\Travian\tableServise;
 
 $app = new Silex\Application(); 
 $app['debug'] = true;
@@ -32,15 +34,12 @@ $app->register(new ConsoleServiceProvider(), array(
     'console.project_directory' => __DIR__.'/..'
 ));
 
-$app['vil_search'] = $app->share(function (Application $app) {
-    return new VillageSearch($app['db']);
-});
 $app['tableServise'] = $app->share(function (Application $app) {
     return new tableServise($app['db']);
 });
 
-//### allservers ###
 
+//####### allservers #######
 $app['allServers'] = $app->share(function (Application $app) {
     return new allServers($app['db'], $app['tableServise']);
 });
@@ -51,9 +50,46 @@ $app->get('/api/travian/server/updateservers/',function(Application $app){
 $app->get('/api/travian/server/list/all/',function(Application $app){
     return json_encode($app['allServers']->getServersList());
 });
-//######################
-//### active servers ###
+//##########################
+//### server data update ###
+$app['dataupdate'] = $app->share(function (Application $app) {
+    return new serverDataService($app['db'], $app['tableServise'], $app['activeservers']);
+});
 
+$app->get('/api/travian/server/update/{address}',function(Application $app, $address){
+    return $app['dataupdate']->updateServerData($address);
+});
+//##########################
+//###### guild search ######
+$app['guildService'] = $app->share(function (Application $app) {
+    return new guildService($app['db']);
+});
+
+
+//##########################
+//##### player search ######
+$app['playerService'] = $app->share(function (Application $app) {
+    return new playerService($app['db']);
+});
+$app->post('/api/travian/search/player/',function(Application $app, Request $request){
+  $data = json_decode($request->getContent());
+  if($data->server == 'Select server') return 'No players';
+  return json_encode($app['playerService']->playerByName($data->server,$data->name));
+});
+//##########################
+//#### Search villages #####
+$app['vil_search'] = $app->share(function (Application $app) {
+    return new VillageSearch($app['db']);
+});
+
+$app->post('/api/travian/search',function(Application $app, Request $request){
+  $data = json_decode($request->getContent());
+  if($data->server == 'Select server') return true;
+  $app['vil_search']->setData(json_decode($request->getContent()));
+  return json_encode($app['vil_search']->searchVillages());
+});
+//##########################
+//##### active servers #####
 $app['activeservers'] = $app->share(function (Application $app) {
     return new activeServers($app['db'], $app['tableServise']);
 });
@@ -81,54 +117,6 @@ $app->get('/api/travian/server/delete/{id}',function(Application $app, $id){
     $app['tableServise']->DropTable(str_replace('.','',$server['address']));
     return true;
 });
-//##########################
-//### server data update ###
-$app['dataupdate'] = $app->share(function (Application $app) {
-    return new serverDataService($app['db'], $app['tableServise'], $app['activeservers']);
-});
-
-$app->get('/api/travian/server/update/{address}',function(Application $app, $address){
-    return $app['dataupdate']->updateServerData($address);
-});
-//##########################
-//#### Search villages #####
-/*
-$app->post('/api/travian/search/player/',function(Application $app, Request $request){
-    $data = json_decode($request->getContent());
-    $temp = $app['vil_search']->getPlayer($data->key,$data->server);
-    $players = array();
-    foreach ($temp as $line) {
-          array_push($players, $line['player']);
-    }
-    return json_encode($temp);
-});
-$app->post('/api/travian/search/playerbyname/',function(Application $app, Request $request){
-    $data = json_decode($request->getContent());
-    $temp = $app['vil_search']->getPlayer($data->key,$data->server);
-    return json_encode($temp); 
-});
-$app->post('/api/travian/search/guild/',function(Application $app, Request $request){
-    $data = json_decode($request->getContent());
-    $temp = $app['vil_search']->getGuild($data->key,$data->server);
-    $guilds = array();
-    foreach ($temp as $line) {
-          array_push($guilds, $line['alliance']);
-      }
-    return json_encode($guilds);
-});
-$app->post('/api/travian/search/guildbyname/',function(Application $app, Request $request){
-    $data = json_decode($request->getContent());
-    $temp = $app['vil_search']->getGuild($data->key,$data->server);
-    return json_encode($temp); 
-});
-*/
-$app->post('/api/travian/search',function(Application $app, Request $request){
-  $data = json_decode($request->getContent());
-  if($data->server == null) return true;
-  $app['vil_search']->setData(json_decode($request->getContent()));
-  return json_encode($app['vil_search']->searchVillages());
-});
-
 //##########################
 
 return $app;

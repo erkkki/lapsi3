@@ -4,6 +4,7 @@ function testCtrl($scope, $http, $window, LocalStorage, $log){
   $scope.isStorage = $scope.LocalS.isSupported();
   
   $scope.init = function(){
+    $scope.showElems = {"settings":true,"results":true,"firstTime":false};
     if($scope.LocalS.get('table')){
       $scope.table = $scope.LocalS.get('table');
     } else {
@@ -11,6 +12,8 @@ function testCtrl($scope, $http, $window, LocalStorage, $log){
     };
     if($scope.LocalS.get('lastServer')){
       $scope.opt = $scope.LocalS.get('lastServer');
+      if($scope.opt.server != "Select server")
+        $scope.showElems.firstTime = true;
     } else {
       $scope.opt = {
         "server":"Select server",
@@ -28,45 +31,54 @@ function testCtrl($scope, $http, $window, LocalStorage, $log){
         "vilcountmax": 100
       };
     };
-    $scope.showElems = {"settings":true,"results":true};
     $scope.servers();
-    $scope.search();
-  };  
+  };
+  $scope.AddPersonlaVil = function(name){
+    if(name == null) return;
+    if(!$scope.LocalS.isset(name)){
+      $scope.LocalS.add(name, $scope.opt);
+      $scope.table.LocalVil.push({name:name});
+      $scope.newLocalVil = '';
+      return;
+    } else {}
+  }
   
   $scope.openVil = function(name){
     if($scope.LocalS.get(name)){
       $scope.opt = $scope.LocalS.get(name);
     }
   };
-
   $scope.servers = function(){
     $http.get('api/travian/server/list/')
       .success(function(data) {
         $scope.servers = data;
     });
   };
-  
   $scope.$watch('table', function() {
     $scope.LocalS.add('table',$scope.table);
-  }, true);
-  
+  }, true);  
   $scope.$watch('opt', function() {
     $scope.LocalS.add('lastServer',$scope.opt);
+    if($scope.showElems.settings) $scope.search();
   }, true);
   
   $scope.search = function(){
+    if($scope.showElems.settings != true) return;
     if($scope.opt.server == "" || $scope.opt.server == "Select server") return;
-    if(!$scope.showElems.settings) { $scope.showElems.results = true; return;}
-    $scope.showElems.down = false; // downloading
-    
     $http.post('api/travian/search', $scope.opt)
       .success(function(data) {
          $scope.villages = data;
-         $scope.showElems.down = true;
          $scope.showElems.results = false;
+         $scope.showElems.firstTime = true;
       });
-  }; 
-
+  };
+  $scope.playerByName = function(name){
+    var queryData = {"server":$scope.opt.server,"name":name}
+    $http.post('api/travian/search/player/', queryData)
+      .success(function(data) {
+        $scope.temp = data;
+      });
+  };
   $scope.openall = function(address,what){
     var i = 0;
     if(what == 'x'){

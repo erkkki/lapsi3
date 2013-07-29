@@ -1,17 +1,8 @@
 var app = angular.module("app", ['ui.bootstrap']);
 
-app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
-  .when('/',{
-      templateUrl:"/views/info.html"
-    })
-  .when('/info',{
-      templateUrl:"/views/info.html"
-    })
-  .when('/test',{
-      templateUrl:"/views/test.html"
-    })
-  .when('/travian/',{
+  .when('',{
       templateUrl:"/views/villageSearch.html"
     })
   .when('/admin',{

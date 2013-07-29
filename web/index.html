@@ -28,26 +28,28 @@
         width:25px;
         height:30px;
         background:url(img/1235.png) -75px 0;
-    }                
+    }
   </style>
 </head>
 
-<body style="padding:20px;">
-  <div class="navbar">
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
-      <ul class="nav">
-        <li><a href="#/">Home</a></li>
-        <li><a href="#/travian/">Travian</a></li>
-        <li><a href="#/admin">Admin</a></li>
-        <li><a href="#/test">test</a></li>
-      </ul>
-      <ul class="nav pull-right">
-        <li><a href="#/info">Info</a></li>
-      </ul>
-    </div>	  
+      <div class="container">
+        <ul class="nav">
+          <li class="active">
+            <a href="">Travian</a>
+          </li>
+          <li class="active">
+            <a href="#/admin">Travian servers</a>
+          </li>
+        </ul>
+        <span class="brand"></span>
+      </div>
+    </div>
   </div>
   
-  <div ng-app="app">
+  <div ng-app="app" style="padding: 10px;padding-top: 40px;">
         <div ng-view></div>
   </div>
   

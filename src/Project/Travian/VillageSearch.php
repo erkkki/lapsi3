@@ -7,7 +7,6 @@ class VillageSearch {
   protected $conn;
   protected $villages;
   protected $post;
-  public $temp;
 
   public function __construct($conn){
     $this->conn = $conn;
@@ -22,10 +21,10 @@ class VillageSearch {
     $this->post->count = (is_int($data->count) ? $data->count : 20);
     $this->post->limit = (is_int($data->limit) ? $data->limit : 0);
     
-    $this->post->roman = ($data->tribes->roman ? '' : '1');
-    $this->post->teuton = ($data->tribes->teuton ? '' : '2');
-    $this->post->gaul = ($data->tribes->gaul ? '' : '3');
-    $this->post->natar = ($data->tribes->natar ? '' : '5');
+    $this->post->roman = @($data->tribes->roman ? '' : '1');
+    $this->post->teuton = @($data->tribes->teuton ? '' : '2');
+    $this->post->gaul = @($data->tribes->gaul ? '' : '3');
+    $this->post->natar = @($data->tribes->natar ? '' : '5');
     
     $this->post->vilminpop = (is_int($data->vilminpop) ? $data->vilminpop : '0');
     $this->post->vilmaxpop = (is_int($data->vilmaxpop) ? $data->vilmaxpop : '2000');
@@ -36,9 +35,9 @@ class VillageSearch {
     $this->post->vilcountmin = (is_int($data->vilcountmin) ? $data->vilcountmin : '1');
     $this->post->vilcountmax = (is_int($data->vilcountmax) ? $data->vilcountmax : '100');     
     
-    $this->post->playersquery = $this->inquerry('uid',$data->onlyplayers, $data->players);
+    $this->post->playersquery = @$this->inquerry('uid',$data->onlyplayers, $data->players);
     
-    $this->post->quildquery = $this->inquerry('aid',$data->onlyguilds, $data->guilds);
+    $this->post->quildquery = @$this->inquerry('aid',$data->onlyguilds, $data->guilds);
     
     
   }
@@ -69,7 +68,11 @@ class VillageSearch {
                               ':vilmin' => $opt->vilcountmin,
                               ':vilmax' => $opt->vilcountmax
                               ));
-    return $statement->fetchAll();
+    $result = $statement->fetchAll();
+    if(count($result) == 0){
+      return 'No villages';
+    }
+    return $result;
   }
   private function inquerry($id,$not,$values){
     $query = 'AND ' . $id;

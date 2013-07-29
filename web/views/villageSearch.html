@@ -2,6 +2,15 @@
 <div ng-controller="testCtrl">
   <div class="row-fluid">
     <div class="span9">
+      <div class="row-fluid" style="position:fixed;top:100px;left:15%" ng-hide="showElems.firstTime">
+        <div class="span6">
+          <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h3>Welcome.</h3>
+            Start using this village search tool selecting server from top dropdown menu.
+          </div>
+        </div>
+      </div>
       <div class="row-fluid">
         <div class="span12">
           <!-- search selection bar -->
@@ -11,32 +20,32 @@
                 <span class="caret"></span>    
               </a>
               <ul class="dropdown-menu">
-                <li><a ng-repeat="server in servers" ng-click="opt.server = server.address; search();">
+                <li><a ng-repeat="server in servers" ng-click="opt.server = server.address;">
                   {{server.address}}
                 </a></li>
               </ul>
+            </div>            
+            <div class="input-prepend" style="margin-top:10px;">
+              <span class="add-on">X</span>
+              <input class="input-mini" type="number" ng-model="opt.x" min="-400" max="400" placeholder="{{opt.x}}">
             </div>
             <div class="input-prepend" style="margin-top:10px;">
               <span class="add-on">X</span>
-              <input class="input-mini" type="number" ng-model="opt.x" ng-change="search()" min="-400" max="400" placeholder="{{opt.x}}">
+              <input class="input-mini" type="number" ng-model="opt.y" min="-400" max="400" placeholder="{{opt.y}}">
             </div>
-            <div class="input-prepend" style="margin-top:10px;">
-              <span class="add-on">X</span>
-              <input class="input-mini" type="number" ng-model="opt.y" ng-change="search()" min="-400" max="400" placeholder="{{opt.y}}">
-            </div>
-            <button class="btn btn-info" ng-click="showElems.settings = !showElems.settings; search();">Settings</button>
+            <button class="btn btn-info" ng-click="showElems.settings = !showElems.settings; showElems.results = !showElems.results; search();">Settings</button>
             <div class="btn-group">
-              <button class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
+              <button class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="">
                 Show: {{opt.count}}
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu">
-                <li><a ng-click="opt.count = 10; search();">10</a></li>
-                <li><a ng-click="opt.count = 20; search();">20</a></li>
-                <li><a ng-click="opt.count = 40; search();">40</a></li>
-                <li><a ng-click="opt.count = 60; search();">60</a></li>
-                <li><a ng-click="opt.count = 80; search();">80</a></li>
-                <li><a ng-click="opt.count = 100; search();">100</a></li>
+                <li><a ng-click="opt.count = 10;">10</a></li>
+                <li><a ng-click="opt.count = 20;">20</a></li>
+                <li><a ng-click="opt.count = 40;">40</a></li>
+                <li><a ng-click="opt.count = 60;">60</a></li>
+                <li><a ng-click="opt.count = 80;">80</a></li>
+                <li><a ng-click="opt.count = 100;">100</a></li>
               </ul>
             </div>
           <!-- end search bar -->
@@ -50,17 +59,17 @@
               <table class="table table-condensed table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th ng-click="opt.limit = opt.limit - opt.count; search();"><a href=""><i class="icon-chevron-left"></i></a></th>
+                    <th ng-click="opt.limit = opt.limit - opt.count;"><a href=""><i class="icon-chevron-left"></i></a></th>
                     <th ng-hide="table.dist">Distance</th>
-                    <th ng-hide="table.xy">X.Y <a href="" ng-hide="table.openAllLink" ng-click="openall('/position_details.php?x=','x');" class="text-error"> Open all</a></th>
-                    <th ng-hide="table.pop">Pop</th>
-                    <th ng-hide="table.name">Village name<a href="" ng-hide="table.openAllLink" ng-click="openall('/build.php?id=39&tt=2&z=','id');" class="text-error"> Open all</a></th>
-                    <th ng-hide="table.acc">Account <a href="" ng-hide="table.openAllLink" ng-click="openall('/allianz.php?uid=','uid');" class="text-error"> Open all</a></th>
-                    <th ng-hide="table.accpop">Account pop</th>
+                    <th ng-hide="table.xy">X.Y <a href="" ng-hide="table.openAllLink" ng-click="openall('/position_details.php?x=','x');" class="text-error pull-right"> Open all</a></th>
+                    <th ng-hide="table.name">Village name<a href="" ng-hide="table.openAllLink" ng-click="openall('/build.php?id=39&tt=2&z=','id');" class="text-error pull-right"> Open all</a></th>
                     <th ng-hide="table.idle">Idle time</th>
-                    <th ng-hide="table.vcount">Village count</th>
-                    <th ng-hide="table.guild">Guild <a href="" ng-hide="table.openAllLink" ng-click="openall('/allianz.php?aid=','aid');" class="text-error"> Open all</a></th>
-                    <th ng-click="opt.limit = opt.limit + opt.count; search();"><a href=""><i class="icon-chevron-right"></i></a></th>
+                    <th ng-hide="table.pop">pop</th>
+                    <th ng-hide="table.acc">Account <a href="" ng-hide="table.openAllLink" ng-click="openall('/allianz.php?uid=','uid');" class="text-error pull-right"> Open all</a></th>
+                    <th ng-hide="table.vcount">Villages</th>
+                    <th ng-hide="table.accpop">pop</th>
+                    <th ng-hide="table.guild">Guild <a href="" ng-hide="table.openAllLink" ng-click="openall('/allianz.php?aid=','aid');" class="text-error pull-right"> Open all</a></th>
+                    <th ng-click="opt.limit = opt.limit + opt.count;"><a href=""><i class="icon-chevron-right"></i></a></th>
                   </tr>                
                 </thead>
                 <tbody>
@@ -68,15 +77,29 @@
                     <td><i class="icon-chevron-down"></i></td>
                     <td ng-hide="table.dist">{{village.dist}}</td>
                     <td ng-hide="table.xy"><a href="http://{{opt.server}}/position_details.php?x={{village.x}}&y={{village.y}}">({{village.x}}|{{village.y}})</a></td>
-                    <td ng-hide="table.pop">{{village.population}}</td>
                     <td ng-hide="table.name"><a href="http://{{opt.server}}/build.php?id=39&tt=2&z={{village.id}}">{{village.village}}</a></td>
+                    <td ng-hide="table.idle">{{village.idle}}.pv</td>
+                    <td ng-hide="table.pop">{{village.population}}</td>
                     <td ng-hide="table.acc"><a href="http://{{opt.server}}/allianz.php?uid={{village.uid}}">{{village.player}}</a>
-                        <a href=""><i class="icon-plus pull-right" ng-click="opt.players.push({name:village.player,uid:village.uid})"></i></a></td>
-                    <td ng-hide="table.accpop">{{village.uidPopulation}}</td>
-                    <td ng-hide="table.idle">{{village.idle}}</td>
+                      <a href="">
+                        <span ng-switch on="opt.onlyplayers" >
+                          <i ng-switch-default class="icon-plus pull-right" ng-click="opt.players.push({name:village.player,uid:village.uid})"></i>
+                          <span ng-switch-when='true'></span>
+                        </span>
+                      </a>
+                    </td>
                     <td ng-hide="table.vcount">{{village.villagecount}}</td>
+                    <td ng-hide="table.accpop">{{village.uidPopulation}}</td>
+                    
+                    
                     <td ng-hide="table.guild"><a href="http://{{opt.server}}/allianz.php?aid={{village.aid}}">{{village.alliance}}</a>
-                        <a href=""><i class="icon-plus pull-right" ng-click="opt.guilds.push({name:village.alliance,aid:village.aid})"></i></a></td>
+                      <a href="">
+                        <span ng-switch on="opt.onlyguilds" >
+                          <i ng-switch-default class="icon-plus pull-right" ng-click="opt.guilds.push({name:village.alliance,aid:village.aid})"></i>
+                          <span ng-switch-when='true'></span>
+                        </span>
+                      </a>
+                    </td>
                     <td><img class="type{{village.tid}}" src="img/img_trans.gif"/></td>      
                   </tr>    
                 </tbody>
@@ -94,15 +117,12 @@
                   <div class="row-fluid">
                     <div class="span12">
                       <legend>Players</legend>
-                      <div class="inline">
-                        <div class="btn-group">
-                          <button class="btn btn-info" ng-disabled="!opt.onlyplayers"
-                                  ng-click="opt.onlyplayers = !opt.onlyplayers">Hide selected</button>
-                          <button class="btn btn-info" ng-disabled="opt.onlyplayers" 
-                                  ng-click="opt.onlyplayers = !opt.onlyplayers">Show only selected</button>
-                        </div>
-                      </div>                      
-                      <ul class="inline" style="margin-top:10px;">
+                      <label class="checkbox">
+                        <input type="checkbox" ng-model="opt.onlyplayers">
+                        Show / hide selected players.
+                      </label>
+                        
+                      <ul class="inline" style="margin-top:20px;">
                         <li ng-repeat="player in opt.players">
                           <p>
                             <button class="btn btn-small btn-danger" style="margin-bottom: 5px;" 
@@ -115,14 +135,10 @@
                   <div class="row-fluid">
                     <div class="span12">
                       <legend>Guilds</legend> 
-                      <div class="inline">
-                        <div class="btn-group">
-                          <button class="btn btn-info" ng-disabled="!opt.onlyguilds"
-                                  ng-click="opt.onlyguilds = !opt.onlyguilds">Hide selected</button>
-                          <button class="btn btn-info" ng-disabled="opt.onlyguilds" 
-                                  ng-click="opt.onlyguilds = !opt.onlyguilds">Show only selected</button>
-                        </div>
-                      </div>
+                      <label class="checkbox">
+                        <input type="checkbox" ng-model="opt.onlyguilds">
+                        Show / hide selected players.
+                      </label>
                       <ul class="inline" style="margin-top:10px;">
                         <li ng-repeat="guild in opt.guilds">
                           <p>
@@ -138,51 +154,75 @@
                   <div class="row-fluid">
                     <div class="span12">
                       <legend>Table settings</legend>
-                      <form class="form-horizontal">
-                        <div class="control-group">
-                          <label class="control-label">Show / Hide Open all link</label>
-                          <div class="controls">
-                            <button class="btn" type="button" ng-class="{'btn': table.openAllLink, 'btn btn-danger': !table.openAllLink}" 
-                                 ng-click="table.openAllLink = !table.openAllLink">Toggle</button>
-                          </div>
-                        </div>
-                      </form>
-                      <label class="checkbox inline">
-                        <input type="checkbox" ng-model="table.dist">
-                        Distance
+                      <label class="checkbox" style="margin-left: 5px;">
+                        <input type="checkbox" ng-model="opt.openAllLink">
+                        Show / Hide Open all link
                       </label>
-                      <label class="checkbox inline">
-                        <input type="checkbox" ng-model="table.xy">
-                        X.Y
-                      </label>
-                      <label class="checkbox inline">
-                        <input type="checkbox" ng-model="table.pop">
-                        Pop
-                      </label>
-                      <label class="checkbox inline">
-                        <input type="checkbox" ng-model="table.name">
-                        Village name
-                      </label>
-                      <label class="checkbox inline">
-                        <input type="checkbox" ng-model="table.acc">
-                        Account
-                      </label><br>
-                      <label class="checkbox inline">
-                        <input type="checkbox" ng-model="table.accpop">
-                        Account pop
-                      </label>
-                      <label class="checkbox inline">
-                        <input type="checkbox" ng-model="table.idle">
-                        Idle
-                      </label>
-                      <label class="checkbox inline">
-                        <input type="checkbox" ng-model="table.vcount">
-                        Village count
-                      </label>
-                      <label class="checkbox inline">
-                        <input type="checkbox" ng-model="table.guild">
-                        Guild
-                      </label>
+                      <br>
+                      <table class="table table-condensed">
+                        <tbody>
+                          <tr>
+                            <td style="border-top:0px;">
+                              <label class="checkbox inline">
+                                <input type="checkbox" ng-model="table.dist">
+                                Distance
+                              </label>
+                            </td>
+                            <td style="border-top:0px;">
+                              <label class="checkbox inline">
+                                <input type="checkbox" ng-model="table.xy">
+                                X.Y
+                              </label>
+                            </td>
+                            <td style="border-top:0px;">
+                              <label class="checkbox inline">
+                                <input type="checkbox" ng-model="table.pop">
+                                Pop
+                              </label>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label class="checkbox inline">
+                                <input type="checkbox" ng-model="table.name">
+                                Village name
+                              </label>
+                            </td>
+                            <td>
+                              <label class="checkbox inline">
+                                <input type="checkbox" ng-model="table.acc">
+                                Account
+                              </label>
+                            </td>
+                            <td>
+                              <label class="checkbox inline">
+                                <input type="checkbox" ng-model="table.accpop">
+                                Account pop
+                              </label>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label class="checkbox inline">
+                                <input type="checkbox" ng-model="table.idle">
+                                Idle
+                              </label>
+                            </td>
+                            <td>
+                              <label class="checkbox inline">
+                                <input type="checkbox" ng-model="table.vcount">
+                                Village count
+                              </label>
+                            </td>
+                            <td>
+                              <label class="checkbox inline">
+                                <input type="checkbox" ng-model="table.guild">
+                                Guild
+                              </label>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                   <div class="row-fluid">
@@ -254,7 +294,15 @@
         </div>
       </div>
     </div>
-    <div class="span3">
+    <div class="span3 well well-small" style="position:fixed;right:10px;margin-top: 50px">
+      <div class="row-fluid" ng-hide="isStorage"><!-- maybe future erros-->
+        <div class="span12">
+          <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Warning!</strong> Your browser does't support LocalStorage.
+          </div>
+        </div>
+      </div>      
       <div class="row-fluid" ng-hide="!isStorage">
         <div class="span12" style="margin-top:10px;">
           <table style="width: 100%">
@@ -262,39 +310,31 @@
               <td><b><a href="" ng-click="openVil(vil.name);">{{vil.name}}</a></b></td>
               <td class="pull-right">
                 <div class="btn-group">
-                  <button class="btn btn-info"><i class="icon-edit"></i></button>
+                  <button class="btn btn-info" ng-click="LocalS.update(vil.name,opt);"><i class="icon-edit"></i></button>
                   <button class="btn btn-danger" ng-click="table.LocalVil.splice($index, 1); LocalS.remove(vil.name);"><i class="icon-remove"></i></button>
                 </div>
               </td>
             </tr>
             <tr>
-              <td><input type="text" class="input-small" ng-model="newLocalVil" maxlength="14" placeholder="New village..."></td>
+              <td>
+                <input type="text" class="input-small" ng-model="newLocalVil" maxlength="14" placeholder="New village...">
+              </td>
               <td class="pull-right">
                 <div class="btn-group">
                   <button class="btn btn-info" style="width: 79px" 
-                          ng-click="table.LocalVil.push({name:newLocalVil}); 
-                                    LocalS.add(newLocalVil,opt); 
-                                    newLocalVil = '';">Add</button>
+                          ng-click="AddPersonlaVil(newLocalVil);">Add</button>
                 </div>
               </td>
             </tr>
           </table>
         </div>
-      </div>
-      <div class="row-fluid" ng-hide="isStorage">
-        <div class="span12">
-          <div class="alert alert-error">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Warning!</strong> Your browser does't support LocalStorage.
-          </div>
-        </div>
-      </div>
-      <div class="row-fluid" ng-hide="false">
+      </div>      
+      <div class="row-fluid" ng-hide="true">
         <div class="span12">
           <!-- side -->
-          <!--<pre>{{opt | json}}</pre>
-          <pre>{{table | json}}</pre>
-          <pre>{{asd | json}}</pre>
+          <pre>{{opt | json}}</pre>
+          <pre>{{temp | json}}</pre>
+          <!--<pre>{{asd | json}}</pre>
           <button ng-click="serverTest();">Test</button>-->
         </div>
       </div>
