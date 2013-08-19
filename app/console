@@ -5,11 +5,20 @@ $app = require_once __DIR__.'/bootstrap.php';
 use Project\command\testCommand;
 use Project\command\AllServersCommand;
 use Project\command\UpdateDataCommand;
+use Project\command\ShowActiveSCommand;
+use Project\command\AddServerCommand;
+use Project\command\RemoveServerCommand;
 
 $application = $app['console'];
-$application->add(new testCommand());
-$application->add(new AllServersCommand());
-$application->add(new UpdateDataCommand());
+// Console commands
+  $application->add(new testCommand());
+  $application->add(new AllServersCommand());
+  $application->add(new UpdateDataCommand());
+  $application->add(new ShowActiveSCommand());
+  $application->add(new AddServerCommand());
+  $application->add(new RemoveServerCommand());
+  
 $application->run();
 
 ?>
+

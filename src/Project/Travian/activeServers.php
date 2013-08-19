@@ -10,25 +10,28 @@ class activeServers {
         $this->conn = $conn;
         $this->tables = $tablesServise;
     } 
-    public function addServer($data){
+    public function addServer($address){
         if(!$this->tables->tableExists('activeservers'))
             $this->tables->createActiveServers();
-        $statement = $this->conn->prepare('insert into activeservers values(?, ?, ?, ?, ?)');
-        $statement->execute(array('', $data->server->address, strtolower($data->country->code), $data->country->name, 1));
+        if($this->getServerName($address)){
+          throw new \Exception('Server allready set. Try other server.');
+        }
+        $statement = $this->conn->prepare('insert into activeservers values(?, ?, ?)');
+        $statement->execute(array('', $address, 1));
         return true;        
     }
     public function deleteServer($id){
         if($this->getServerID($id)){
             $statement = $this->conn->prepare('delete from activeservers where id = ?');
-            $statement->execute(array($id)); 
+            $statement->execute(array($id));
             return true;
         }
         return false;
     }
     public function updateServer($data){
         if($this->getServerID($data->id)){
-            $statement = $this->conn->prepare('update activeservers set country = ? , name = ? , address = ? where id = ?');
-            $statement->execute(array(strtolower($data->name->code), $data->name->name, $data->address, $data->id)); 
+            $statement = $this->conn->prepare('update activeservers set name = ? , address = ? where id = ?');
+            $statement->execute(array($data->address, $data->id)); 
             return true;
         }
         return false;
@@ -53,7 +56,7 @@ class activeServers {
     public function getServerName($name){
         $servers = $this->getServers();
         foreach ($servers as $server) {
-            if($server['name'] == $name)
+            if($server['address'] == $name)
                 return $server;
         }
         return false;

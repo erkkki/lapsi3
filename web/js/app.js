@@ -2,11 +2,15 @@ var app = angular.module("app", ['ui.bootstrap']);
 
 app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
-  .when('',{
-      templateUrl:"/views/villageSearch.html"
+    .when('',{
+      templateUrl:"/views/villages.html",
+      controller: villageCtrl
     })
-  .when('/admin',{
-      controller: AdminCtrl,
-      templateUrl:"/views/admin.html"     
-  });
+    .when('/players',{
+      templateUrl:"/views/players.html"
+    })
+    .when('/guilds',{
+      templateUrl:"/views/guilds.html"
+    }
+  );
 }]);

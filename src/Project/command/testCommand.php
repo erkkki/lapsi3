@@ -18,7 +18,7 @@ class testcommand extends Command{
     }
 
     protected function execute(InputInterface $input, OutputInterface $output){
-        $output->writeln("It works!");
+        $output->writeln("Short command test!");
     }
 }
 ?>

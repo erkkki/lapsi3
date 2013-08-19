@@ -15,8 +15,8 @@ class AllServersCommand extends Command{
   
     protected function configure(){
         $this
-            ->setName('tra:allservers')
-            ->setDescription('Updata Server list.');
+            ->setName('tra:all')
+            ->setDescription('Update server list.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output){

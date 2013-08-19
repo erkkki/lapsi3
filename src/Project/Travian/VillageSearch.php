@@ -35,10 +35,12 @@ class VillageSearch {
     $this->post->vilcountmin = (is_int($data->vilcountmin) ? $data->vilcountmin : '1');
     $this->post->vilcountmax = (is_int($data->vilcountmax) ? $data->vilcountmax : '100');     
     
+    $this->post->idlemin = (is_int($data->idlemin) ? $data->idlemin : '0');
+    $this->post->idlemax = (is_int($data->idlemax) ? $data->idlemax : '50');  
+    
     $this->post->playersquery = @$this->inquerry('uid',$data->onlyplayers, $data->players);
     
     $this->post->quildquery = @$this->inquerry('aid',$data->onlyguilds, $data->guilds);
-    
     
   }
   public function searchVillages(){
@@ -51,6 +53,7 @@ class VillageSearch {
                                       AND population BETWEEN :vilminpop AND :vilmaxpop  
                                       AND uidPopulation BETWEEN :accminpop AND :accmaxpop
                                       AND villagecount BETWEEN :vilmin AND :vilmax
+                                      AND idle BETWEEN :idlemin AND :idlemax
                                       ".$opt->playersquery . $opt->quildquery."
                                       ORDER BY dist
                                       LIMIT ".$opt->limit.",".$opt->count);
@@ -66,7 +69,9 @@ class VillageSearch {
                               ':accminpop' => $opt->accominpop,
                               ':accmaxpop' => $opt->accomaxpop,
                               ':vilmin' => $opt->vilcountmin,
-                              ':vilmax' => $opt->vilcountmax
+                              ':vilmax' => $opt->vilcountmax,
+                              ':idlemin' => $opt->idlemin,
+                              ':idlemax' => $opt->idlemax
                               ));
     $result = $statement->fetchAll();
     if(count($result) == 0){

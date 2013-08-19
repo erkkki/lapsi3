@@ -25,7 +25,7 @@ app.service('LocalStorage', function(){
       return false;
     }
     return true;
-  }
+  };
   this.remove = function(name){
     localStorage.removeItem(name);
   };
@@ -33,7 +33,6 @@ app.service('LocalStorage', function(){
     this.remove(name);
     this.add(name,newValue);    
   }
-  
   this.isSupported = function(){
     try{
       this.add('test','test123');
