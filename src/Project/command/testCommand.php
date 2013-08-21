@@ -9,16 +9,28 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Doctrine\DBAL\Connection;
 
+use Project\Travian\tableServise;
+
 class testcommand extends Command{
   
     protected function configure(){
         $this
             ->setName('test:console')
-            ->setDescription('Test console');
+            ->setDescription('Test sql connection etc.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output){
-        $output->writeln("Short command test!");
+      try{
+        $tableService = $this->getSilexApplication()['tableServise'];
+        $tableService->tableExists('random');
+      } catch (Exception $e){
+        $output->writeln("No sql connection. $e");
+      }
+      $output->writeln("Sql connection ok.");
+      
+      
+      
+      
     }
 }
 ?>

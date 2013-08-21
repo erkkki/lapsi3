@@ -24,11 +24,11 @@ function villageCtrl($scope, $http, $window, LocalStorage, $log){
         "players": [],
         "guilds": [],
         "vilminpop": 0,
-        "vilmaxpop": 2000,
+        "vilmaxpop": 2500,
         "accominpop": 0,
-        "accomaxpop": 50000,
+        "accomaxpop": 200000,
         "vilcountmin": 1,
-        "vilcountmax": 100,
+        "vilcountmax": 200,
         "idlemin": 0,
         "idlemax": 50
       };
