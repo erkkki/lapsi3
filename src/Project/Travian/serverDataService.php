@@ -27,7 +27,7 @@ class serverDataService {
     $this->conn->exec("DELETE FROM ".$tableName." WHERE population = 0");
     
     $this->updatePopVil($tableName);
-    $this->updateTime($server);
+    $this->updateTime($server, $tableName);
     return true;
   }
  
@@ -92,9 +92,37 @@ class serverDataService {
     }
     return $data;
   }
-  protected function updateTime($address){
+  protected function updateTime($address, $table){
     $statement = $this->conn->prepare('update activeservers set updatetime = ? where address = ?');
     $statement->execute(array(time(), $address));
+    
+    $statement = $this->conn->prepare('
+             update activeservers as servers,
+             (select count(id) as vcount, 
+              count(distinct uid) as pcount, 
+              sum(population)/count(id) as vpopavg, 
+              sum(population)/count(distinct uid) as ppopavg, 
+              count(id)/count(distinct uid) as pvavg from ' . $table . ') as stats
+             set servers.villagecount = stats.vcount,
+             servers.villagepopavg = stats.vpopavg, 
+             servers.accountcount = stats.pcount,
+             servers.accountpopavg = stats.ppopavg,
+             servers.accountvillageavg = stats.pvavg');
+    $statement->execute(array());
+    
+    /*
+             update activeservers as servers,
+             (select count(id) as vcount, 
+              count(distinct uid) as pcount, 
+              sum(population)/count(id) as vpopavg, 
+              sum(population)/count(distinct uid) as ppopavg, 
+              count(distinct uid)/count(id) as pvavg from tx3travianfi) as stats
+             set servers.villagecount = stats.vcount,
+             servers.villagepopavg = stats.vpopavg, 
+             servers.accountcount = stats.pcount,
+             servers.accountpopavg = stats.ppopavg,
+             servers.accountvillageavg = stats.pvavg
+       */
   }
 
   protected function updatePopVil($table){

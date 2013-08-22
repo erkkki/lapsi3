@@ -1,0 +1,49 @@
+<div ng-init="servers();"></div>
+
+<div class="row" ng-repeat="server in servers" style="margin-top:30px;">
+  <div class="col-md-2 col-xs-12">
+    <div class="panel panel-default">
+      <ul class="nav nav-pills nav-stacked">
+        <li class="text-center"><a href="" ng-click="well.well2 = true; well.well1 = false;"><b>Servers</b></a></li>
+        <li class="text-center"><a href="" ng-click="well.well1 = true; well.well2 = false;"><b>Contact</b></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-10 col-xs-12" ng-hide="well.well1">
+    <div class="well" style="padding:5px">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="text-center">Server</th>
+              <th class="text-center">Village count</th>
+              <th class="text-center">Villages average population</th>
+              <th class="text-center">Player count</th>
+              <th class="text-center">Players average population</th>
+              <th class="text-center">Average village count</th>
+              <th class="text-center">Last update time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="server in servers">
+              <td class="text-center"><a htef="http://server.address">{{server.address}}</a></td>
+              <td class="text-center">{{server.villagecount}}</td>
+              <td class="text-center">{{server.villagepopavg | number:2}}</td>
+              <td class="text-center">{{server.accountcount}}</td>
+              <td class="text-center">{{server.accountpopavg | number:2}}</td>
+              <td class="text-center">{{server.accountvillageavg | number:2}}</td>
+              <td class="text-center">{{server.humantime}}</td>          
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-10 col-xs-12" ng-hide="well.well2">
+    <div class="well well-lg">
+      <p class="text-center">@quakenet #L3</p>
+      <p class="text-primary">Like to see some other travian server here?</p>
+      <p class="text-primary">Join our irc channel <b>#L3</b> to find someone admin.</p>
+    </div>
+  </div>
+</div>

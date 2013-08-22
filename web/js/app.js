@@ -14,6 +14,10 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl:"/views/players.html",
       controller: playerCtrl
     })
+    .when('/servers',{
+      templateUrl:"/views/servers.html",
+      controller: serversCtrl
+    })
     .when('/guilds',{
       templateUrl:"/views/guilds.html",
       controller: guildCtrl

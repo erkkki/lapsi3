@@ -7,7 +7,23 @@ function guildCtrl($scope, $http, LocalStorage){
   $scope.LocalS = LocalStorage;
   
 }
-
+function serversCtrl($scope, $http, $window, LocalStorage){
+  $scope.LocalS = LocalStorage;
+  $scope.well = {"well1": false};
+  if($scope.LocalS.isset('well')){ $scope.well = $scope.LocalS.get('well')};
+  
+  $scope.$watch('well', function() {
+    $scope.LocalS.add('well',$scope.well);
+  }, true);
+  
+  
+  $scope.servers = function(){
+    $http.get('api/travian/server/list/')
+      .success(function(data) {
+        $scope.servers = data;
+    });
+  };  
+}
 function villageCtrl($scope, $http, $window, LocalStorage, $log){
   $scope.window = $window;
   $scope.LocalS = LocalStorage;

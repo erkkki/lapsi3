@@ -27,8 +27,14 @@ class tableServise {
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `address` varchar(100) NOT NULL,
               `updatetime` BIGINT NOT NULL,
+              `villagecount` int(11),
+              `villagepopavg` DOUBLE,
+              `accountcount` int(11),
+              `accountpopavg` DOUBLE,
+              `accountvillageavg` DOUBLE,
               PRIMARY KEY (`id`)
               ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
+      
       return $this->conn->exec($sql);
     }
     public function createXworld($name){
