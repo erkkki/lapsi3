@@ -9,7 +9,7 @@ function guildCtrl($scope, $http, LocalStorage){
 }
 function serversCtrl($scope, $http, $window, LocalStorage){
   $scope.LocalS = LocalStorage;
-  $scope.well = {"well1": false};
+  $scope.well = {"well1": false,"well2": true};
   if($scope.LocalS.isset('well')){ $scope.well = $scope.LocalS.get('well')};
   
   $scope.$watch('well', function() {
