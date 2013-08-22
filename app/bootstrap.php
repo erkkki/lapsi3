@@ -14,7 +14,7 @@ use Project\Travian\serverDataService;
 use Project\Travian\tableServise;
 
 $app = new Silex\Application(); 
-$app['debug'] = true;
+$app['debug'] = false;
 
 $app->register(new DoctrineServiceProvider(), array(
     'db.options' => array(

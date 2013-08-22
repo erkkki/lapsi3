@@ -1,3 +1,13 @@
+function playerCtrl($scope, $http, LocalStorage){
+  $scope.LocalS = LocalStorage;
+  
+}
+
+function guildCtrl($scope, $http, LocalStorage){
+  $scope.LocalS = LocalStorage;
+  
+}
+
 function villageCtrl($scope, $http, $window, LocalStorage, $log){
   $scope.window = $window;
   $scope.LocalS = LocalStorage;
@@ -8,7 +18,20 @@ function villageCtrl($scope, $http, $window, LocalStorage, $log){
     if($scope.LocalS.get('table')){
       $scope.table = $scope.LocalS.get('table');
     } else {
-      $scope.table = {"openAllLink": true,"LocalVil":[],"nextDisable":false};
+      $scope.table = {"openAllLink": true,"LocalVil":[],"nextDisable":false,
+                      "unit": {
+                            "race":"r",
+                            "t1":"0","t2":"0","t3":"0",
+                            "t4":"0","t5":"0","t6":"0",
+                            "t7":"0","t8":"0","t9":"0"
+                       },
+                       "setRows": {
+                         "pop": true,
+                         "table": false,
+                         "players": false,
+                         "guilds": false
+                       }
+                     };
     };
     if($scope.LocalS.get('lastServer')){
       $scope.opt = $scope.LocalS.get('lastServer');

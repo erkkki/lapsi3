@@ -15,8 +15,8 @@ class VillageSearch {
     $this->post = $data;
     $this->post->table = str_replace('.','',$this->post->server);
     
-    $this->post->vilminpop = (is_int($data->x) ? $data->x : 0);
-    $this->post->vilminpop = (is_int($data->y) ? $data->y : 0);
+    $this->post->x = (is_int($data->x) ? $data->x : 0);
+    $this->post->y = (is_int($data->y) ? $data->y : 0);
     
     $this->post->count = (is_int($data->count) ? $data->count : 20);
     $this->post->limit = (is_int($data->limit) ? $data->limit : 0);

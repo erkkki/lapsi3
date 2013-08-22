@@ -6,11 +6,17 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl:"/views/villages.html",
       controller: villageCtrl
     })
+    .when('/',{
+      templateUrl:"/views/villages.html",
+      controller: villageCtrl
+    })
     .when('/players',{
-      templateUrl:"/views/players.html"
+      templateUrl:"/views/players.html",
+      controller: playerCtrl
     })
     .when('/guilds',{
-      templateUrl:"/views/guilds.html"
+      templateUrl:"/views/guilds.html",
+      controller: guildCtrl
     }
   );
 }]);
