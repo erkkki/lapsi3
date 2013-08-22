@@ -124,10 +124,20 @@ function villageCtrl($scope, $http, $window, LocalStorage, $log){
       }
       return;
     }
+    if(what == 'id'){
+      while($scope.villages[i]){
+        $scope.window.open('http://'+ $scope.opt.server + address + $scope.villages[i][what] + 
+          '&t1=' + $scope.table.unit.t1 + '&t2=' + $scope.table.unit.t2 + '&t3=' + $scope.table.unit.t3 + 
+          '&t4=' + $scope.table.unit.t4 + '&t5=' + $scope.table.unit.t5 + '&t6=' + $scope.table.unit.t6 + 
+          '&t7=' + $scope.table.unit.t7 + '&t8=' + $scope.table.unit.t8 + '&t9=' + $scope.table.unit.t9);
+        i++;
+      }
+      return;
+    }
     var temp = [];
     while($scope.villages[i]){
       if(temp.indexOf($scope.villages[i][what]) == -1){
-        $scope.window.open("http://"+ $scope.opt.server + address + $scope.villages[i][what]);
+        $scope.window.open('http://'+ $scope.opt.server + address + $scope.villages[i][what]);
         temp.push($scope.villages[i][what]);
       }
       i++;
