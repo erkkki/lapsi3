@@ -24,3 +24,26 @@ app.config(['$routeProvider', function($routeProvider) {
     }
   );
 }]);
+
+app.filter('addressEnd', function(){
+  return function (text){
+    return temp = text.split(".")[(text.split(".").length)-1]; 
+  }
+})
+app.filter('unique', function(){
+  return function(text){
+    var i,
+        len=text.length,
+        out=[],
+        obj={};
+
+    for (i=0;i<len;i++) {
+      obj[text]=0;
+    }
+    for (i in obj) {
+      out.push(i);
+    }
+    console.log(out);
+    return out;
+  }
+})

@@ -14,7 +14,7 @@ class activeServers {
         if(!$this->tables->tableExists('activeservers'))
             $this->tables->createActiveServers();
         if($this->getServerName($address)){
-          throw new \Exception('Server allready set. Try other server.');
+          return 'Server allready set. Try other server.';
         }
         $statement = $this->conn->prepare('insert into activeservers values(?, ?, ?, ?, ?, ?, ?, ?)');
         $statement->execute(array('', $address, 1, '', '', '', '', ''));

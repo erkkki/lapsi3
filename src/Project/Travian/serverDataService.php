@@ -107,22 +107,9 @@ class serverDataService {
              servers.villagepopavg = stats.vpopavg, 
              servers.accountcount = stats.pcount,
              servers.accountpopavg = stats.ppopavg,
-             servers.accountvillageavg = stats.pvavg');
-    $statement->execute(array());
-    
-    /*
-             update activeservers as servers,
-             (select count(id) as vcount, 
-              count(distinct uid) as pcount, 
-              sum(population)/count(id) as vpopavg, 
-              sum(population)/count(distinct uid) as ppopavg, 
-              count(distinct uid)/count(id) as pvavg from tx3travianfi) as stats
-             set servers.villagecount = stats.vcount,
-             servers.villagepopavg = stats.vpopavg, 
-             servers.accountcount = stats.pcount,
-             servers.accountpopavg = stats.ppopavg,
              servers.accountvillageavg = stats.pvavg
-       */
+             where servers.address = ?');
+    $statement->execute(array($address));
   }
 
   protected function updatePopVil($table){

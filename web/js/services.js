@@ -21,7 +21,7 @@ app.service('LocalStorage', function(){
     //return JSON.parse(localStorage.getItem(name));
   };
   this.isset = function(name){
-    if (localStorage.getItem(name) === null) {
+    if (localStorage.getItem(name) === null || localStorage.getItem(name) ===undefined) {
       return false;
     }
     return true;

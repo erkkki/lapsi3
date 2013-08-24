@@ -19,8 +19,15 @@ class allServers {
     public function getServersList(){
         $statement = $this->conn->prepare('SELECT * FROM servers');
         $statement->execute();
-        return $statement->fetchAll(); 
+        return $statement->fetchAll();
     }
+    
+    public function isServerInList($address){
+        $statement = $this->conn->prepare('select address from servers where address = ?');
+        $statement->execute(array($address));
+        return $statement->fetchAll();
+    }
+    
     private function createTable(){
         return $this->tables->createServerTable();
     }
@@ -55,7 +62,6 @@ class allServers {
         $statement = $this->conn->prepare("insert into servers values $sql");
         $statement->execute();       
         return true;
-    }  
-    
+    }      
 }
 ?>

@@ -1,4 +1,4 @@
-<div ng-init="servers();"></div>
+<div ng-init="init();"></div>
 
 <div class="row" style="margin-top:30px;">
   <div class="col-md-2 col-xs-12">
@@ -17,16 +17,16 @@
             <tr>
               <th class="text-center">Server</th>
               <th class="text-center">Village count</th>
-              <th class="text-center">Villages average population</th>
+              <th class="text-center">Average village population</th>
               <th class="text-center">Player count</th>
-              <th class="text-center">Players average population</th>
+              <th class="text-center">Average player population</th>
               <th class="text-center">Average village count</th>
               <th class="text-center">Last update time</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="server in servers">
-              <td class="text-center"><a htef="http://server.address">{{server.address}}</a></td>
+            <tr ng-repeat="server in servers | orderBy:'code'">
+              <td class="text-center"><a href="http://{{server.address}}">{{server.address}}</a></td>
               <td class="text-center">{{server.villagecount}}</td>
               <td class="text-center">{{server.villagepopavg | number:2}}</td>
               <td class="text-center">{{server.accountcount}}</td>
@@ -43,7 +43,7 @@
     <div class="well well-lg">
       <p class="text-center">@quakenet #L3</p>
       <p class="text-primary">Like to see some other travian server here?</p>
-      <p class="text-primary">Join our irc channel <b>#L3</b> to find someone admin.</p>
+      <p class="text-primary">Join our irc channel <b>#L3</b> to find an admin and ask!</p>
     </div>
   </div>
 </div>

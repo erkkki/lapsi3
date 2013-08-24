@@ -1,78 +1,57 @@
-<div class="row" ng-init="init();">
-  <div class="col-xs-12">
-    <div class="row">
-      <div class="col-md-8 col-xs-12" style="padding-left:0px;">
-        <div class="btn-group" style="vertical-align:0px">
-          <div class="btn-group" style="">
-            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" ng-model="opt.server">
-              {{opt.server}}
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <li>
-                <a ng-repeat="server in servers" ng-click="opt.server = server.address;">
-                  {{server.address}}
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="btn-group">
-            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-              Show {{opt.count}} 
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <li><a ng-click="opt.count = 10; opt.limit=0;">10</a></li>
-              <li><a ng-click="opt.count = 20; opt.limit=0;">20</a></li>
-              <li><a ng-click="opt.count = 30; opt.limit=0;">30</a></li>
-              <li><a ng-click="opt.count = 40; opt.limit=0;">40</a></li>
-              <li><a ng-click="opt.count = 60; opt.limit=0;">60</a></li>
-              <li><a ng-click="opt.count = 80; opt.limit=0;">80</a></li>
-              <li><a ng-click="opt.count = 100; opt.limit=0;">100</a></li>
-            </ul>
-          </div>
-          <button class="btn" ng-class="{'btn-danger': opt.tribes.roman, 'btn-info': !opt.tribes.roman}" 
-                      type="button" ng-click="opt.tribes.roman = !opt.tribes.roman">{{tribes.1}} Romans</button>
-          <button class="btn" ng-class="{'btn-danger': opt.tribes.teuton, 'btn-info': !opt.tribes.teuton}" 
-                      type="button" ng-click="opt.tribes.teuton = !opt.tribes.teuton">{{tribes.2}} Teutons</button>
-          <button class="btn" ng-class="{'btn-danger': opt.tribes.gaul, 'btn-info': !opt.tribes.gaul}" 
-                      type="button" ng-click="opt.tribes.gaul = !opt.tribes.gaul">{{tribes.3}} Gauls</button>
-          <button class="btn" ng-class="{'btn-danger': opt.tribes.natar, 'btn-info': !opt.tribes.natar}" 
-                      type="button" ng-click="opt.tribes.natar = !opt.tribes.natar">{{tribes.5}} Natars</button>
-          <button type="button" class="btn btn-info"
-                  ng-click="showElems.settings = !showElems.settings; showElems.results = !showElems.results; search();">
-            <div ng-switch="showElems.settings">
-              <div ng-switch-when="false">Results</div>
-              <div ng-switch-default>Settings</div>
-            </div>
-          </button>
+<div ng-init="init();"></div>
+<div class="row" style="padding-top: -50px;">
+  <div class="text-center">
+    <div class="btn-group" style="vertical-align:0px">
+      <div class="btn-group" style="">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" ng-model="opt.server">
+          {{opt.server}}
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a ng-repeat="server in servers | orderBy:'code' " ng-click="opt.server = server.address;">
+              {{server.address}} {{server.code}}
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+          Show {{opt.count}} 
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a ng-click="opt.count = 10; opt.limit=0;">10</a></li>
+          <li><a ng-click="opt.count = 20; opt.limit=0;">20</a></li>
+          <li><a ng-click="opt.count = 30; opt.limit=0;">30</a></li>
+          <li><a ng-click="opt.count = 40; opt.limit=0;">40</a></li>
+          <li><a ng-click="opt.count = 60; opt.limit=0;">60</a></li>
+          <li><a ng-click="opt.count = 80; opt.limit=0;">80</a></li>
+          <li><a ng-click="opt.count = 100; opt.limit=0;">100</a></li>
+        </ul>
+      </div>
+      <button class="btn" ng-class="{'btn-danger': opt.tribes.roman, 'btn-info': !opt.tribes.roman}" 
+                  type="button" ng-click="opt.tribes.roman = !opt.tribes.roman">{{tribes.1}} Romans</button>
+      <button class="btn" ng-class="{'btn-danger': opt.tribes.teuton, 'btn-info': !opt.tribes.teuton}" 
+                  type="button" ng-click="opt.tribes.teuton = !opt.tribes.teuton">{{tribes.2}} Teutons</button>
+      <button class="btn" ng-class="{'btn-danger': opt.tribes.gaul, 'btn-info': !opt.tribes.gaul}" 
+                  type="button" ng-click="opt.tribes.gaul = !opt.tribes.gaul">{{tribes.3}} Gauls</button>
+      <button class="btn" ng-class="{'btn-danger': opt.tribes.natar, 'btn-info': !opt.tribes.natar}" 
+                  type="button" ng-click="opt.tribes.natar = !opt.tribes.natar">{{tribes.5}} Natars</button>
+      <button type="button" class="btn btn-info"
+              ng-click="table.elems.settings = !table.elems.settings; table.elems.results = !table.elems.results; search();">
+        <div ng-switch="table.elems.settings">
+          <div ng-switch-when="false">Results</div>
+          <div ng-switch-default>Settings</div>
         </div>
-      </div>
-      <div class="col-md-4 col-xs-12" style="padding-left:0px;">
-        <form class="form-horizontal" role="form">
-          <div class="form-group">
-            <div class="col-lg-4 col-md-5 col-xs-4">
-              <div class="input-group">
-                <span class="input-group-addon">X:</span>
-                <input class="form-control" type="number" ng-model="opt.x" min="-400" max="400" placeholder="{{opt.x}}">
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-5 col-xs-4">
-              <div class="input-group">
-                <span class="input-group-addon">Y:</span>
-                <input class="form-control" type="number" ng-model="opt.y" min="-400" max="400" placeholder="{{opt.y}}">
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
+      </button>
     </div>
   </div>
 </div>
-  
-<div class="row">
-  <div class="col-md-9 col-xs-12">
-    <div class="row" ng-hide="showElems.results">
+
+<div class="row" style="margin-left: 0px;margin-right: 0px;margin-top:10px;">
+  <div class="col-xs-12">
+    <div class="row" ng-hide="table.elems.results">
       <table class="table table-condensed table-bordered table-hover">
         <thead>
           <tr>
@@ -85,6 +64,16 @@
                 <a href="" ng-switch-when="true">{{opt.limit + opt.count}}-{{opt.limit + opt.count + opt.count}}<span class="glyphicon glyphicon-chevron-right"></span></a>
                 <a href="" ng-switch-default ng-click="opt.limit = opt.limit + opt.count;">{{opt.limit + opt.count}}-{{opt.limit + opt.count + opt.count}}<span class="glyphicon glyphicon-chevron-right"></span></a>
               </div>
+              <form name="koord">
+                <div class="input-group input-group-sm pull-left" style="margin-left: 20%;" ng-class="{'has-error': !koord.x.$valid}">
+                  <span class="input-group-addon">X:</span>
+                  <input class="form-control" type="number" name="x" ng-model="opt.x" min="-400" max="400" placeholder="{{opt.x}}" required>
+                </div>
+                <div class="input-group input-group-sm pull-right" style="margin-right: 40%;" ng-class="{'has-error': !koord.y.$valid}">
+                  <span class="input-group-addon">Y:</span>
+                  <input class="form-control" type="number" name="y" ng-model="opt.y" min="-400" max="400" placeholder="{{opt.y}}" required>
+                </div>
+              </form>
             </th>
           </tr>
           <tr>
@@ -105,7 +94,7 @@
             <td ng-hide="table.columns.dist" class="text-center">{{village.dist}}</td>
             <td ng-hide="table.columns.xy" class="text-center"><a href="http://{{opt.server}}/position_details.php?x={{village.x}}&y={{village.y}}">({{village.x}}|{{village.y}})</a></td>
             <td ng-hide="table.columns.name">
-              <a href="http://{{opt.server}}/build.php?id=39&tt=2&z={{village.id}}&t1={{table.unit.t1}}&t2={{table.unit.t2}}&t3={{table.unit.t3}}&t4={{table.unit.t4}}&t5={{table.unit.t5}}&t6={{table.unit.t6}}&t7={{table.unit.t7}}&t8={{table.unit.t8}}&t9={{table.unit.t9}}">
+              <a href="http://{{opt.server}}/build.php?id=39&tt=2&z={{village.id}}&t1={{table.unit.t1}}&t2={{table.unit.t2}}&t3={{table.unit.t3}}&t4={{table.unit.t4}}&t5={{table.unit.t5}}&t6={{table.unit.t6}}&t7={{table.unit.t7}}&t8={{table.unit.t8}}&t9={{table.unit.t9}}&c={{table.unit.c}}">
                 {{village.village}}
               </a>
             </td>
@@ -152,7 +141,7 @@
         </tr>
       </table>      
     </div>
-    <div class="row" ng-hide="showElems.settings">
+    <div class="row" ng-hide="table.elems.settings">
       <div class="panel panel-default">
         <div class="panel-heading">
           Population, village and idle time limits.
@@ -170,69 +159,180 @@
         </div>
         <div id="limits" class="panel-collapse collapse">
           <div class="panel-body">
-            <form class="form-horizontal" role="form">
+            <form class="form-horizontal" role="form" name="poplimits">
               <div class="form-group">
                 <label class="col-xs-4 control-label">Village population</label>
                 <div class="col-xs-4">
-                  <div class="input-group">
+                  <div class="input-group" ng-class="{'has-error': !poplimits.vilminpop.$valid}">
                     <span class="input-group-addon">Min</span>
-                    <input class="form-control" ng-model="opt.vilminpop" min="0" max="2499" type="number">
+                    <input class="form-control" ng-model="opt.vilminpop" min="0" max="2499" type="number" name="vilminpop" required>
                   </div>
                 </div>
                 <div class="col-xs-4">
-                  <div class="input-group">
+                  <div class="input-group" ng-class="{'has-error': !poplimits.vilmaxpop.$valid}">
                     <span class="input-group-addon">Max</span>
-                    <input class="form-control" ng-model="opt.vilmaxpop" min="1" max="2500" type="number">
+                    <input class="form-control" ng-model="opt.vilmaxpop" min="1" max="2500" type="number" name="vilmaxpop" required>
                   </div>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-xs-4 control-label">Account population</label>
                 <div class="col-xs-4">
-                  <div class="input-group">
+                  <div class="input-group" ng-class="{'has-error': !poplimits.accominpop.$valid}">
                     <span class="input-group-addon">Min</span>
-                    <input class="form-control" ng-model="opt.accominpop" min="0" max="199999" type="number">
+                    <input class="form-control" ng-model="opt.accominpop" min="0" max="199999" type="number" name="accominpop" required>
                   </div>
                 </div>
                 <div class="col-xs-4">
-                  <div class="input-group">
+                  <div class="input-group" ng-class="{'has-error': !poplimits.accomaxpop.$valid}">
                     <span class="input-group-addon">Max</span>
-                    <input class="form-control" ng-model="opt.accomaxpop" min="1" max="200000" type="number">
+                    <input class="form-control" ng-model="opt.accomaxpop" min="1" max="200000" type="number" name="accomaxpop" required>
                   </div>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-xs-4 control-label">Account village count</label>
                 <div class="col-xs-4">
-                  <div class="input-group">
+                  <div class="input-group" ng-class="{'has-error': !poplimits.vilcountmin.$valid}">
                     <span class="input-group-addon">Min</span>
-                    <input class="form-control" ng-model="opt.vilcountmin" min="1" max="199" type="number">
+                    <input class="form-control" ng-model="opt.vilcountmin" min="1" max="199" type="number" name="vilcountmin" required>
                   </div>
                 </div>
                 <div class="col-xs-4">
-                  <div class="input-group">
+                  <div class="input-group" ng-class="{'has-error': !poplimits.vilcountmax.$valid}">
                     <span class="input-group-addon">Max</span>
-                    <input class="form-control" ng-model="opt.vilcountmax" min="1" max="200" type="number">
+                    <input class="form-control" ng-model="opt.vilcountmax" min="1" max="200" type="number" name="vilcountmax" required>
                   </div>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-xs-4 control-label">Account idle time</label>
                 <div class="col-xs-4">
-                  <div class="input-group">
+                  <div class="input-group" ng-class="{'has-error': !poplimits.idlemin.$valid}">
                     <span class="input-group-addon">Min</span>
-                    <input class="form-control" ng-model="opt.idlemin" min="0" max="49" type="number">
+                    <input class="form-control" ng-model="opt.idlemin" min="0" max="49" type="number" name="idlemin" required>
                   </div>
                 </div>
                 <div class="col-xs-4">
-                  <div class="input-group">
+                  <div class="input-group" ng-class="{'has-error': !poplimits.idlemax.$valid}">
                     <span class="input-group-addon">Max</span>
-                    <input class="form-control" ng-model="opt.idlemax" min="1" max="100" type="number">
+                    <input class="form-control" ng-model="opt.idlemax" min="1" max="100" type="number" name="idlemax" required>
                   </div>
                 </div>
               </div>
             </form>         
           </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Units      
+          <button type="button" class="btn pull-right btn-xs" style="margin-left:10px;"
+                  data-toggle="collapse" href="#units">
+            <span class="glyphicon glyphicon-align-justify"></span>
+          </button>
+          
+          <button type="button" class="btn pull-right btn-xs"
+                  ng-click="table.unit.race = 'r'; table.unit.c = 2;
+                    table.unit.t1 = 0;table.unit.t2 = 0;table.unit.t3 = 0;
+                    table.unit.t4 = 0;table.unit.t5 = 0;table.unit.t6 = 0;
+                    table.unit.t7 = 0;table.unit.t8 = 0;table.unit.t9 = 0;">
+            <span>Reset</span>
+            <span class="glyphicon glyphicon-refresh"></span>
+          </button>
+          
+          <div class="pull-right" style="margin-right: 10px;">
+            <div class="btn-group pull-right" data-toggle="buttons"> 
+              <label class="btn btn-default btn-xs" ng-click="table.unit.race = 'r'">
+                <input type="radio" name="options"> Romans
+              </label>
+              <label class="btn btn-default btn-xs" ng-click="table.unit.race = 't'">
+                <input type="radio" name="options"> Teutons
+              </label>
+              <label class="btn btn-default btn-xs" ng-click="table.unit.race = 'g'">
+                <input type="radio" name="options"> Gauls
+              </label>
+            </div>
+          </div>
+          <div class="pull-right" style="margin-right: 10px;">
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-default btn-xs" ng-click="table.unit.c = '2'">
+                <input type="radio" name="options"><div ng-class="{'text-danger': table.unit.c == 2}">Reinforcement</div> 
+              </label>
+              <label class="btn btn-default btn-xs" ng-click="table.unit.c = '3'">
+                <input type="radio" name="options"><div ng-class="{'text-danger': table.unit.c == 3}">Attack: Normal</div> 
+              </label>
+              <label class="btn btn-default btn-xs" ng-click="table.unit.c = '4'">
+                <input type="radio" name="options"><div ng-class="{'text-danger': table.unit.c == 4}">Attack: Raid</div> 
+              </label>
+            </div>
+          </div>
+        </div>
+        <div id="units" class="panel-collapse collapse">
+          <form name="units">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-4">
+                  <div class="input-group" ng-class="{'has-error': !units.t1.$valid}">
+                    <span class="input-group-addon"><img class="unit {{table.unit.race}}t1" src="img/img_trans.gif"/></span>
+                    <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t1" name="t1" required>
+                  </div>
+                </div>
+                <div class="col-xs-4">
+                  <div class="input-group" ng-class="{'has-error': !units.t2.$valid}">
+                    <span class="input-group-addon"><img class="unit {{table.unit.race}}t2" src="img/img_trans.gif"/></span>
+                    <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t2" name="t2" required>
+                  </div>
+                </div>
+                <div class="col-xs-4">
+                  <div class="input-group" ng-class="{'has-error': !units.t3.$valid}">
+                    <span class="input-group-addon"><img class="unit {{table.unit.race}}t3" src="img/img_trans.gif"/></span>
+                    <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t3" name="t3" required>
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="margin-top:5px;">
+                <div class="col-xs-4">
+                  <div class="input-group" ng-class="{'has-error': !units.t4.$valid}">
+                    <span class="input-group-addon"><img class="unit {{table.unit.race}}t4" src="img/img_trans.gif"/></span>
+                    <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t4" name="t4" required>
+                  </div>
+                </div>
+                <div class="col-xs-4">
+                  <div class="input-group" ng-class="{'has-error': !units.t5.$valid}">
+                    <span class="input-group-addon"><img class="unit {{table.unit.race}}t5" src="img/img_trans.gif"/></span>
+                    <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t5" name="t5" required>
+                  </div>
+                </div>
+                <div class="col-xs-4">
+                  <div class="input-group" ng-class="{'has-error': !units.t6.$valid}">
+                    <span class="input-group-addon"><img class="unit {{table.unit.race}}t6" src="img/img_trans.gif"/></span>
+                    <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t6" name="t6" required>
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="margin-top:5px;">
+                <div class="col-xs-4">
+                  <div class="input-group" ng-class="{'has-error': !units.t7.$valid}">
+                    <span class="input-group-addon"><img class="unit {{table.unit.race}}t7" src="img/img_trans.gif"/></span>
+                    <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t7" name="t7" required>
+                  </div>
+                </div>
+                <div class="col-xs-4">
+                  <div class="input-group" ng-class="{'has-error': !units.t8.$valid}">
+                    <span class="input-group-addon"><img class="unit {{table.unit.race}}t8" src="img/img_trans.gif"/></span>
+                    <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t8" name="t8" required>
+                  </div>
+                </div>
+                <div class="col-xs-4">
+                  <div class="input-group" ng-class="{'has-error': !units.t9.$valid}">
+                    <span class="input-group-addon"><img class="unit {{table.unit.race}}t9" src="img/img_trans.gif"/></span>
+                    <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t9" name="t9" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
       <div class="panel panel-default">
@@ -249,20 +349,17 @@
             <span>Reset</span>
             <span class="glyphicon glyphicon-refresh"></span>
           </button>
-          
+          <div class="checkbox pull-right" style="margin-top: 0px;">
+            <label>
+              <input type="checkbox" ng-model="table.openAllLink">
+              Show / Hide Open all link
+            </label>
+          </div>
         </div>
         <div id="tableSettings" class="panel-collapse collapse">
           <div class="panel-body">
-            <div class="col-xs-4">
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" ng-model="table.openAllLink">
-                  Show / Hide Open all link
-                </label>
-              </div>
-            </div>
-            <div class="col-xs-8">
-              <div class="col-xs-12 text-center">
+            <div class="col-xs-12">
+              <div class="text-center">
                 <b>Hide columns</b>
               </div>
               <div class="row">
@@ -349,101 +446,6 @@
       </div>
       <div class="panel panel-default">
         <div class="panel-heading">
-          Units      
-          <button type="button" class="btn pull-right btn-xs" style="margin-left:10px;"
-                  data-toggle="collapse" href="#units">
-            <span class="glyphicon glyphicon-align-justify"></span>
-          </button>
-          
-          <button type="button" class="btn pull-right btn-xs" style="margin-left:10px;"
-                  ng-click="table.unit.race = 'r'; 
-                    table.unit.t1 = '0';table.unit.t2 = '0';table.unit.t3 = '0';
-                    table.unit.t4 = '0';table.unit.t5 = '0';table.unit.t6 = '0';
-                    table.unit.t7 = '0';table.unit.t8 = '0';table.unit.t9 = '0';">
-            <span>Reset</span>
-            <span class="glyphicon glyphicon-refresh"></span>
-          </button>
-          
-          
-          <div class="btn-group pull-right" data-toggle="buttons">
-            <label class="btn btn-default btn-xs" ng-click="table.unit.race = 'r'">
-              <input type="radio" name="options"> Romans
-            </label>
-            <label class="btn btn-default btn-xs" ng-click="table.unit.race = 't'">
-              <input type="radio" name="options"> Teutons
-            </label>
-            <label class="btn btn-default btn-xs" ng-click="table.unit.race = 'g'">
-              <input type="radio" name="options"> Gauls
-            </label>
-          </div>
-        </div>
-        <div id="units" class="panel-collapse collapse">
-          <div class="panel-body">
-            <div class="row">
-              <div class="col-xs-4">
-                <div class="input-group">
-                  <span class="input-group-addon"><img class="unit {{table.unit.race}}t1" src="img/img_trans.gif"/></span>
-                  <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t1">
-                </div>
-              </div>
-              <div class="col-xs-4">
-                <div class="input-group">
-                  <span class="input-group-addon"><img class="unit {{table.unit.race}}t2" src="img/img_trans.gif"/></span>
-                  <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t2">
-                </div>
-              </div>
-              <div class="col-xs-4">
-                <div class="input-group">
-                  <span class="input-group-addon"><img class="unit {{table.unit.race}}t3" src="img/img_trans.gif"/></span>
-                  <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t3">
-                </div>
-              </div>
-            </div>
-            <div class="row" style="margin-top:5px;">
-              <div class="col-xs-4">
-                <div class="input-group">
-                  <span class="input-group-addon"><img class="unit {{table.unit.race}}t4" src="img/img_trans.gif"/></span>
-                  <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t4">
-                </div>
-              </div>
-              <div class="col-xs-4">
-                <div class="input-group">
-                  <span class="input-group-addon"><img class="unit {{table.unit.race}}t5" src="img/img_trans.gif"/></span>
-                  <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t5">
-                </div>
-              </div>
-              <div class="col-xs-4">
-                <div class="input-group">
-                  <span class="input-group-addon"><img class="unit {{table.unit.race}}t6" src="img/img_trans.gif"/></span>
-                  <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t6">
-                </div>
-              </div>
-            </div>
-            <div class="row" style="margin-top:5px;">
-              <div class="col-xs-4">
-                <div class="input-group">
-                  <span class="input-group-addon"><img class="unit {{table.unit.race}}t7" src="img/img_trans.gif"/></span>
-                  <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t7">
-                </div>
-              </div>
-              <div class="col-xs-4">
-                <div class="input-group">
-                  <span class="input-group-addon"><img class="unit {{table.unit.race}}t8" src="img/img_trans.gif"/></span>
-                  <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t8">
-                </div>
-              </div>
-              <div class="col-xs-4">
-                <div class="input-group">
-                  <span class="input-group-addon"><img class="unit {{table.unit.race}}t9" src="img/img_trans.gif"/></span>
-                  <input type="number" class="form-control" placeholder="0" min="0" ng-model="table.unit.t9">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>     
-      <div class="panel panel-default">
-        <div class="panel-heading">
           Players
           
           <button type="button" class="btn pull-right btn-xs" style="margin-left:10px;"
@@ -488,7 +490,7 @@
           </button>
           
           <button type="button" class="btn pull-right btn-xs" style="margin-left:10px;"
-                  ng-click="opt.onlyguilds = false; opt.players = [];">
+                  ng-click="opt.onlyguilds = false; opt.guilds = [];">
             <span>Reset</span>
             <span class="glyphicon glyphicon-refresh"></span>
           </button>
@@ -515,7 +517,7 @@
       </div>
     </div>
   </div>
-  
+  <!--
   <div class="col-md-3 hidden-xs">
     <div class="alert alert-danger" ng-hide="isStorage">
       <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -549,4 +551,5 @@
       </div>
     </div>    
   </div>
+  -->
 </div>
