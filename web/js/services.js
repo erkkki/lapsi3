@@ -1,15 +1,3 @@
-angular.module('app').factory('Servers', function($http) {
-    var Servers = function(data) {
-      angular.extend(this, data);
-    }
-    Servers.getAll = function() {
-      return $http.get('/api/travian/server/list/').then(function(response) {
-        return new Servers(response.data);
-      });
-    };
-    return Servers;
-});
-
 app.service('LocalStorage', function(){
   this.add = function(name,value){
     localStorage.setItem(name,angular.toJson(value));

@@ -2,19 +2,41 @@
 <div class="row" style="padding-top: -50px;">
   <div class="text-center">
     <div class="btn-group" style="vertical-align:0px">
-      <div class="btn-group" style="">
+      <div class="btn-group">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" ng-model="opt.server">
+          <img class="flag flag-{{opt.addressend}}" src="img/img_trans.gif"/> {{opt.addressend}}
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <ul class="list-inline" ng-repeat="server in serversToFilter() | filter:filterGroupbyEnd">
+            <li class="pull-left">
+              <a href="" ng-click="opt.addressend = server.addressend;">
+                <img class="flag flag-{{server.addressend}}" src="img/img_trans.gif"/>
+              </a>
+            </li>
+            <li>
+              <a href="" ng-click="opt.addressend = server.addressend;">
+                <b> {{server.addressend}} </b>
+              </a>
+            </li>
+          </ul>
+        </ul>
+      </div>
+      <div class="btn-group">
         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" ng-model="opt.server">
           {{opt.server}}
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
           <li>
-            <a ng-repeat="server in servers | orderBy:'code' " ng-click="opt.server = server.address;">
-              {{server.address}} {{server.code}}
+            <a href="" ng-repeat="server in servers | filter:{addressend: opt.addressend}" ng-click="opt.server = server.address; opt.addressend = server.addressend;">
+              {{server.address}}
             </a>
           </li>
         </ul>
       </div>
+      
+      
       <div class="btn-group">
         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
           Show {{opt.count}} 

@@ -61,20 +61,22 @@ $app['guildService'] = $app->share(function (Application $app) {
 $app['playerService'] = $app->share(function (Application $app) {
     return new playerService($app['db']);
 });
+/*
 $app->post('/api/travian/search/player/',function(Application $app, Request $request){
   $data = json_decode($request->getContent());
   if($data->server == 'Select server') return 'No players';
   return json_encode($app['playerService']->playerByName($data->server,$data->name));
 });
+ */
 //##########################
 //#### Search villages #####
 $app['vil_search'] = $app->share(function (Application $app) {
-    return new VillageSearch($app['db']);
+    return new VillageSearch($app['db'], $app['tableServise']);
 });
 
 $app->post('/api/travian/search',function(Application $app, Request $request){
   $data = json_decode($request->getContent());
-  if($data->server == 'Select server') return true;
+  if($data->server == 'Select server') return 'No villages';
   $app['vil_search']->setData(json_decode($request->getContent()));
   return json_encode($app['vil_search']->searchVillages());
 });

@@ -1,40 +1,39 @@
-function playerCtrl($scope, $http, LocalStorage){
+function playerCtrl($scope, $http, $window, LocalStorage, analytics){
   $scope.LocalS = LocalStorage;
   
   $scope.temp = true;
 }
 
-function guildCtrl($scope, $http, LocalStorage){
+function guildCtrl($scope, $http, $window, LocalStorage, analytics){
   $scope.LocalS = LocalStorage;
   
 }
-function serversCtrl($scope, $http, $window, LocalStorage){
-  $scope.LocalS = LocalStorage;  
-
-  $scope.init = function(){
-    if($scope.LocalS.isset('well')){ $scope.well = $scope.LocalS.get('well')}
-    else {$scope.well = {"well1": false,"well2": true}}
-    $scope.servers();
-  }
-
-  $scope.$watch('well', function() {
-    $scope.LocalS.add('well',$scope.well);
-  }, true);
+function serversCtrl($scope, $http, $location, $window, LocalStorage, analytics){
+  $scope.LocalS = LocalStorage;
+  $scope.serversSum = {"players": 0, "villages": 0, "servers": 0};
   
+  $scope.init = function(){
+    $scope.servers(); 
+  } 
 
+  $scope.stats = function(servers){
+    var count = servers.length;
+    $scope.serversSum.servers = count;
+    for(var i = 0; i< count;i++){
+      $scope.serversSum.players += parseInt(servers[i].accountcount);
+      $scope.serversSum.villages += parseInt(servers[i].villagecount);
+    }
+  };
   
   $scope.servers = function(){
     $http.get('api/travian/server/list/')
       .success(function(data) {
         $scope.servers = data;
-        var i = 0, count = data.length;
-        for(i; i < count; i++){
-          $scope.servers[i].code = data[i].address.split(".")[(data[i].address.split(".").length)-1]
-        }
+        $scope.stats(data);
     });
   };  
 }
-function villageCtrl($scope, $http, $window, LocalStorage, $log){
+function villageCtrl($scope, $http, $window, LocalStorage, analytics){
   $scope.window = $window;
   $scope.LocalS = LocalStorage;
   $scope.isStorage = $scope.LocalS.isSupported();
@@ -61,7 +60,7 @@ function villageCtrl($scope, $http, $window, LocalStorage, $log){
                          "settings": true, "results": false
                        }
                      };
-    };
+    }
     if($scope.LocalS.get('lastServer')){
       $scope.opt = $scope.LocalS.get('lastServer');
     } else {
@@ -82,7 +81,7 @@ function villageCtrl($scope, $http, $window, LocalStorage, $log){
         "idlemin": 0,
         "idlemax": 50
       };
-    };
+    }
     $scope.servers();
   };
   $scope.AddPersonlaVil = function(name){
@@ -104,12 +103,22 @@ function villageCtrl($scope, $http, $window, LocalStorage, $log){
     $http.get('api/travian/server/list/')
       .success(function(data) {
         $scope.servers = data;
-        var i = 0, count = data.length;
-        for(i; i < count; i++){
-          $scope.servers[i].code = data[i].address.split(".")[(data[i].address.split(".").length)-1]
-        }
     });
   };
+  
+  $scope.serversToFilter = function(){
+    indexedServes = [];
+    return $scope.servers;
+  };
+  
+  $scope.filterGroupbyEnd = function(server){
+    var newServer = indexedServes.indexOf(server.addressend) == -1;
+    if (newServer) {
+      indexedServes.push(server.addressend);
+    }
+    return newServer;
+  }
+  
   $scope.$watch('table', function() {
     $scope.LocalS.add('table',$scope.table);
   }, true);
@@ -123,10 +132,8 @@ function villageCtrl($scope, $http, $window, LocalStorage, $log){
   $scope.search = function(){
     if($scope.table.elems.settings != true) return;
     if($scope.opt.server == "" || $scope.opt.server == "Select server") return;
-    //$scope.villages = {};
     $http.post('api/travian/search', $scope.opt)
       .success(function(data) {
-        //$scope.opt.limit = $scope.opt.limit - $scope.opt.count;
         if(data == '\"No villages\"') {
           $scope.villages = '';
           $scope.opt.limit = 0;
@@ -136,13 +143,6 @@ function villageCtrl($scope, $http, $window, LocalStorage, $log){
         else $scope.table.nextDisable = false;
         $scope.villages = data;
         $scope.table.elems.results = false;
-      });
-  };
-  $scope.playerByName = function(name){
-    var queryData = {"server":$scope.opt.server,"name":name}
-    $http.post('api/travian/search/player/', queryData)
-      .success(function(data) {
-        $scope.temp = data;
       });
   };
   $scope.openall = function(address,what){

@@ -5,6 +5,7 @@ namespace Project\command;
 use Knp\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Doctrine\DBAL\Connection;
@@ -18,7 +19,12 @@ class UpdateDataCommand extends Command{
     protected function configure(){
         $this
             ->setName('tra:update')
-            ->setDescription('Update active servers.');
+            ->setDescription('Update active servers.  Use --update when update is not needed.')
+            ->addOption( 'update',
+               null,
+               InputOption::VALUE_NONE,
+               'If not set, server data will not update after added.'
+            );
     }
     
     protected function execute(InputInterface $input, OutputInterface $output){
@@ -41,18 +47,20 @@ class UpdateDataCommand extends Command{
       foreach ($servers as $server) {
         if($allServerService->isServerInList($server['address']) == null){
           $output->writeln('Server ' . $server['address'] . ' no more active removing..');
-          $temp = $active->getServerName($server['address']);
-          $active->deleteServer($temp['id']);
+          $temp = $activeService->getServerName($server['address']);
+          $activeService->deleteServer($temp['id']);
           $tableService->DropTable(str_replace('.','',$server['address']));
           $output->writeln('Server ' . $server['address'] . ' removed.');
         } else {
-          $sTime = time();
-          $output->write("updating: <info>".$server['address']."</info>");
-          try {
-            $dataService->updateServerData($server['address']);
-            $output->writeln(" ... done! Time taken: " . (time()-$sTime).".s");
-          } catch (Exception $e){
-            $output->writeln("<error> ... failed to update ".$server['address'].".</error>");
+          if (!$input->getOption('update')) {
+            $sTime = time();
+            $output->write("updating: <info>".$server['address']."</info>");
+            try {
+              $dataService->updateServerData($server['address']);
+              $output->writeln(" ... done! Time taken: " . (time()-$sTime).".s");
+            } catch (Exception $e){
+              $output->writeln("<error> ... failed to update ".$server['address'].".</error>");
+            }
           }
         }
       }

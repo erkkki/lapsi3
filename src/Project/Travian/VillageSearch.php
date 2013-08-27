@@ -7,9 +7,11 @@ class VillageSearch {
   protected $conn;
   protected $villages;
   protected $post;
+  protected $tableService;
 
-  public function __construct($conn){
+  public function __construct($conn, tableServise $tableService){
     $this->conn = $conn;
+    $this->tableService = $tableService;
   }
   public function setData($data){
     $this->post = $data;
@@ -44,6 +46,8 @@ class VillageSearch {
     
   }
   public function searchVillages(){
+    if(!$this->tableService->tableExists($this->post->table))
+      return 'No villages';
     return $this->squery();
   }
   private function squery(){

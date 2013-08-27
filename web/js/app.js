@@ -1,6 +1,6 @@
-var app = angular.module("app", []);
+var app = angular.module("app", ['analytics']);
 
-app.config(['$routeProvider', function($routeProvider) {
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
     .when('',{
       templateUrl:"/views/villages.html",
@@ -23,27 +23,6 @@ app.config(['$routeProvider', function($routeProvider) {
       controller: guildCtrl
     }
   );
+    
+  $locationProvider.html5Mode(true);
 }]);
-
-app.filter('addressEnd', function(){
-  return function (text){
-    return temp = text.split(".")[(text.split(".").length)-1]; 
-  }
-})
-app.filter('unique', function(){
-  return function(text){
-    var i,
-        len=text.length,
-        out=[],
-        obj={};
-
-    for (i=0;i<len;i++) {
-      obj[text]=0;
-    }
-    for (i in obj) {
-      out.push(i);
-    }
-    console.log(out);
-    return out;
-  }
-})

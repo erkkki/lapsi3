@@ -26,6 +26,7 @@ class tableServise {
       $sql = "CREATE TABLE `activeservers` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `address` varchar(100) NOT NULL,
+              `addressend` varchar(100) NOT NULL,
               `updatetime` BIGINT NOT NULL,
               `villagecount` int(11),
               `villagepopavg` DOUBLE,

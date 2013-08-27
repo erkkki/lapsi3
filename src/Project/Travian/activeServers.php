@@ -16,8 +16,9 @@ class activeServers {
         if($this->getServerName($address)){
           return 'Server allready set. Try other server.';
         }
-        $statement = $this->conn->prepare('insert into activeservers values(?, ?, ?, ?, ?, ?, ?, ?)');
-        $statement->execute(array('', $address, 1, '', '', '', '', ''));
+        $addressend = explode(".", $address);
+        $statement = $this->conn->prepare('insert into activeservers values(?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $statement->execute(array('', $address, $addressend[count($addressend)-1],1, '', '', '', '', ''));
         return true;        
     }
     public function deleteServer($id){
