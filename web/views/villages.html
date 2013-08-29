@@ -7,7 +7,7 @@
           <img class="flag flag-{{opt.addressend}}" src="img/img_trans.gif"/> {{opt.addressend}}
           <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu" style="min-width: 80px;">
           <ul class="list-inline" ng-repeat="server in serversToFilter() | filter:filterGroupbyEnd">
             <li class="pull-left">
               <a href="" ng-click="opt.addressend = server.addressend;">
@@ -42,7 +42,7 @@
           Show {{opt.count}} 
           <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu" style="min-width: 60px;margin-left: 5px;">
           <li><a ng-click="opt.count = 10; opt.limit=0;">10</a></li>
           <li><a ng-click="opt.count = 20; opt.limit=0;">20</a></li>
           <li><a ng-click="opt.count = 30; opt.limit=0;">30</a></li>
@@ -60,6 +60,10 @@
                   type="button" ng-click="opt.tribes.gaul = !opt.tribes.gaul">{{tribes.3}} Gauls</button>
       <button class="btn" ng-class="{'btn-danger': opt.tribes.natar, 'btn-info': !opt.tribes.natar}" 
                   type="button" ng-click="opt.tribes.natar = !opt.tribes.natar">{{tribes.5}} Natars</button>
+      <button class="btn btn-info" ng-click="LocalS.remove('lastServer');LocalS.remove('table');villages = '';init();">
+        <span>Reset all </span>
+        <span class="glyphicon glyphicon-refresh"></span>
+      </button>
       <button type="button" class="btn btn-info"
               ng-click="table.elems.settings = !table.elems.settings; table.elems.results = !table.elems.results; search();">
         <div ng-switch="table.elems.settings">
@@ -70,7 +74,6 @@
     </div>
   </div>
 </div>
-
 <div class="row" style="margin-left: 0px;margin-right: 0px;margin-top:10px;">
   <div class="col-xs-12">
     <div class="row" ng-hide="table.elems.results">
@@ -78,24 +81,34 @@
         <thead>
           <tr>
             <th colspan="12">
-              <div ng-switch="opt.limit" class="pull-left">
-                <a href="" ng-switch-when="0"><span class="glyphicon glyphicon-chevron-left"></span> 0-{{opt.count}}</a>
-                <a href="" ng-switch-default ng-click="opt.limit = opt.limit - opt.count;"><span class="glyphicon glyphicon-chevron-left"></span>{{opt.limit - opt.count}}-{{opt.limit}}</a>
-              </div>
-              <div ng-switch="table.nextDisable" class="pull-right">
-                <a href="" ng-switch-when="true">{{opt.limit + opt.count}}-{{opt.limit + opt.count + opt.count}}<span class="glyphicon glyphicon-chevron-right"></span></a>
-                <a href="" ng-switch-default ng-click="opt.limit = opt.limit + opt.count;">{{opt.limit + opt.count}}-{{opt.limit + opt.count + opt.count}}<span class="glyphicon glyphicon-chevron-right"></span></a>
-              </div>
-              <form name="koord">
-                <div class="input-group input-group-sm pull-left" style="margin-left: 20%;" ng-class="{'has-error': !koord.x.$valid}">
-                  <span class="input-group-addon">X:</span>
-                  <input class="form-control" type="number" name="x" ng-model="opt.x" min="-400" max="400" placeholder="{{opt.x}}" required>
+              <div class="row">
+                <div class="col-xs-2">
+                  <div ng-switch="opt.limit" style="padding-top: 5px;">
+                    <a href="" ng-switch-when="0"><span class="glyphicon glyphicon-chevron-left"></span> 0-{{opt.count}}</a>
+                    <a href="" ng-switch-default ng-click="opt.limit = opt.limit - opt.count;"><span class="glyphicon glyphicon-chevron-left"></span>{{opt.limit - opt.count}}-{{opt.limit}}</a>
+                  </div>
                 </div>
-                <div class="input-group input-group-sm pull-right" style="margin-right: 40%;" ng-class="{'has-error': !koord.y.$valid}">
-                  <span class="input-group-addon">Y:</span>
-                  <input class="form-control" type="number" name="y" ng-model="opt.y" min="-400" max="400" placeholder="{{opt.y}}" required>
+                <form name="koord">
+                  <div class="col-xs-4">
+                    <div class="input-group input-group-sm pull-right" style="max-width: 100px;" ng-class="{'has-error': !koord.x.$valid}">
+                      <span class="input-group-addon">X:</span>
+                      <input class="form-control" type="number" name="x" ng-model="opt.x" min="-400" max="400" placeholder="{{opt.x}}" required>
+                    </div>
+                  </div>
+                  <div class="col-xs-4">
+                    <div class="input-group input-group-sm pull-left" style="max-width: 100px;" ng-class="{'has-error': !koord.y.$valid}">
+                      <span class="input-group-addon">Y:</span>
+                      <input class="form-control" type="number" name="y" ng-model="opt.y" min="-400" max="400" placeholder="{{opt.y}}" required>
+                    </div>
+                  </div>
+                </form>
+                <div class="col-xs-2">
+                  <div ng-switch="table.nextDisable" class="pull-right" style="padding-top: 5px;">
+                    <a href="" ng-switch-when="true">{{opt.limit + opt.count}}-{{opt.limit + opt.count + opt.count}}<span class="glyphicon glyphicon-chevron-right"></span></a>
+                    <a href="" ng-switch-default ng-click="opt.limit = opt.limit + opt.count;">{{opt.limit + opt.count}}-{{opt.limit + opt.count + opt.count}}<span class="glyphicon glyphicon-chevron-right"></span></a>
+                  </div>
                 </div>
-              </form>
+              </div>
             </th>
           </tr>
           <tr>

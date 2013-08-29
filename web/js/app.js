@@ -1,4 +1,4 @@
-var app = angular.module("app", ['analytics']);
+var app = angular.module("app", ['analytics', 'app.l3api']);
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider

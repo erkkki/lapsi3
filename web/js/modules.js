@@ -1,7 +1,7 @@
 var _gaq = _gaq || [];
 
 angular.module('analytics', []).run(['$http', function($http) {
-
+        
 	_gaq.push(['_setAccount', 'UA-43296636-1']);
 	_gaq.push(['_trackPageview']);
 
@@ -9,9 +9,9 @@ angular.module('analytics', []).run(['$http', function($http) {
 	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 	var s = document.getElementsByTagName('script')[0];
 	s.parentNode.insertBefore(ga, s);
-
+        
 }]).service('analytics', function($rootScope, $window, $location, $routeParams) {
-
+        
 	$rootScope.$on('$viewContentLoaded', track);
 
 	var track = function() {

@@ -1,20 +1,17 @@
-function playerCtrl($scope, $http, $window, LocalStorage, analytics){
+function playerCtrl($scope, $http, $window, LocalStorage, analytics, Servers){
   $scope.LocalS = LocalStorage;
   
-  $scope.temp = true;
+  
 }
 
 function guildCtrl($scope, $http, $window, LocalStorage, analytics){
   $scope.LocalS = LocalStorage;
   
 }
-function serversCtrl($scope, $http, $location, $window, LocalStorage, analytics){
+function serversCtrl($scope, $http, $location, $window, LocalStorage, analytics, Servers){
   $scope.LocalS = LocalStorage;
   $scope.serversSum = {"players": 0, "villages": 0, "servers": 0};
-  
-  $scope.init = function(){
-    $scope.servers(); 
-  } 
+  $scope.servers = Servers.query();
 
   $scope.stats = function(servers){
     var count = servers.length;
@@ -24,19 +21,12 @@ function serversCtrl($scope, $http, $location, $window, LocalStorage, analytics)
       $scope.serversSum.villages += parseInt(servers[i].villagecount);
     }
   };
-  
-  $scope.servers = function(){
-    $http.get('api/travian/server/list/')
-      .success(function(data) {
-        $scope.servers = data;
-        $scope.stats(data);
-    });
-  };  
 }
-function villageCtrl($scope, $http, $window, LocalStorage, analytics){
+function villageCtrl($scope, $http, $window, LocalStorage, analytics, Servers){
   $scope.window = $window;
   $scope.LocalS = LocalStorage;
   $scope.isStorage = $scope.LocalS.isSupported();
+  $scope.servers = Servers.query();
     
   $scope.init = function(){
     if($scope.LocalS.get('table')){
@@ -66,6 +56,7 @@ function villageCtrl($scope, $http, $window, LocalStorage, analytics){
     } else {
       $scope.opt = {
         "server":"Select server",
+        "addressend":"Select domain",
         "x": 0,
         "y": 0,
         "count": 10,
@@ -82,8 +73,8 @@ function villageCtrl($scope, $http, $window, LocalStorage, analytics){
         "idlemax": 50
       };
     }
-    $scope.servers();
   };
+  
   $scope.AddPersonlaVil = function(name){
     if(name == null) return;
     if(!$scope.LocalS.isset(name)){
@@ -91,19 +82,13 @@ function villageCtrl($scope, $http, $window, LocalStorage, analytics){
       $scope.table.LocalVil.push({name:name});
       $scope.newLocalVil = '';
       return;
-    } else {}
-  }
+    }
+  };
   
   $scope.openVil = function(name){
     if($scope.LocalS.get(name)){
       $scope.opt = $scope.LocalS.get(name);
     }
-  };
-  $scope.servers = function(){
-    $http.get('api/travian/server/list/')
-      .success(function(data) {
-        $scope.servers = data;
-    });
   };
   
   $scope.serversToFilter = function(){

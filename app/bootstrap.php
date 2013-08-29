@@ -43,23 +43,29 @@ $app['tableServise'] = $app->share(function (Application $app) {
 $app['allServers'] = $app->share(function (Application $app) {
     return new allServers($app['db'], $app['tableServise']);
 });
-$app->get('/api/travian/server/list/all/',function(Application $app){
+$app->get('/api/travian/server/list/all',function(Application $app){
     return json_encode($app['allServers']->getServersList());
 });
-//##########################
 //### server data update ###
 $app['dataupdate'] = $app->share(function (Application $app) {
     return new serverDataService($app['db'], $app['tableServise'], $app['activeservers']);
 });
-//##########################
 //###### guild search ######
 $app['guildService'] = $app->share(function (Application $app) {
     return new guildService($app['db']);
 });
-//##########################
 //##### player search ######
 $app['playerService'] = $app->share(function (Application $app) {
     return new playerService($app['db']);
+});
+$app->get('/api/travian/search/player/{name}',function(Application $app, $name){
+  echo $name;
+  return true;
+});
+
+$app->post('/api/test',function(Request $request){
+  $data = json_decode($request->getContent());
+  return json_encode($data);
 });
 /*
 $app->post('/api/travian/search/player/',function(Application $app, Request $request){
@@ -68,7 +74,6 @@ $app->post('/api/travian/search/player/',function(Application $app, Request $req
   return json_encode($app['playerService']->playerByName($data->server,$data->name));
 });
  */
-//##########################
 //#### Search villages #####
 $app['vil_search'] = $app->share(function (Application $app) {
     return new VillageSearch($app['db'], $app['tableServise']);
@@ -80,13 +85,12 @@ $app->post('/api/travian/search',function(Application $app, Request $request){
   $app['vil_search']->setData(json_decode($request->getContent()));
   return json_encode($app['vil_search']->searchVillages());
 });
-//##########################
 //##### active servers #####
 $app['activeservers'] = $app->share(function (Application $app) {
     return new activeServers($app['db'], $app['tableServise']);
 });
        
-$app->get('/api/travian/server/list/',function(Application $app){
+$app->get('/api/travian/server/list',function(Application $app){
     return json_encode($app['activeservers']->getServers());
 });
 //##########################
