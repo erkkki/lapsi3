@@ -31,6 +31,7 @@ class UpdateDataCommand extends Command{
       $dataService = $this->getUpdateService();
       $activeService = $this->getActiveServersService();
       $allServerService = $this->getAllServersService();
+      $tableService = $this->getTableService();
       
       $allServerService->updateServers();
       $allServers = $allServerService->getServersList();
@@ -69,6 +70,9 @@ class UpdateDataCommand extends Command{
     
     protected function getUpdateService(){
         return $this->getSilexApplication()['dataupdate'];
+    }
+    protected function getTableService(){
+        return $this->getSilexApplication()['tableServise'];
     }
     protected function getAllServersService(){
         return $this->getSilexApplication()['allServers'];

@@ -11,7 +11,9 @@ function guildCtrl($scope, $http, $window, LocalStorage, analytics){
 function serversCtrl($scope, $http, $location, $window, LocalStorage, analytics, Servers){
   $scope.LocalS = LocalStorage;
   $scope.serversSum = {"players": 0, "villages": 0, "servers": 0};
-  $scope.servers = Servers.query();
+  $scope.servers = Servers.query({}, function(){
+    $scope.stats($scope.servers);
+  });
 
   $scope.stats = function(servers){
     var count = servers.length;
