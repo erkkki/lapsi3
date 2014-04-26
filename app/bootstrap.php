@@ -16,6 +16,8 @@ use Project\Travian\tableServise;
 $app = new Silex\Application(); 
 $app['debug'] = false;
 
+// netbeans test
+
 $app->register(new DoctrineServiceProvider(), array(
     'db.options' => array(
         'driver'   => 'pdo_mysql',
