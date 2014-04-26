@@ -68,11 +68,11 @@ function villageCtrl($scope, $http, $window, LocalStorage, analytics, Servers){
         "vilminpop": 0,
         "vilmaxpop": 2500,
         "accominpop": 0,
-        "accomaxpop": 200000,
+        "accomaxpop": 10000000,
         "vilcountmin": 1,
-        "vilcountmax": 200,
+        "vilcountmax": 10000000,
         "idlemin": 0,
-        "idlemax": 50
+        "idlemax": 1000
       };
     }
   };

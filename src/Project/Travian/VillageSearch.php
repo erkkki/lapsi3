@@ -29,16 +29,16 @@ class VillageSearch {
     $this->post->natar = @($data->tribes->natar ? '' : '5');
     
     $this->post->vilminpop = (is_int($data->vilminpop) ? $data->vilminpop : '0');
-    $this->post->vilmaxpop = (is_int($data->vilmaxpop) ? $data->vilmaxpop : '2500');
+    $this->post->vilmaxpop = (is_int($data->vilmaxpop) ? $data->vilmaxpop : '214748364');
     
     $this->post->accominpop = (is_int($data->accominpop) ? $data->accominpop : '0');
-    $this->post->accomaxpop = (is_int($data->accomaxpop) ? $data->accomaxpop : '200000');   
+    $this->post->accomaxpop = (is_int($data->accomaxpop) ? $data->accomaxpop : '214748364');   
     
     $this->post->vilcountmin = (is_int($data->vilcountmin) ? $data->vilcountmin : '1');
-    $this->post->vilcountmax = (is_int($data->vilcountmax) ? $data->vilcountmax : '200');     
+    $this->post->vilcountmax = (is_int($data->vilcountmax) ? $data->vilcountmax : '214748364');     
     
     $this->post->idlemin = (is_int($data->idlemin) ? $data->idlemin : '0');
-    $this->post->idlemax = (is_int($data->idlemax) ? $data->idlemax : '50');  
+    $this->post->idlemax = (is_int($data->idlemax) ? $data->idlemax : '214748364');  
     
     $this->post->playersquery = @$this->inquerry('uid',$data->onlyplayers, $data->players);
     

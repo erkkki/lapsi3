@@ -187,7 +187,7 @@
           </button>
           
           <button type="button" class="btn pull-right btn-xs" style="margin-left:10px;"
-                  ng-click="opt.vilminpop=0;opt.vilmaxpop=2500;opt.accominpop=0;opt.accomaxpop=200000;opt.vilcountmin=1;opt.vilcountmax=200;opt.idlemin=0;opt.idlemax=50 ">
+                  ng-click="opt.vilminpop=0;opt.vilmaxpop=2500;opt.accominpop=0;opt.accomaxpop=10000000;opt.vilcountmin=1;opt.vilcountmax=10000000;opt.idlemin=0;opt.idlemax=1000 ">
             <span>Reset</span>
             <span class="glyphicon glyphicon-refresh"></span>
           </button>
@@ -215,13 +215,13 @@
                 <div class="col-xs-4">
                   <div class="input-group" ng-class="{'has-error': !poplimits.accominpop.$valid}">
                     <span class="input-group-addon">Min</span>
-                    <input class="form-control" ng-model="opt.accominpop" min="0" max="199999" type="number" name="accominpop" required>
+                    <input class="form-control" ng-model="opt.accominpop" min="0" max="9999999" type="number" name="accominpop" required>
                   </div>
                 </div>
                 <div class="col-xs-4">
                   <div class="input-group" ng-class="{'has-error': !poplimits.accomaxpop.$valid}">
                     <span class="input-group-addon">Max</span>
-                    <input class="form-control" ng-model="opt.accomaxpop" min="1" max="200000" type="number" name="accomaxpop" required>
+                    <input class="form-control" ng-model="opt.accomaxpop" min="1" max="10000000" type="number" name="accomaxpop" required>
                   </div>
                 </div>
               </div>
@@ -230,13 +230,13 @@
                 <div class="col-xs-4">
                   <div class="input-group" ng-class="{'has-error': !poplimits.vilcountmin.$valid}">
                     <span class="input-group-addon">Min</span>
-                    <input class="form-control" ng-model="opt.vilcountmin" min="1" max="199" type="number" name="vilcountmin" required>
+                    <input class="form-control" ng-model="opt.vilcountmin" min="1" max="9999999" type="number" name="vilcountmin" required>
                   </div>
                 </div>
                 <div class="col-xs-4">
                   <div class="input-group" ng-class="{'has-error': !poplimits.vilcountmax.$valid}">
                     <span class="input-group-addon">Max</span>
-                    <input class="form-control" ng-model="opt.vilcountmax" min="1" max="200" type="number" name="vilcountmax" required>
+                    <input class="form-control" ng-model="opt.vilcountmax" min="1" max="10000000" type="number" name="vilcountmax" required>
                   </div>
                 </div>
               </div>
@@ -245,13 +245,13 @@
                 <div class="col-xs-4">
                   <div class="input-group" ng-class="{'has-error': !poplimits.idlemin.$valid}">
                     <span class="input-group-addon">Min</span>
-                    <input class="form-control" ng-model="opt.idlemin" min="0" max="49" type="number" name="idlemin" required>
+                    <input class="form-control" ng-model="opt.idlemin" min="0" max="999" type="number" name="idlemin" required>
                   </div>
                 </div>
                 <div class="col-xs-4">
                   <div class="input-group" ng-class="{'has-error': !poplimits.idlemax.$valid}">
                     <span class="input-group-addon">Max</span>
-                    <input class="form-control" ng-model="opt.idlemax" min="1" max="100" type="number" name="idlemax" required>
+                    <input class="form-control" ng-model="opt.idlemax" min="1" max="1000" type="number" name="idlemax" required>
                   </div>
                 </div>
               </div>
