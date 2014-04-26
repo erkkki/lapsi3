@@ -119,7 +119,7 @@
             <th ng-hide="table.columns.pop" class="text-center">pop</th>
             <th ng-hide="table.columns.acc" class="text-center">Player<a href="" ng-hide="table.openAllLink" ng-click="openall('/allianz.php?uid=','uid');" class="text-error pull-right"> Open all</a></th>
             <th ng-hide="table.columns.vcount" class="text-center">Villages</th>
-            <th ng-hide="table.columns.accpop" class="text-center">pop</th>
+            <th ng-hide="table.columns.accpop" class="text-center">Pop</th>
             <th ng-hide="table.columns.guild" class="text-center">Guild<a href="" ng-hide="table.openAllLink" ng-click="openall('/allianz.php?aid=','aid');" class="text-error pull-right"> Open all</a></th>
             <th></th>
           </tr>                
@@ -134,7 +134,7 @@
               </a>
             </td>
             <td ng-hide="table.columns.idle" class="text-center">{{village.idle}}.pv</td>
-            <td ng-hide="table.columns.pop" class="text-center">{{village.population}}</td>
+            <td ng-hide="table.columns.pop" class="text-center">{{village.population | number:2}}</td>
             <td ng-hide="table.columns.acc">
               <a href="http://{{opt.server}}/spieler.php?uid={{village.uid}}" class="pull-left">{{village.player}}</a>
               <a href="" ng-switch on="opt.onlyplayers">
@@ -147,7 +147,7 @@
               </a>
             </td>
             <td ng-hide="table.columns.vcount" class="text-center">{{village.villagecount}}</td>
-            <td ng-hide="table.columns.accpop" class="text-center">{{village.uidPopulation}}</td>
+            <td ng-hide="table.columns.accpop" class="text-center">{{village.uidPopulation | number:2}}</td>
             <td ng-hide="table.columns.guild">
               <a href="http://{{opt.server}}/allianz.php?aid={{village.aid}}" class="pull-left">{{village.alliance}}</a>
               <a href="" ng-switch on="opt.onlyguilds">
