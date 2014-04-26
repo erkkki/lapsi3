@@ -7,7 +7,7 @@ server {
     fastcgi_buffer_size 2048k;
 
     listen       80;
-    server_name  lapsi3.tunk.io;
+    server_name  l3.tunk.io;
     root    /home/user/lapsi3/web;
 
     charset utf-8;

@@ -22,7 +22,7 @@ $app->register(new DoctrineServiceProvider(), array(
         'host' => 'localhost',
         'port' => 3306,
         'dbname' => 'erkki',
-        'user' => 'root',
+        'user' => 'l3',
         'password' => 'userpassu',
         'charset' => 'utf8',
     ),
