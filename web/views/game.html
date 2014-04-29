@@ -1,1 +1,94 @@
-<canvas id="game"></canvas>
+<div style="overflow: hidden;margin-top: 50px;">
+    <div class="col-xs-12">
+        <table class="table table-condensed" style="padding:0px;margin:0px;">
+           <tr>
+                <td><img class="res wood" src="img/img_trans.gif"/> {{res.wood}}</td>
+                <td><img class="res clay" src="img/img_trans.gif"/> {{res.clay}}</td>
+                <td><img class="res stone" src="img/img_trans.gif"/> {{res.stone}}</td>
+                <td><img class="res crop" src="img/img_trans.gif"/> {{res.wheat}}</td>
+                <td><img class="unit tt1" src="img/img_trans.gif"/> {{swingerCount}}</td>
+                <td><img class="unit tt1dead" src="img/img_trans.gif"/> {{deathCount}} / {{deathEnd}}</td>
+                <td>Score: {{res.sum}} * {{killsFactor}} = {{score}}</td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+    <canvas id="game" style="border-style: solid;"></canvas>
+    
+    
+    
+    <div ng-hide="!pause" class="panel panel-default" style="position:absolute; top:100px; left:50px; width: 90%">
+        <div class="panel-body" style="padding:10px;" ng-init="tab = 'what';">
+            <div class="col-xs-3">
+                <ul class="nav nav-pills nav-stacked">
+                    <li ng-class="{'active': tab == 'what'}"><a href="#" ng-click="tab = 'what'">What? How to?</a></li>
+                    <li ng-class="{'active': tab == 'upgrades'}"><a href="#" ng-click="tab = 'upgrades'">Upgrades</a></li>
+                    <li ng-class="{'active': tab == 'top'}"><a href="#" ng-click="tab = 'top'">Top 10</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-9">
+                <div class="panel panel-default" ng-hide="tab != 'end'">
+                    <div class="panel-heading">Submit your score</div>
+                    <div class="panel-body">
+                        Final score: {{res.sum}} * {{killsFactor}} = {{score}}
+                        <br>
+                        Max nuti count? :D<br>
+                        submit score jtn.<br>
+                        restart? <br>
+                        <h4>Kills</h4>
+                        <p class="text-success centering">
+                            <img class="unit u31" src="img/img_trans.gif"/> {{killed.rat}} |
+                            <img class="unit u32" src="img/img_trans.gif"/> {{killed.spider}} |
+                            <img class="unit u33" src="img/img_trans.gif"/> {{killed.snake}} |
+                            <img class="unit u34" src="img/img_trans.gif"/> {{killed.bat}} |
+                            <img class="unit u35" src="img/img_trans.gif"/> {{killed.boar}} |
+                            <img class="unit u36" src="img/img_trans.gif"/> {{killed.wolf}} |
+                            <img class="unit u37" src="img/img_trans.gif"/> {{killed.bear}} |
+                            <img class="unit u38" src="img/img_trans.gif"/> {{killed.crocodile}} |
+                            <img class="unit u39" src="img/img_trans.gif"/> {{killed.tiger}} |
+                            <img class="unit u310" src="img/img_trans.gif"/> {{killed.elephant}} 
+                        </p>
+                        
+                    </div>
+                </div>
+                <div class="panel panel-default" ng-hide="tab != 'what'">
+                    <div class="panel-heading">What? How to?</div>
+                    <div class="panel-body">
+                        
+                        <h4>Controls</h4>
+                        <p>Start / Pause the game : <strong>Spacebar</strong></p>
+                        <p>Directions : <strong>Arrow Keys</strong></p>
+                        <h4>Animals</h4>
+                        <p>Animal kills will increase the score multiplier.</p>
+                        <p>You can kill Rats <img class="unit u31" src="img/img_trans.gif"/>, 
+                            Spiders <img class="unit u32" src="img/img_trans.gif"/> 
+                            and Snakes <img class="unit u33" src="img/img_trans.gif"/> without fearing to lose swingers.</p>
+                        <p>When killing other animals like Elephants <img class="unit u310" src="img/img_trans.gif"/>
+                            , Tigers <img class="unit u39" src="img/img_trans.gif"/> 
+                            etc you will lose swingers but gain more score multiplier.</p>
+                    </div>
+                </div>
+                <div class="panel panel-default" ng-hide="tab != 'upgrades'">
+                    <div class="panel-heading">Upgrades</div>
+                    <div class="panel-body">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                {{swingerCount}} <img class="unit tt1" src="img/img_trans.gif"/> 
+                            </div>
+                            <button type="button" class="btn btn-default btn-sm" ng-click="game.duyUnit()">
+                                <span class="glyphicon glyphicon-plus"></span><b> 1</b>
+                            </button> 
+                            <button type="button" class="btn btn-default btn-sm" ng-click="game.duyUnit(10)">
+                                <span class="glyphicon glyphicon-plus"></span><b> 10</b>
+                            </button>
+                        </form>
+                        
+                    </div>
+                </div>
+                <div class="well" ng-hide="tab != 'top'">Top 10</div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+

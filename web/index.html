@@ -7,6 +7,10 @@
   <link href="css/ui/jquery-ui.css" rel="stylesheet">
   <link href="css/flags.css" rel="stylesheet">
   <style>
+    .centering {
+        float: none;
+        margin: 0 auto;
+    }
     span.ng-scope {
         display:none;
     }
@@ -32,16 +36,22 @@
     }
     body { 
       padding-top: 50px;
+      height: 100%;
+      width: 100%;
+      margin:0; 
+      padding:0;
+    }
+    img.unit {
+      width:19px;
+      height:16px;
     }
     img.res.wood{width:19px;height:16px; background:url(img/units.png) -18px -48px;}
     img.res.clay{width:19px;height:16px; background:url(img/units.png) -36px -48px;}
     img.res.stone{width:19px;height:16px; background:url(img/units.png) -55px -48px;}
     img.res.crop{width:19px;height:16px; background:url(img/units.png) -75px -48px;}
     img.res.cropempty{width:19px;height:16px; background:url(img/units.png) -95px -48px;}
-    img.unit {
-      width:19px;
-      height:16px;
-    }
+    img.unit.tt1dead{width:19px;height:16px; background:url(img/units.png) -114px -48px;}
+    
     img.unit.t11{background:url(img/units.png) 0 -48px;}
     img.unit.rt1{background:url(img/units.png) 0 0;}
     img.unit.rt2{background:url(img/units.png) -19px 0;}
@@ -73,6 +83,16 @@
     img.unit.gt8{background:url(img/units.png) -133px -32px;}
     img.unit.gt9{background:url(img/units.png) -151px -32px;}
     img.unit.gt10{background:url(img/units.png) -169px -32px;}
+    img.unit.u31{background:url(img/units.png) 0 -64px;}
+    img.unit.u32{background:url(img/units.png) -19px -64px;}
+    img.unit.u33{background:url(img/units.png) -38px -64px;}
+    img.unit.u34{background:url(img/units.png) -56px -64px;}
+    img.unit.u35{background:url(img/units.png) -76px -64px;}
+    img.unit.u36{background:url(img/units.png) -95px -64px;}
+    img.unit.u37{background:url(img/units.png) -114px -64px;}
+    img.unit.u38{background:url(img/units.png) -133px -64px;}
+    img.unit.u39{background:url(img/units.png) -151px -64px;}
+    img.unit.u310{background:url(img/units.png) -169px -64px;}
   </style>
 </head>
 
@@ -92,26 +112,21 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav">
         <li>
-          <a href="/"><b>Villages</b></a>
+          <a href="/villages"><b>Villages</b></a>
         </li>
         <li>
           <a href="/servers"><b>Servers</b></a>
         </li>
         <!--
         <li>
-          <a href="#/players"><b>Players</b></a>
+          <a href="/game"><b>Game</b></a>
         </li>
-        <li>
-          <a href="#/guilds"><b>Guilds</b></a>
-        </li>
-        -->
+        -->        
       </ul>
     </div>
   </nav>
-  <div class="container">
-    <div ng-app="app">
-          <div ng-view></div>
-    </div>
+  <div ng-app="app">
+    <div ng-view></div>
   </div>
   <script src="js/jquery.min.js"></script>
   <script src="js/ui/jquery-ui.js"></script>
@@ -122,5 +137,6 @@
   <script src="js/modules.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/services.js"></script>
+  <script src="js/directives.js"></script>
 </body>  
 </html>
