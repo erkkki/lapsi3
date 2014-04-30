@@ -23,6 +23,7 @@
                 <ul class="nav nav-pills nav-stacked">
                     <li ng-class="{'active': tab == 'what'}"><a href="#" ng-click="tab = 'what'">What? How to?</a></li>
                     <li ng-class="{'active': tab == 'upgrades'}"><a href="#" ng-click="tab = 'upgrades'">Upgrades</a></li>
+                    <li ng-class="{'active': tab == 'npc'}"><a href="#" ng-click="tab = 'npc'">NPC</a></li>
                     <li ng-class="{'active': tab == 'top'}"><a href="#" ng-click="tab = 'top'">Top 10</a></li>
                 </ul>
             </div>
@@ -35,19 +36,20 @@
                         Max nuti count? :D<br>
                         submit score jtn.<br>
                         restart? <br>
-                        <h4>Kills</h4>
-                        <p class="text-success centering">
-                            <img class="unit u31" src="img/img_trans.gif"/> {{killed.rat}} |
-                            <img class="unit u32" src="img/img_trans.gif"/> {{killed.spider}} |
-                            <img class="unit u33" src="img/img_trans.gif"/> {{killed.snake}} |
-                            <img class="unit u34" src="img/img_trans.gif"/> {{killed.bat}} |
-                            <img class="unit u35" src="img/img_trans.gif"/> {{killed.boar}} |
-                            <img class="unit u36" src="img/img_trans.gif"/> {{killed.wolf}} |
-                            <img class="unit u37" src="img/img_trans.gif"/> {{killed.bear}} |
-                            <img class="unit u38" src="img/img_trans.gif"/> {{killed.crocodile}} |
-                            <img class="unit u39" src="img/img_trans.gif"/> {{killed.tiger}} |
-                            <img class="unit u310" src="img/img_trans.gif"/> {{killed.elephant}} 
-                        </p>
+                        <h4>Kills
+                            <span class="label label-success">
+                                <img class="unit u31" src="img/img_trans.gif"/> {{killed.rat}} |
+                                <img class="unit u32" src="img/img_trans.gif"/> {{killed.spider}} |
+                                <img class="unit u33" src="img/img_trans.gif"/> {{killed.snake}} |
+                                <img class="unit u34" src="img/img_trans.gif"/> {{killed.bat}} |
+                                <img class="unit u35" src="img/img_trans.gif"/> {{killed.boar}} |
+                                <img class="unit u36" src="img/img_trans.gif"/> {{killed.wolf}} |
+                                <img class="unit u37" src="img/img_trans.gif"/> {{killed.bear}} |
+                                <img class="unit u38" src="img/img_trans.gif"/> {{killed.crocodile}} |
+                                <img class="unit u39" src="img/img_trans.gif"/> {{killed.tiger}} |
+                                <img class="unit u310" src="img/img_trans.gif"/> {{killed.elephant}} 
+                            </span>
+                        </h4>
                         
                     </div>
                 </div>
@@ -69,23 +71,89 @@
                     </div>
                 </div>
                 <div class="panel panel-default" ng-hide="tab != 'upgrades'">
-                    <div class="panel-heading">Upgrades</div>
+                    <div class="panel-heading">
+                        <h4>Upgrades</h4>
+                    </div>
+
                     <div class="panel-body">
-                        <form class="form-inline" role="form">
-                            <div class="form-group">
-                                {{swingerCount}} <img class="unit tt1" src="img/img_trans.gif"/> 
+                        <div class="well" style="padding:5px;height: 50px;">
+                            <div class="col-xs-4" style="padding-top:10px;">
+                                <img class="unit tt1" src="img/img_trans.gif"/> {{swingerCount}}
+                                <button type="button" class="btn btn-default btn-xs" ng-click="game.duyUnit()">
+                                    <span class="glyphicon glyphicon-plus"></span><b> 1</b>
+                                </button> 
+                                <button type="button" class="btn btn-default btn-xs" ng-click="game.duyUnit(10)">
+                                    <span class="glyphicon glyphicon-plus"></span><b> 10</b>
+                                </button>
                             </div>
-                            <button type="button" class="btn btn-default btn-sm" ng-click="game.duyUnit()">
-                                <span class="glyphicon glyphicon-plus"></span><b> 1</b>
-                            </button> 
-                            <button type="button" class="btn btn-default btn-sm" ng-click="game.duyUnit(10)">
-                                <span class="glyphicon glyphicon-plus"></span><b> 10</b>
-                            </button>
-                        </form>
+                            <div class="col-xs-8">
+                                <h4>
+                                    <span class="label label-info">Cost:
+                                        <img class="res wood" src="img/img_trans.gif"/> 95
+                                        <img class="res clay" src="img/img_trans.gif"/> 75
+                                        <img class="res stone" src="img/img_trans.gif"/> 40
+                                        <img class="res crop" src="img/img_trans.gif"/> 40
+                                    </span>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="well" style="padding:5px;height: 50px;">
+                            <div class="col-xs-4" style="padding-top:10px;">
+                                <img class="unit tt1dead" src="img/img_trans.gif"/> {{deathCount}} / {{deathEnd}}
+                                <button type="button" class="btn btn-default btn-xs" ng-click="game.duyMaxDeaths()">
+                                    <span class="glyphicon glyphicon-plus"></span><b> 10</b>
+                                </button>
+                            </div>
+                            <div class="col-xs-8">
+                                <h4>
+                                    <span class="label label-info">Cost:
+                                        <img class="res wood" src="img/img_trans.gif"/> {{deathEnd/100 * 10000}}
+                                        <img class="res clay" src="img/img_trans.gif"/> {{deathEnd/100 * 10000}}
+                                        <img class="res stone" src="img/img_trans.gif"/> {{deathEnd/100 * 10000}}
+                                        <img class="res crop" src="img/img_trans.gif"/> {{deathEnd/100 * 10000}}
+                                    </span>
+                                </h4>
+                            </div>
+                        </div>
                         
                     </div>
                 </div>
                 <div class="well" ng-hide="tab != 'top'">Top 10</div>
+                <div class="well" ng-hide="tab != 'npc'">
+                    <div class="panel-heading">
+                        <h4>NPC</h4>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered" ng-init="temp.res = {'wood':0,'clay':0,'stone':0,'wheat':0,'sum':0};">
+                            <tr>
+                                <th><img class="res wood" src="img/img_trans.gif"/> {{res.wood}}</th>
+                                <th><img class="res clay" src="img/img_trans.gif"/> {{res.clay}}</th>
+                                <th><img class="res stone" src="img/img_trans.gif"/> {{res.stone}}</th>
+                                <th><img class="res crop" src="img/img_trans.gif"/> {{res.wheat}}</th>
+                                <th>Sum:{{res.sum}}</th>
+                            </tr>
+                            <tr>
+                                <td><input type="text" maxlength="8" class="input-sm" style="width: 80px;" ng-model="temp.res.wood" integer></td>
+                                <td><input type="text" maxlength="8" class="input-sm" style="width: 80px;" ng-model="temp.res.clay" integer></td>
+                                <td><input type="text" maxlength="8" class="input-sm" style="width: 80px;" ng-model="temp.res.stone" integer></td>
+                                <td><input type="text" maxlength="8" class="input-sm" style="width: 80px;" ng-model="temp.res.wheat" integer></td>
+                                <td>Sum: {{temp.res.sum = getSum(temp.res)}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{temp.res.wood - res.wood}}</td>
+                                <td>{{temp.res.clay - res.clay}}</td>
+                                <td>{{temp.res.stone - res.stone}}</td>
+                                <td>{{temp.res.wheat - res.wheat}}</td>
+                                <td>Rest: {{temp.res.sum - res.sum}}</td>
+                            </tr>
+                            
+                            Distribute remaining resources
+                            
+                            
+                            Redeem
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

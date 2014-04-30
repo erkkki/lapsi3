@@ -28,6 +28,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
         this.swinger = [];
         this.res = [];
         this.enemys = [];
+        this.gainText = [];
         this.pause = false;
         this.deathCount = 0;
         this.deathEnd = 100;
@@ -91,14 +92,16 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
         this.render = function(){
             if(this.pause)
                 return;
-            
+            var time = new Date();
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             
             for(var res in this.res){
-                var time = new Date();
+                
                 if(this.collDe(this.swinger[0].position, this.res[res].position,16,20)){
-                    this.resources[this.res[res].type] += this.res[res].getValue(this.swingerCount);
-                    this.resources.sum += this.res[res].getValue(this.swingerCount);
+                    var value = this.res[res].getValue(this.swingerCount);
+                    this.resources[this.res[res].type] += value;
+                    this.resources.sum += value;
+                    this.gainText.push(new gainText(this.canvas,this.ctx,value,this.res[res].position));
                     this.res.splice(res,1);
                 } else if (time > this.res[res].creationTime + 6333){
                     this.res.splice(res,1);
@@ -106,13 +109,25 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
                     this.res[res].draw();
                 }
             }
+            for(var text in this.gainText){
+                if (time > this.gainText[text].creationTime + 1000)
+                    this.gainText.splice(text,1);
+                else
+                    this.gainText[text].draw();
+            }
             for(var enemy in this.enemys){
                 var time = new Date();
                 if(this.collDe(this.swinger[0].position, this.enemys[enemy].position,16,20)){
                     var value = this.enemys[enemy].getValue();
                     this.swingerCount -= Math.floor(value/40);
+                    this.deathCount += Math.floor(value/40);
+                    for (var i = Math.floor(value/40); i > 0;i--){
+                        var len = this.swinger.length;
+                        this.swinger.splice(len-1,1);
+                    }
                     this.killsFactor += value/1000;
                     this.killedEnemies[this.enemys[enemy].type]++;
+                    this.gainText.push(new gainText(this.canvas,this.ctx,(value/1000),this.enemys[enemy].position,'blue'));
                     this.enemys.splice(enemy,1);
                 } else if (time > this.enemys[enemy].creationTime + 10000){
                     this.enemys.splice(enemy,1);
@@ -140,10 +155,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             if(this.deathCount > this.deathEnd || this.swingerCount < 1){
                 this.state();
                 this.endState = true;
-                this.end();
             }
-        };
-        this.end = function(){
         };
         this.canMove = function(){
             var newPos = this.swinger[0].getNewPosition();
@@ -226,8 +238,34 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             var right = a.y + w < b.y;
             return !(bottom || top || left || right);
         };
+        this.duyMaxDeaths = function(){
+            var cost = this.deathEnd/100 * 10000;
+            var res = this.resources;
+            if(res.wood > cost && res.clay > cost && res.stone > cost && res.wheat > cost){
+                res.wood -= cost;
+                res.clay -= cost;
+                res.stone -= cost;
+                res.wheat -= cost;
+                this.deathEnd += 10;
+            }
+            
+        };
         
     };
+    var gainText = function(canvas,ctx,value,position,color){
+        this.canvas = canvas;
+        this.ctx = ctx;
+        this.value = value;
+        this.position = position;
+        this.color = color || 'gold';
+        this.creationTime = new Date().getTime();        
+    };
+    gainText.prototype.draw = function(){
+        var ctx = this.ctx;
+        ctx.fillStyle = this.color;
+        ctx.font = "bold 16px Arial";
+        ctx.fillText('+'+this.value, this.position.x, this.position.y);
+    };    
     var enemy = function(canvas,ctx){
         this.canvas = canvas;
         this.ctx = ctx;
@@ -315,8 +353,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
         return place;
     };
     resource.prototype.getValue = function(k){
-        k = k * 0.1 || 1;
-        if(k < 1) k = 0.74;
+        k = k * 0.2 + 1 || 1;
         return Math.floor(k * this.typeValue[this.type]);
     };
 
@@ -408,6 +445,10 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
     $scope.game.init();
     $window.onresize = (function(){ $scope.game.resizeCanvas(); });
     $window.addEventListener("keydown", (function(e){ $scope.game.keyDown(e); }), true);
+    
+    $scope.getSum = function(res){
+        return parseInt(res.wood) + parseInt(res.clay) + parseInt(res.stone) + parseInt(res.wheat);
+    };
     
     (function updater(){
         $timeout(function(){
