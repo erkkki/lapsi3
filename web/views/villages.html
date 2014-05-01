@@ -135,7 +135,7 @@
               </a>
             </td>
             <td ng-hide="table.columns.idle" class="text-center">{{village.idle}}.pv</td>
-            <td ng-hide="table.columns.pop" class="text-center">{{village.population | number:2}}</td>
+            <td ng-hide="table.columns.pop" class="text-center">{{village.population | number:0}}</td>
             <td ng-hide="table.columns.acc">
               <a href="http://{{opt.server}}/spieler.php?uid={{village.uid}}" class="pull-left">{{village.player}}</a>
               <a href="" ng-switch on="opt.onlyplayers">
@@ -148,7 +148,7 @@
               </a>
             </td>
             <td ng-hide="table.columns.vcount" class="text-center">{{village.villagecount}}</td>
-            <td ng-hide="table.columns.accpop" class="text-center">{{village.uidPopulation | number:2}}</td>
+            <td ng-hide="table.columns.accpop" class="text-center">{{village.uidPopulation | number:0}}</td>
             <td ng-hide="table.columns.guild">
               <a href="http://{{opt.server}}/allianz.php?aid={{village.aid}}" class="pull-left">{{village.alliance}}</a>
               <a href="" ng-switch on="opt.onlyguilds">

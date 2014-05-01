@@ -20,6 +20,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
     var game = function(){
         this.canvas;
         this.ctx;
+        this.npc = new npc();
         this.resources = {'stone':0,'clay':0,'wood':0,'wheat':0,'sum':0};
         this.swingerCount = 1;
         this.killsFactor = 1;
@@ -44,7 +45,21 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             this.generateEnemies();
             this.generateRes();
             animate();
-            
+        };
+        this.restart = function(){
+            this.resources = {'stone':0,'clay':0,'wood':0,'wheat':0,'sum':0};
+            this.swingerCount = 1;
+            this.killsFactor = 1;
+            this.killedEnemies = {'rat':0,'spider':0,'snake':0,'bat':0,'boar':0,
+                       'wolf':0,'bear':0,'crocodile':0,'tiger':0,'elephant':0};
+            this.swinger = [];
+            this.res = [];
+            this.enemys = [];
+            this.gainText = [];
+            this.deathCount = 0;
+            this.deathEnd = 100;
+            this.endState = false;
+            this.swinger.push(new swinger(this.canvas,this.ctx));
         };
         this.resizeCanvas = function() {
             var h = $window.innerHeight - 100,
@@ -154,6 +169,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             }
             if(this.deathCount > this.deathEnd || this.swingerCount < 1){
                 this.state();
+                $scope.tab = 'end';
                 this.endState = true;
             }
         };
@@ -208,8 +224,8 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             var i = i || 1;
             var res = this.resources;
             
-            if(!this.enoughtRes(i))
-              return;
+            //if(!this.enoughtRes(i))
+              //return;
             res.wood -= 95 * i;
             res.clay -= 75 * i;
             res.stone -= 40 * i;
@@ -218,17 +234,26 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             for(var u = 0; u < i; u++){
                 this.addUnit();
             }
+            this.recalcSum();
+        };
+        this.recalcSum = function(){
+            var res = this.resources;
+            res.sum = res.wood + res.clay + res.stone + res.wheat;
         };
         this.generateRes = function(){
             var self = this;
-            var newRes = new resource(this.canvas,this.ctx);
-            this.res.push(newRes);
+            if(!this.pause){
+                var newRes = new resource(this.canvas,this.ctx);
+                this.res.push(newRes);
+            }
             setTimeout(function(){self.generateRes();}, 1000);
         }; 
         this.generateEnemies = function(){
             var self = this;
-            var newEnemy = new enemy(this.canvas,this.ctx);
-            this.enemys.push(newEnemy);
+            if(!this.pause){
+                var newEnemy = new enemy(this.canvas,this.ctx);
+                this.enemys.push(newEnemy);
+            }
             setTimeout(function(){self.generateEnemies();}, 5000);
         };
         this.collDe = function(a,b,w,h){
@@ -241,16 +266,15 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
         this.duyMaxDeaths = function(){
             var cost = this.deathEnd/100 * 10000;
             var res = this.resources;
-            if(res.wood > cost && res.clay > cost && res.stone > cost && res.wheat > cost){
+            //if(res.wood > cost && res.clay > cost && res.stone > cost && res.wheat > cost){
                 res.wood -= cost;
                 res.clay -= cost;
                 res.stone -= cost;
                 res.wheat -= cost;
                 this.deathEnd += 10;
-            }
-            
+            //}
+            this.recalcSum();
         };
-        
     };
     var gainText = function(canvas,ctx,value,position,color){
         this.canvas = canvas;
@@ -441,14 +465,43 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
         
     };
     
+    var npc = function(){
+        this.res = {'wood':0,'clay':0,'stone':0,'wheat':0,'sum':0};
+        
+        this.getSum = function(res){
+            var res = res || this.res;
+            return parseInt(res.wood) + parseInt(res.clay) + parseInt(res.stone) + parseInt(res.wheat);
+        };
+        this.npcReset = function(){
+            this.res = {'wood':0,'clay':0,'stone':0,'wheat':0,'sum':0};
+        };
+        this.distRes = function(sum, dist){
+            var sum = parseInt(sum) || this.sum;
+            var dist = dist || {'wood':0.25,'clay':0.25,'stone':0.25,'wheat':0.25};
+            this.res.wood = Math.floor(sum * dist.wood);
+            this.res.clay = Math.floor(sum * dist.clay);
+            this.res.stone = Math.floor(sum * dist.stone);
+            this.res.wheat = Math.floor(sum * dist.wheat);
+            this.res.wood += (sum - (this.res.wood + this.res.clay + this.res.stone + this.res.wheat));
+            this.res.sum = this.getSum(this.res);
+        };
+        this.redeemRes = function(game){
+            if(game.resources.sum === parseInt(this.res.sum)){
+                game.resources.wood = parseInt(this.res.wood);
+                game.resources.clay = parseInt(this.res.clay);
+                game.resources.stone = parseInt(this.res.stone);
+                game.resources.wheat = parseInt(this.res.wheat);
+            }
+        };
+        this.getRes = function(){
+            return this.res;
+        };
+    };
+    
     $scope.game = new game();
     $scope.game.init();
     $window.onresize = (function(){ $scope.game.resizeCanvas(); });
     $window.addEventListener("keydown", (function(e){ $scope.game.keyDown(e); }), true);
-    
-    $scope.getSum = function(res){
-        return parseInt(res.wood) + parseInt(res.clay) + parseInt(res.stone) + parseInt(res.wheat);
-    };
     
     (function updater(){
         $timeout(function(){
@@ -459,8 +512,6 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             $scope.killsFactor = $scope.game.killsFactor.toFixed(3);
             $scope.score = Math.floor($scope.game.killsFactor * $scope.game.resources.sum);
             $scope.killed = $scope.game.killedEnemies;
-            if($scope.game.endState)
-                $scope.tab = 'end';
             updater();
         },250);
     }());

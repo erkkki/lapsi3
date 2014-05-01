@@ -9,7 +9,6 @@ app.directive('integer', function() {
           ctrl.$setValidity('integer', true);
           return viewValue;
         } else {
-          console.log('emt');
           // it is invalid, return undefined (no model update)
           ctrl.$setValidity('integer', false);
           return undefined;
