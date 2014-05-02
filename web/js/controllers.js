@@ -23,6 +23,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
         this.ctx;
         this.npc = new npc();
         this.scoreSended = false;
+        this.oldTime = '0';
         this.resources = {'stone':0,'clay':0,'wood':0,'wheat':0,'sum':0};
         this.collectedResourse = 0;
         this.swingerCount = 1;
@@ -60,6 +61,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             this.res = [];
             this.enemys = [];
             this.gainText = [];
+            this.oldTime = '0';
             this.deathCount = 0;
             this.deathEnd = 100;
             this.endState = false;
@@ -110,10 +112,19 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
                     this.swinger[0].dir("down");
             }
         };
+        
         this.render = function(){
             if(this.pause)
                 return;
             var time = new Date();
+            var erotus = time - this.oldTime;
+            if(this.oldTime === '0'){
+                this.oldTime = time;
+            }
+            if(erotus < 16){
+                return;
+            }
+            this.oldTime = time;
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             
             for(var res in this.res){
@@ -401,7 +412,6 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
     var swinger = function(canvas,ctx,x,y,dir){
         this.canvas = canvas;
         this.ctx = ctx;
-        this.oldTime;
         this.position = {"x": x || 100,"y":y || 100};
         this.direction = dir || "left";
         this.sprite = {
@@ -462,20 +472,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
         return newPosition;
     };
     swinger.prototype.move = function(){
-        var time = new Date().getTime();
-        var erotus = time - this.oldTime;
-        var speed = 10;
-        if(this.oldTime === '0'){
-            this.oldTime = time;
-        }
-        if(erotus < 16){
-            console.log(erotus);
-            return;
-        }
-        if(erotus > 16){
-            speed = speed * Math.floor(erotus / 16)
-        }
-        this.oldTime = time;
+        var speed =10;
         this.position = this.getNewPosition(speed);
     };   
     swinger.prototype.draw = function(move){
