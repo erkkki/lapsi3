@@ -1,8 +1,8 @@
 
 
-var app = angular.module("app", ['analytics', 'app.l3api']);
+var app = angular.module("app", ['app.l3api','angulartics', 'angulartics.google.analytics']);
 
-app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider, $analyticsProvider) {
   $routeProvider
     .when('',{
       templateUrl:"/views/villages.html",

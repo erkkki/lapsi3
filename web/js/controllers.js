@@ -1,4 +1,4 @@
-function playerCtrl($scope, $http, $window, LocalStorage, analytics, Servers){
+function playerCtrl($scope, $http, $window, LocalStorage, Servers){
   $scope.LocalS = LocalStorage;
   
   
@@ -1114,11 +1114,11 @@ function gameCtrl2($scope,$http,$window,$timeout,LocalStorage){
     }
     
 };
-function guildCtrl($scope, $http, $window, LocalStorage, analytics){
+function guildCtrl($scope, $http, $window, LocalStorage){
   $scope.LocalS = LocalStorage;
   
 }
-function serversCtrl($scope, $http, $location, $window, LocalStorage, analytics, Servers){
+function serversCtrl($scope, $http, $location, $window, LocalStorage, Servers){
   $scope.LocalS = LocalStorage;
   $scope.serversSum = {"players": 0, "villages": 0, "servers": 0};
   $scope.servers = Servers.query({}, function(){
@@ -1134,7 +1134,7 @@ function serversCtrl($scope, $http, $location, $window, LocalStorage, analytics,
     }
   };
 }
-function villageCtrl($scope, $http, $window, LocalStorage, analytics, Servers){
+function villageCtrl($scope, $http, $window, LocalStorage, Servers){
   $scope.window = $window;
   $scope.LocalS = LocalStorage;
   $scope.isStorage = $scope.LocalS.isSupported();
