@@ -18,10 +18,13 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
     })();    
     
     var game = function(){
+        this.version = '1.0';
         this.canvas;
         this.ctx;
         this.npc = new npc();
+        this.scoreSended = false;
         this.resources = {'stone':0,'clay':0,'wood':0,'wheat':0,'sum':0};
+        this.collectedResourse = 0;
         this.swingerCount = 1;
         this.killsFactor = 1;
         this.killedEnemies = {'rat':0,'spider':0,'snake':0,'bat':0,'boar':0,
@@ -59,6 +62,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             this.deathCount = 0;
             this.deathEnd = 100;
             this.endState = false;
+            this.scoreSended = false;
             this.swinger.push(new swinger(this.canvas,this.ctx));
         };
         this.resizeCanvas = function() {
@@ -116,6 +120,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
                     var value = this.res[res].getValue(this.swingerCount);
                     this.resources[this.res[res].type] += value;
                     this.resources.sum += value;
+                    this.collectedResourse += value;
                     this.gainText.push(new gainText(this.canvas,this.ctx,value,this.res[res].position));
                     this.res.splice(res,1);
                 } else if (time > this.res[res].creationTime + 6333){
@@ -173,6 +178,14 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
                 this.endState = true;
             }
         };
+        this.getScoreData = function(){
+            var data = {};
+            data.resSum = this.collectedResourse;
+            data.killFactor = this.killsFactor.toFixed(3);
+            data.kills = this.killedEnemies;
+            data.version = this.version;
+            return data;
+        };
         this.canMove = function(){
             var newPos = this.swinger[0].getNewPosition();
             for(var unit in this.swinger){
@@ -183,6 +196,8 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             return true;         
         };
         this.addUnit = function(){
+            if(this.endState)
+                return;
             var len = this.swinger.length;
             var temp = this.swinger[len-1];
             var x,y;
@@ -224,8 +239,8 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             var i = i || 1;
             var res = this.resources;
             
-            //if(!this.enoughtRes(i))
-              //return;
+            if(!this.enoughtRes(i))
+              return;
             res.wood -= 95 * i;
             res.clay -= 75 * i;
             res.stone -= 40 * i;
@@ -266,13 +281,13 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
         this.duyMaxDeaths = function(){
             var cost = this.deathEnd/100 * 10000;
             var res = this.resources;
-            //if(res.wood > cost && res.clay > cost && res.stone > cost && res.wheat > cost){
+            if(res.wood > cost && res.clay > cost && res.stone > cost && res.wheat > cost){
                 res.wood -= cost;
                 res.clay -= cost;
                 res.stone -= cost;
                 res.wheat -= cost;
                 this.deathEnd += 10;
-            //}
+            }
             this.recalcSum();
         };
     };
@@ -502,6 +517,29 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
     $scope.game.init();
     $window.onresize = (function(){ $scope.game.resizeCanvas(); });
     $window.addEventListener("keydown", (function(e){ $scope.game.keyDown(e); }), true);
+    $scope.vittutoimijo = {};
+    $scope.scoresHttp = new function(){
+        this.post = function(name){
+            var data = $scope.game.getScoreData();
+            data.name = name;
+            $http.post('api/game/score', data)
+                .success(function(data){
+                    $scope.game.scoreSended = true;
+                })
+                .error(function(){
+                    
+                });
+        };
+        this.get = function(){
+            $http.get('api/game/scores')
+                .success(function(data){
+                    $scope.scores = data;
+                })
+                .error(function(){
+                    return [];
+                });
+        };
+    };
     
     (function updater(){
         $timeout(function(){
@@ -510,7 +548,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             $scope.deathCount = $scope.game.deathCount;
             $scope.deathEnd = $scope.game.deathEnd;
             $scope.killsFactor = $scope.game.killsFactor.toFixed(3);
-            $scope.score = Math.floor($scope.game.killsFactor * $scope.game.resources.sum);
+            $scope.score = Math.floor($scope.game.killsFactor * $scope.game.collectedResourse);
             $scope.killed = $scope.game.killedEnemies;
             updater();
         },250);
@@ -596,7 +634,7 @@ function villageCtrl($scope, $http, $window, LocalStorage, analytics, Servers){
   };
   
   $scope.AddPersonlaVil = function(name){
-    if(name == null) return;
+    if(name === null) return;
     if(!$scope.LocalS.isset(name)){
       $scope.LocalS.add(name, $scope.opt);
       $scope.table.LocalVil.push({name:name});
@@ -617,12 +655,12 @@ function villageCtrl($scope, $http, $window, LocalStorage, analytics, Servers){
   };
   
   $scope.filterGroupbyEnd = function(server){
-    var newServer = indexedServes.indexOf(server.addressend) == -1;
+    var newServer = indexedServes.indexOf(server.addressend) === -1;
     if (newServer) {
       indexedServes.push(server.addressend);
     }
     return newServer;
-  }
+  };
   
   $scope.$watch('table', function() {
     $scope.LocalS.add('table',$scope.table);
@@ -635,11 +673,11 @@ function villageCtrl($scope, $http, $window, LocalStorage, analytics, Servers){
   }, true);
   
   $scope.search = function(){
-    if($scope.table.elems.settings != true) return;
-    if($scope.opt.server == "" || $scope.opt.server == "Select server") return;
+    if($scope.table.elems.settings !== true) return;
+    if($scope.opt.server === "" || $scope.opt.server === "Select server") return;
     $http.post('api/travian/search', $scope.opt)
       .success(function(data) {
-        if(data == '\"No villages\"') {
+        if(data === '\"No villages\"') {
           $scope.villages = '';
           $scope.opt.limit = 0;
           return;
@@ -652,14 +690,14 @@ function villageCtrl($scope, $http, $window, LocalStorage, analytics, Servers){
   };
   $scope.openall = function(address,what){
     var i = 0;
-    if(what == 'x'){
+    if(what === 'x'){
       while($scope.villages[i]){
         $scope.window.open('http://'+ $scope.opt.server + address + $scope.villages[i].x + '&y=' + $scope.villages[i].y);
         i++;
       }
       return;
     }
-    if(what == 'id'){
+    if(what === 'id'){
       while($scope.villages[i]){
         $scope.window.open('http://'+ $scope.opt.server + address + $scope.villages[i][what] + 
           '&t1=' + $scope.table.unit.t1 + '&t2=' + $scope.table.unit.t2 + '&t3=' + $scope.table.unit.t3 + 
@@ -671,7 +709,7 @@ function villageCtrl($scope, $http, $window, LocalStorage, analytics, Servers){
     }
     var temp = [];
     while($scope.villages[i]){
-      if(temp.indexOf($scope.villages[i][what]) == -1){
+      if(temp.indexOf($scope.villages[i][what]) === -1){
         $scope.window.open('http://'+ $scope.opt.server + address + $scope.villages[i][what]);
         temp.push($scope.villages[i][what]);
       }

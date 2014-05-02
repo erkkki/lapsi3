@@ -8,7 +8,7 @@ server {
 
     listen       80;
     server_name  l3.tunk.io;
-    root    /home/user/lapsi3/web;
+    root    /home/erkki/Documents/lapsi3/web;
 
     charset utf-8;
 

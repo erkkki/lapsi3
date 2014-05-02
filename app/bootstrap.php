@@ -12,11 +12,10 @@ use Project\Travian\guildService;
 use Project\Travian\playerService;
 use Project\Travian\serverDataService;
 use Project\Travian\tableServise;
+use Project\Travian\gameScoreService;
 
 $app = new Silex\Application(); 
-$app['debug'] = false;
-
-// netbeans test
+$app['debug'] = true;
 
 $app->register(new DoctrineServiceProvider(), array(
     'db.options' => array(
@@ -39,8 +38,24 @@ $app->register(new ConsoleServiceProvider(), array(
 $app['tableServise'] = $app->share(function (Application $app) {
     return new tableServise($app['db']);
 });
+//####### game Score #######
+$app['game_scores'] = $app->share(function (Application $app) {
+    return new gameScoreService($app['db'], $app['tableServise']);
+});
 
-
+$app->post('api/game/score',function(Application $app, Request $request){
+    $data = json_decode($request->getContent(), true);
+    if($app['game_scores']->setData($data)){
+        if($app['game_scores']->safeScore()){
+            return json_encode($data);
+        }
+    }
+    return 'error';
+});
+$app->get('api/game/scores',function(Application $app){
+    $data = $app['game_scores']->getScores();
+    return json_encode($data);
+});
 //####### allservers #######
 $app['allServers'] = $app->share(function (Application $app) {
     return new allServers($app['db'], $app['tableServise']);

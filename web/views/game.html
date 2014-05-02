@@ -2,13 +2,25 @@
     <div class="col-xs-12">
         <table class="table table-condensed" style="padding:0px;margin:0px;">
            <tr>
-                <td><img class="res wood" src="img/img_trans.gif"/> {{res.wood | number:0}}</td>
-                <td><img class="res clay" src="img/img_trans.gif"/> {{res.clay | number:0}}</td>
-                <td><img class="res stone" src="img/img_trans.gif"/> {{res.stone | number:0}}</td>
-                <td><img class="res crop" src="img/img_trans.gif"/> {{res.wheat | number:0}}</td>
-                <td><img class="unit tt1" src="img/img_trans.gif"/> {{swingerCount}}</td>
-                <td><img class="unit tt1dead" src="img/img_trans.gif"/> {{deathCount}} / {{deathEnd}}</td>
-                <td>Score: {{res.sum}} * {{killsFactor}} = {{score}}</td>
+                <td><img class="res wood" src="img/img_trans.gif"/>
+                    <span class="label label-info">{{res.wood | number:0}}</span>
+                </td>
+                <td><img class="res clay" src="img/img_trans.gif"/> 
+                    <span class="label label-info">{{res.clay | number:0}}</span>
+                </td>
+                <td><img class="res stone" src="img/img_trans.gif"/> 
+                    <span class="label label-info">{{res.stone | number:0}}</span>
+                </td>
+                <td><img class="res crop" src="img/img_trans.gif"/> 
+                    <span class="label label-info">{{res.wheat | number:0}}</span>
+                </td>
+                <td><img class="unit tt1" src="img/img_trans.gif"/> 
+                    <span class="label label-success">{{swingerCount}}</span>
+                </td>
+                <td><img class="unit tt1dead" src="img/img_trans.gif"/>
+                    <span class="label label-danger">{{deathCount}} / {{deathEnd}}</span>
+                </td>
+                <td><span class="label label-success">Score: {{res.sum}} * {{killsFactor}} = {{score}}</span></td>
                 <td></td>
             </tr>
         </table>
@@ -21,10 +33,10 @@
         <div class="panel-body" style="padding:10px;" ng-init="tab = 'what';">
             <div class="col-xs-2">
                 <ul class="nav nav-pills nav-stacked">
-                    <li ng-class="{'active': tab == 'what'}"><a href="#" ng-click="tab = 'what'">What? How to?</a></li>
+                    <li ng-class="{'active': tab == 'what'}"><a href="#" ng-click="tab = 'what'">How to?</a></li>
                     <li ng-class="{'active': tab == 'upgrades'}"><a href="#" ng-click="tab = 'upgrades'">Upgrades</a></li>
                     <li ng-class="{'active': tab == 'npc'}"><a href="#" ng-click="tab = 'npc'">NPC</a></li>
-                    <li ng-class="{'active': tab == 'top'}"><a href="#" ng-click="tab = 'top'">Top 10</a></li>
+                    <li ng-class="{'active': tab == 'top'}"><a href="#" ng-click="tab = 'top';scoresHttp.get()">Top 10</a></li>
                     <li ng-class="{'active': tab == 'end'}" ng-hide="!game.endState"><a href="#" ng-click="tab = 'end'">Submit score</a></li>
                 </ul>
             </div>
@@ -44,31 +56,39 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        Final score: {{res.sum}} * {{killsFactor}} = {{score}}
-                        <br>
-                        Max nuti count? :D<br>
-                        submit score jtn.<br>
-                        
-                        <h4>Kills
-                            <span class="label label-success">
-                                <img class="unit u31" src="img/img_trans.gif"/> {{killed.rat}} |
-                                <img class="unit u32" src="img/img_trans.gif"/> {{killed.spider}} |
-                                <img class="unit u33" src="img/img_trans.gif"/> {{killed.snake}} |
-                                <img class="unit u34" src="img/img_trans.gif"/> {{killed.bat}} |
-                                <img class="unit u35" src="img/img_trans.gif"/> {{killed.boar}} |
-                                <img class="unit u36" src="img/img_trans.gif"/> {{killed.wolf}} |
-                                <img class="unit u37" src="img/img_trans.gif"/> {{killed.bear}} |
-                                <img class="unit u38" src="img/img_trans.gif"/> {{killed.crocodile}} |
-                                <img class="unit u39" src="img/img_trans.gif"/> {{killed.tiger}} |
-                                <img class="unit u310" src="img/img_trans.gif"/> {{killed.elephant}} 
-                            </span>
-                        </h4>
-                        
+                        <div class="well">
+                            <h3>Final Score <span class="label label-success pull-right" style="position:relative;top:-2px;">{{score | number:0}}</span></h3>
+                            <h3>Collected resources <span class="label label-success pull-right" style="position:relative;top:-2px;">{{res.sum | number:0}}</span></h3>
+                            <h3>Kills
+                                <span class="label label-success pull-right">
+                                    <img class="unit u31" src="img/img_trans.gif"/> {{killed.rat}} |
+                                    <img class="unit u32" src="img/img_trans.gif"/> {{killed.spider}} |
+                                    <img class="unit u33" src="img/img_trans.gif"/> {{killed.snake}} |
+                                    <img class="unit u34" src="img/img_trans.gif"/> {{killed.bat}} |
+                                    <img class="unit u35" src="img/img_trans.gif"/> {{killed.boar}} |
+                                    <img class="unit u36" src="img/img_trans.gif"/> {{killed.wolf}} |
+                                    <img class="unit u37" src="img/img_trans.gif"/> {{killed.bear}} |
+                                    <img class="unit u38" src="img/img_trans.gif"/> {{killed.crocodile}} |
+                                    <img class="unit u39" src="img/img_trans.gif"/> {{killed.tiger}} |
+                                    <img class="unit u310" src="img/img_trans.gif"/> {{killed.elephant}} 
+                                </span>
+                            </h3>
+                            <div class="panel panel-default" ng-hide="game.scoreSended">
+                                <div class="panel-body">
+                                    <form class="form-inline" role="form">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" ng-model="name" placeholder="Name">
+                                        </div>
+                                        <button type="submit" class="btn btn-default" ng-click="scoresHttp.post(name)">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="panel panel-default" ng-switch-default>
                     <div class="panel-heading">
-                        <h4>What? How to?</h4>
+                        <h4>How to?</h4>
                         <div ng-switch="game.endState">
                             <button class="btn btn-success pull-right" ng-switch-default
                                     style="position:relative; top: -36px;" ng-click="game.state();">
@@ -81,18 +101,44 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        
-                        <h4>Controls</h4>
-                        <p>Start / Pause the game : <strong>Spacebar</strong></p>
-                        <p>Directions : <strong>Arrow Keys</strong></p>
-                        <h4>Animals</h4>
-                        <p>Animal kills will increase the score multiplier.</p>
-                        <p>You can kill Rats <img class="unit u31" src="img/img_trans.gif"/> and 
-                            Spiders <img class="unit u32" src="img/img_trans.gif"/> 
-                             without fearing to lose swingers.</p>
-                        <p>When killing other animals like Elephants <img class="unit u310" src="img/img_trans.gif"/>
-                            , Tigers <img class="unit u39" src="img/img_trans.gif"/> 
-                            etc you will lose swingers but gain more score multiplier.</p>
+                        <dl class="dl-horizontal">
+                            <h4>Controls</h4>
+                            <dt>Spacebar</dt>
+                            <dd>Start / Pause the game</dd>
+                            <dt>Arrow Keys</dt>
+                            <dd>Directions</dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <h4>Resources</h4>
+                            <dt>
+                                <img class="res wood" src="img/img_trans.gif"/>
+                                <img class="res clay" src="img/img_trans.gif"/>
+                                <img class="res stone" src="img/img_trans.gif"/>
+                                <img class="res crop" src="img/img_trans.gif"/>
+                            </dt>
+                            <dd>Collect resources and buy more units and lives</dd>
+                            <dt>NPC</dt>
+                            <dd>Use NPC to change resources</dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <h4>Animals</h4>
+                            <dt>
+                                <img class="unit u31" src="img/img_trans.gif"/>
+                                <img class="unit u32" src="img/img_trans.gif"/>
+                            </dt>
+                            <dd> Rats and Spiders don't deal damage </dd>
+                            <dt> 
+                                <img class="unit u34" src="img/img_trans.gif"/> 
+                                <img class="unit u38" src="img/img_trans.gif"/>
+                                <img class="unit u39" src="img/img_trans.gif"/>
+                            </dt>
+                            <dd> Bats, Tigers and other stronger animals will deal damage  </dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <h4>End</h4>
+                            <dt><img class="unit tt1dead" src="img/img_trans.gif"></dt>
+                            <dd>Game will end when death count is full</dd>
+                        </dl>
                     </div>
                 </div>
                 <div class="panel panel-default" ng-switch-when="upgrades">
@@ -174,7 +220,26 @@
                                 Restart
                             </button>
                         </div>
-                    </div></div>
+                    </div>
+                    <div class="panel-body">
+                        <strong>
+                        <table class="table table-hover">
+                            <tr>
+                                <th class="text-center">Score</th>
+                                <th class="text-center">Name</th>
+                                <th class="text-center">Version</th>
+                                <th class="text-center">Time<th>
+                            </tr>
+                            <tr ng-repeat="score in scores" class="text-center">
+                                <td>{{score.score | number:0}}</td>
+                                <td>{{score.name}}</td>
+                                <td>{{score.version}}</td>
+                                <td>{{score.time * 1000 | date:'HH:mm:ss dd.MM.yyyy Z'}}</td>
+                            </tr>
+                        </table>
+                        </strong>
+                    </div>
+                </div>
                 <div class="panel panel-default" ng-switch-when="npc">
                     <div class="panel-heading">
                         <h4>NPC</h4>

@@ -60,10 +60,25 @@ class tableServise {
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
       return $this->conn->exec($sql);
     }
+    public function createGameScores(){
+        $sql = "CREATE TABLE `gamescores` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `killfactory` FLOAT NOT NULL,
+                `ressum` int(11) NOT NULL,
+                `score` int(11) NOT NULL,
+                `name` varchar(100) NOT NULL,
+                `version` varchar(100) NOT NULL,
+                `time` BIGINT NOT NULL,
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+        return $this->conn->exec($sql);
+    }
+    
     public function tableExists($name){
         $results = $this->conn->query("SHOW TABLES LIKE '$name'");
-        if($results->rowCount()>0)
+        if($results->rowCount()>0){
             return 1;
+        }
         return 0;
     }
     
@@ -71,4 +86,3 @@ class tableServise {
         return $this->conn->exec("DROP TABLE IF EXISTS `" . $table . "`");
     }
 }
-?>
