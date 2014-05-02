@@ -170,7 +170,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
                 } else { 
                     this.swinger[i].position.x = this.swinger[i-1].position.x;
                     this.swinger[i].position.y = this.swinger[i-1].position.y;
-                    this.swinger[i].dir = this.swinger[i-1].direction;
+                    this.swinger[i].direction = this.swinger[i-1].direction;
                     this.swinger[i].draw(1);
                 }
             }
@@ -242,7 +242,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             var res = this.resources;
             
             if(!this.enoughtRes(i))
-              return;
+                return;
             res.wood -= 95 * i;
             res.clay -= 75 * i;
             res.stone -= 40 * i;
