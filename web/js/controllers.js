@@ -51,6 +51,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
         };
         this.restart = function(){
             this.resources = {'stone':0,'clay':0,'wood':0,'wheat':0,'sum':0};
+            this.collectedResourse = 0;
             this.swingerCount = 1;
             this.killsFactor = 1;
             this.killedEnemies = {'rat':0,'spider':0,'snake':0,'bat':0,'boar':0,
@@ -64,6 +65,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
             this.endState = false;
             this.scoreSended = false;
             this.swinger.push(new swinger(this.canvas,this.ctx));
+            $scope.tab = 'what';
         };
         this.resizeCanvas = function() {
             var h = $window.innerHeight - 100,
