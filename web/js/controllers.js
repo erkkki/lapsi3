@@ -546,6 +546,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
     (function updater(){
         $timeout(function(){
             $scope.res = $scope.game.resources;
+            $scope.resSum = $scope.game.collectedResourse;
             $scope.swingerCount = $scope.game.swingerCount;
             $scope.deathCount = $scope.game.deathCount;
             $scope.deathEnd = $scope.game.deathEnd;

@@ -20,7 +20,7 @@
                 <td><img class="unit tt1dead" src="img/img_trans.gif"/>
                     <span class="label label-danger">{{deathCount}} / {{deathEnd}}</span>
                 </td>
-                <td><span class="label label-success">Score: {{res.sum}} * {{killsFactor}} = {{score}}</span></td>
+                <td><span class="label label-success">Score: {{resSum}} * {{killsFactor}} = {{score}}</span></td>
                 <td></td>
             </tr>
         </table>
@@ -58,7 +58,7 @@
                     <div class="panel-body">
                         <div class="well">
                             <h3>Final Score <span class="label label-success pull-right" style="position:relative;top:-2px;">{{score | number:0}}</span></h3>
-                            <h3>Collected resources <span class="label label-success pull-right" style="position:relative;top:-2px;">{{res.sum | number:0}}</span></h3>
+                            <h3>Collected resources <span class="label label-success pull-right" style="position:relative;top:-2px;">{{resSum | number:0}}</span></h3>
                             <h3>Kills
                                 <span class="label label-success pull-right">
                                     <img class="unit u31" src="img/img_trans.gif"/> {{killed.rat}} |
