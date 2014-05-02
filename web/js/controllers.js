@@ -401,6 +401,7 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
     var swinger = function(canvas,ctx,x,y,dir){
         this.canvas = canvas;
         this.ctx = ctx;
+        this.oldTime;
         this.position = {"x": x || 100,"y":y || 100};
         this.direction = dir || "left";
         this.sprite = {
@@ -432,10 +433,10 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
                 break;
         }
     };
-    swinger.prototype.getNewPosition = function(){
-        var dir = this.direction;
-        var speed = 10; 
+    swinger.prototype.getNewPosition = function(speed){
         var newPosition = {'x':this.position.x, 'y':this.position.y};
+        var dir = this.direction;
+        var speed = speed || 10; 
         switch (dir){
             case "left":
                 newPosition.x = this.position.x - speed;
@@ -461,7 +462,21 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
         return newPosition;
     };
     swinger.prototype.move = function(){
-        this.position = this.getNewPosition();
+        var time = new Date().getTime();
+        var erotus = time - this.oldTime;
+        var speed = 10;
+        if(this.oldTime === '0'){
+            this.oldTime = time;
+        }
+        if(erotus < 16){
+            console.log(erotus);
+            return;
+        }
+        if(erotus > 16){
+            speed = speed * Math.floor(erotus / 16)
+        }
+        this.oldTime = time;
+        this.position = this.getNewPosition(speed);
     };   
     swinger.prototype.draw = function(move){
         if(move === 0){
@@ -519,7 +534,6 @@ function gameCtrl($scope,$http,$window,$timeout,LocalStorage){
     $scope.game.init();
     $window.onresize = (function(){ $scope.game.resizeCanvas(); });
     $window.addEventListener("keydown", (function(e){ $scope.game.keyDown(e); }), true);
-    $scope.vittutoimijo = {};
     $scope.scoresHttp = new function(){
         this.post = function(name){
             var data = $scope.game.getScoreData();
