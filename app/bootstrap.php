@@ -15,7 +15,7 @@ use Project\Travian\tableServise;
 use Project\Travian\gameScoreService;
 
 $app = new Silex\Application(); 
-$app['debug'] = true;
+$app['debug'] = false;
 
 $app->register(new DoctrineServiceProvider(), array(
     'db.options' => array(
