@@ -1,0 +1,290 @@
+<div style="overflow: hidden;margin-top: 50px;">
+    <div class="col-xs-12">
+        <table class="table table-condensed" style="padding:0px;margin:0px;">
+           <tr>
+                <td><img class="res wood" src="img/img_trans.gif"/>
+                    <span class="label label-info">{{res.wood | number:0}}</span>
+                </td>
+                <td><img class="res clay" src="img/img_trans.gif"/> 
+                    <span class="label label-info">{{res.clay | number:0}}</span>
+                </td>
+                <td><img class="res stone" src="img/img_trans.gif"/> 
+                    <span class="label label-info">{{res.stone | number:0}}</span>
+                </td>
+                <td><img class="res crop" src="img/img_trans.gif"/> 
+                    <span class="label label-info">{{res.wheat | number:0}}</span>
+                </td>
+                <td><img class="unit tt1" src="img/img_trans.gif"/> 
+                    <span class="label label-success">{{swingerCount}}</span>
+                </td>
+                <td><img class="unit tt1dead" src="img/img_trans.gif"/>
+                    <span class="label label-danger">{{deathCount}} / {{deathEnd}}</span>
+                </td>
+                <td><span class="label label-success">Score: {{resSum}} * {{killsFactor}} = {{score}}</span></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+    <canvas id="game" style="border-style: solid;"></canvas>
+    
+    
+    
+    <div ng-hide="!pause" class="panel panel-default" style="position:absolute; top:100px; left:50px; width: 90%">
+        <div class="panel-body" style="padding:10px;" ng-init="tab = 'what';">
+            <div class="col-xs-2">
+                <ul class="nav nav-pills nav-stacked">
+                    <li ng-class="{'active': tab == 'what'}"><a href="#" ng-click="tab = 'what'">How to?</a></li>
+                    <li ng-class="{'active': tab == 'upgrades'}"><a href="#" ng-click="tab = 'upgrades'">Upgrades</a></li>
+                    <li ng-class="{'active': tab == 'npc'}"><a href="#" ng-click="tab = 'npc'">NPC</a></li>
+                    <li ng-class="{'active': tab == 'top'}"><a href="#" ng-click="tab = 'top';scoresHttp.get()">Top 10</a></li>
+                    <li ng-class="{'active': tab == 'end'}" ng-hide="!game.endState"><a href="#" ng-click="tab = 'end'">Submit score</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-10" ng-switch="tab">
+                <div class="panel panel-default" ng-switch-when="end">
+                    <div class="panel-heading">
+                        <h4>Submit your score</h4>
+                        <div ng-switch="game.endState">
+                            <button class="btn btn-success pull-right" ng-switch-default
+                                    style="position:relative; top: -36px;" ng-click="game.state();">
+                                Start/Continue
+                            </button>
+                            <button class="btn btn-success pull-right" ng-switch-when="true"
+                                    style="position:relative; top: -36px;" ng-click="game.restart();">
+                                Restart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="well">
+                            <h3>Final Score <span class="label label-success pull-right" style="position:relative;top:-2px;">{{score | number:0}}</span></h3>
+                            <h3>Collected resources <span class="label label-success pull-right" style="position:relative;top:-2px;">{{resSum | number:0}}</span></h3>
+                            <h3>Kills
+                                <span class="label label-success pull-right">
+                                    <img class="unit u31" src="img/img_trans.gif"/> {{killed.rat}} |
+                                    <img class="unit u32" src="img/img_trans.gif"/> {{killed.spider}} |
+                                    <img class="unit u33" src="img/img_trans.gif"/> {{killed.snake}} |
+                                    <img class="unit u34" src="img/img_trans.gif"/> {{killed.bat}} |
+                                    <img class="unit u35" src="img/img_trans.gif"/> {{killed.boar}} |
+                                    <img class="unit u36" src="img/img_trans.gif"/> {{killed.wolf}} |
+                                    <img class="unit u37" src="img/img_trans.gif"/> {{killed.bear}} |
+                                    <img class="unit u38" src="img/img_trans.gif"/> {{killed.crocodile}} |
+                                    <img class="unit u39" src="img/img_trans.gif"/> {{killed.tiger}} |
+                                    <img class="unit u310" src="img/img_trans.gif"/> {{killed.elephant}} 
+                                </span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default" ng-switch-default>
+                    <div class="panel-heading">
+                        <h4>How to?</h4>
+                        <div ng-switch="game.endState">
+                            <button class="btn btn-success pull-right" ng-switch-default
+                                    style="position:relative; top: -36px;" ng-click="game.state();">
+                                Start/Continue
+                            </button>
+                            <button class="btn btn-success pull-right" ng-switch-when="true"
+                                    style="position:relative; top: -36px;" ng-click="game.restart();">
+                                Restart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal">
+                            <h4>Controls</h4>
+                            <dt>Spacebar</dt>
+                            <dd>Start / Pause the game</dd>
+                            <dt>Arrow Keys</dt>
+                            <dd>Directions</dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <h4>Resources</h4>
+                            <dt>
+                                <img class="res wood" src="img/img_trans.gif"/>
+                                <img class="res clay" src="img/img_trans.gif"/>
+                                <img class="res stone" src="img/img_trans.gif"/>
+                                <img class="res crop" src="img/img_trans.gif"/>
+                            </dt>
+                            <dd>Collect resources and buy more units and lives</dd>
+                            <dt>NPC</dt>
+                            <dd>Use NPC to change resources</dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <h4>Animals</h4>
+                            <dt>
+                                <img class="unit u31" src="img/img_trans.gif"/>
+                                <img class="unit u32" src="img/img_trans.gif"/>
+                            </dt>
+                            <dd> Rats and Spiders don't deal damage </dd>
+                            <dt> 
+                                <img class="unit u34" src="img/img_trans.gif"/> 
+                                <img class="unit u38" src="img/img_trans.gif"/>
+                                <img class="unit u39" src="img/img_trans.gif"/>
+                            </dt>
+                            <dd> Bats, Tigers and other stronger animals will deal damage  </dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <h4>End</h4>
+                            <dt><img class="unit tt1dead" src="img/img_trans.gif"></dt>
+                            <dd>Game will end when death count is full</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="panel panel-default" ng-switch-when="upgrades">
+                    <div class="panel-heading">
+                        <h4>Upgrades</h4>
+                        <div ng-switch="game.endState">
+                            <button class="btn btn-success pull-right" ng-switch-default
+                                    style="position:relative; top: -36px;" ng-click="game.state();">
+                                Start/Continue
+                            </button>
+                            <button class="btn btn-success pull-right" ng-switch-when="true"
+                                    style="position:relative; top: -36px;" ng-click="game.restart();">
+                                Restart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="well" style="padding:5px;height: 50px;">
+                            <div class="col-xs-4" style="padding-top:10px;">
+                                <img class="unit tt1" src="img/img_trans.gif"/> {{swingerCount}}
+                                <button type="button" class="btn btn-default btn-xs" ng-click="game.duyUnit();">
+                                    <span class="glyphicon glyphicon-plus"></span><b> 1</b>
+                                </button> 
+                                <button type="button" class="btn btn-default btn-xs" ng-click="game.duyUnit(10);">
+                                    <span class="glyphicon glyphicon-plus"></span><b> 10</b>
+                                </button>
+                                <button type="button" class="btn btn-default btn-xs" 
+                                        ng-click="$parent.tab = 'npc';game.npc.distRes(res.sum, {'wood':0.38,'clay':0.30,'stone':0.16,'wheat':0.16})">
+                                    <b>NPC</b>
+                                </button>
+                            </div>
+                            <div class="col-xs-8">
+                                <h4>
+                                    <span class="label label-info">Cost:
+                                        <img class="res wood" src="img/img_trans.gif"/> 95
+                                        <img class="res clay" src="img/img_trans.gif"/> 75
+                                        <img class="res stone" src="img/img_trans.gif"/> 40
+                                        <img class="res crop" src="img/img_trans.gif"/> 40
+                                    </span>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="well" style="padding:5px;height: 50px;">
+                            <div class="col-xs-4" style="padding-top:10px;">
+                                <img class="unit tt1dead" src="img/img_trans.gif"/> {{deathCount}} / {{deathEnd}}
+                                <button type="button" class="btn btn-default btn-xs" ng-click="game.duyMaxDeaths()">
+                                    <span class="glyphicon glyphicon-plus"></span><b> 10</b>
+                                </button>
+                                <button type="button" class="btn btn-default btn-xs" 
+                                        ng-click="$parent.tab = 'npc';game.npc.distRes(res.sum)">
+                                    <b>NPC</b>
+                                </button>
+                            </div>
+                            <div class="col-xs-8">
+                                <h4>
+                                    <span class="label label-info">Cost:
+                                        <img class="res wood" src="img/img_trans.gif"/> {{deathEnd/100 * 10000 | number:0}}
+                                        <img class="res clay" src="img/img_trans.gif"/> {{deathEnd/100 * 10000 | number:0}}
+                                        <img class="res stone" src="img/img_trans.gif"/> {{deathEnd/100 * 10000 | number:0}}
+                                        <img class="res crop" src="img/img_trans.gif"/> {{deathEnd/100 * 10000 | number:0}}
+                                    </span>
+                                </h4>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="panel panel-default" ng-switch-when="top">
+                    <div class="panel-heading">
+                        <h4>Top Scores</h4>
+                        <div ng-switch="game.endState">
+                            <button class="btn btn-success pull-right" ng-switch-default
+                                    style="position:relative; top: -36px;" ng-click="game.state();">
+                                Start/Continue
+                            </button>
+                            <button class="btn btn-success pull-right" ng-switch-when="true"
+                                    style="position:relative; top: -36px;" ng-click="game.restart();">
+                                Restart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <strong>
+                        <table class="table table-hover">
+                            <tr>
+                                <th class="text-center">Score</th>
+                                <th class="text-center">Name</th>
+                                <th class="text-center">Version</th>
+                                <th class="text-center">Time<th>
+                            </tr>
+                            <tr ng-repeat="score in scores" class="text-center">
+                                <td>{{score.score | number:0}}</td>
+                                <td>{{score.name}}</td>
+                                <td>{{score.version}}</td>
+                                <td>{{score.time * 1000 | date:'HH:mm:ss dd.MM.yyyy Z'}}</td>
+                            </tr>
+                        </table>
+                        </strong>
+                    </div>
+                </div>
+                <div class="panel panel-default" ng-switch-when="npc">
+                    <div class="panel-heading">
+                        <h4>NPC</h4>
+                        <div ng-switch="game.endState">
+                            <button class="btn btn-success pull-right" ng-switch-default
+                                    style="position:relative; top: -36px;" ng-click="game.state();">
+                                Start/Continue
+                            </button>
+                            <button class="btn btn-success pull-right" ng-switch-when="true"
+                                    style="position:relative; top: -36px;" ng-click="game.restart();">
+                                Restart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th><img class="res wood" src="img/img_trans.gif"/> {{res.wood | number:0}}</th>
+                                <th><img class="res clay" src="img/img_trans.gif"/> {{res.clay | number:0}}</th>
+                                <th><img class="res stone" src="img/img_trans.gif"/> {{res.stone | number:0}}</th>
+                                <th><img class="res crop" src="img/img_trans.gif"/> {{res.wheat | number:0}}</th>
+                                <th>Sum:{{res.sum | number:0}}</th>
+                            </tr>
+                            <tr>
+                                <td><input type="text" maxlength="8" class="input-sm" style="width: 80px;" ng-model="game.npc.res.wood"></td>
+                                <td><input type="text" maxlength="8" class="input-sm" style="width: 80px;" ng-model="game.npc.res.clay"></td>
+                                <td><input type="text" maxlength="8" class="input-sm" style="width: 80px;" ng-model="game.npc.res.stone"></td>
+                                <td><input type="text" maxlength="8" class="input-sm" style="width: 80px;" ng-model="game.npc.res.wheat"></td>
+                                <td>Sum: {{game.npc.getSum(npc.sum) | number:0}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{game.npc.wood - res.wood | number:0}}</td>
+                                <td>{{game.npc.clay - res.clay | number:0}}</td>
+                                <td>{{game.npc.stone - res.stone | number:0}}</td>
+                                <td>{{game.npc.wheat - res.wheat | number:0}}</td>
+                                <td>Rest: {{res.sum - game.npc.getSum() | number:0}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" ng-switch on="sum = res.sum - game.npc.getSum()">
+                                    <button type="button" class="btn btn-info btn-xs pull-right" 
+                                            ng-switch-default ng-click="game.npc.distRes(res.sum - game.npc.getSum());">
+                                        Distribute remaining resources
+                                    </button>
+                                    <button type="button" class="btn btn-success btn-xs pull-right" 
+                                            ng-switch-when="0" ng-click="game.npc.redeemRes(game);game.npc.npcReset()">
+                                        Redeem
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+

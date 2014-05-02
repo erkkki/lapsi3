@@ -20,6 +20,10 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
       templateUrl:"/views/game.html",
       controller: gameCtrl
     })
+    .when('/game2',{
+      templateUrl:"/views/game2.html",
+      controller: gameCtrl2
+    })
     .when('/servers',{
       templateUrl:"/views/servers.html",
       controller: serversCtrl
